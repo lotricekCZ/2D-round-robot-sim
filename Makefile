@@ -16,14 +16,14 @@ LDLIBS   := -lm
 .PHONY: all clean
 
 
-main.obj:
-	$(CC) $(CFLAGS) main.o $(SRC)
+all: point main_prog
+	$(CC) -o main TPoint.o main.o
 
-point.obj:
-	$(CC) $(CFLAGS) point.o $(SHAPES)/point/point.cpp
+main_prog:
+	$(CC) -c $(CFLAGS) $(SRC)
 
-all: point.obj main.obj
-	g++ main -o main.o point.o
+point:
+	$(CC) -c $(CFLAGS) $(SHAPES)/point/TPoint.hpp
 
 
 clean:

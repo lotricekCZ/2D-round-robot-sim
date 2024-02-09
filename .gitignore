@@ -1,0 +1,5 @@
+main.o
+.vscode/*
+.vscode
+build
+.vscode/settings.json

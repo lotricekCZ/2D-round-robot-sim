@@ -14,15 +14,16 @@ class TPoint
     std::array<T, dims> coords;
 
 public:
-    TPoint();
+    template <typename ...Args>
+    TPoint(Args ...);
+
     static T distance(TPoint<T, dims> a, TPoint<T, dims> b);
     T distance(TPoint<T, dims> a);
 };
 
 #include "TPoint.tpp"
 
-class Point2D : public TPoint<float, 2>
-{
-};
+typedef TPoint<float, 2> Point2D;
+typedef TPoint<float, 3> Point3D;
 
 #endif /* TPOINT_HPP */

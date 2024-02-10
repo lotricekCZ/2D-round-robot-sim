@@ -1,5 +1,6 @@
 #include <iostream>
 #include "shapes/TPoint.hpp"
+#include "shapes/TVector.hpp"
 
 int main(int argc, char ** argv){
 	Point2D a(1, 1);
@@ -14,6 +15,7 @@ int main(int argc, char ** argv){
 	std::cout << c.distance(d) << std::endl;
 	std::cout << e.distance(f) << std::endl;
 	std::cout << g.distance(h) << std::endl;
+	std::cout << Vect2D(a, b).length() << std::endl;
 	return 0;
 };
 

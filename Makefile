@@ -15,14 +15,17 @@ LDLIBS   := -lm
 .PHONY: all clean
 
 
-all: point main_prog build
+all: point main_prog build vector
 	$(CC) -L $(BIN_DIR)/point.so -o $(EXE) $(BIN_DIR)/main.o
 
-main_prog:
+main_prog: build
 	$(CC) -c $(CFLAGS) -o $(BIN_DIR)/main.o $(SRC)
 
 point: build
 	$(CC) -shared $(CFLAGS) -o $(BIN_DIR)/point.so $(SHAPES)/TPoint.hpp
+
+vector: build point
+	$(CC) -shared $(CFLAGS) -o $(BIN_DIR)/vector.so $(SHAPES)/TVector.hpp
 
 build:
 	mkdir $(BIN_DIR)

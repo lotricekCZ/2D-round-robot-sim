@@ -11,7 +11,7 @@
 
 // template <typename T>
 template <typename T, uint32_t dims>
-class TVector: public std::pair<TPoint<T, dims>, TPoint<T, dims>>
+class TVector : public std::pair<TPoint<T, dims>, TPoint<T, dims>>
 {
     // std::pair<TPoint<T, dims>, TPoint<T, dims>> points;
 
@@ -20,6 +20,18 @@ public:
     // using std::pair<TPoint<T, dims>, TPoint<T, dims>>::get<>;
     TVector();
     TVector(TPoint<T, dims>, TPoint<T, dims>);
+    TVector operator+(const TVector &rhs);
+    TVector operator-(const TVector &rhs);
+
+    TVector operator<<(const TVector &rhs);         // move rhs origin to lhs
+    TVector operator>>(const TPoint<T, dims> &rhs); // move rhs origin to lhs
+
+    TVector operator/(const T &rhs);
+    TVector operator-(const T &rhs); // subtracts the value from TVector length
+    TVector operator*(const T &rhs);
+    TVector operator+(const T &rhs);
+    TPoint<T, dims> operator<<(const TPoint<T, dims> &rhs); // shifts the coordinate according to the vector
+    TPoint<T, dims> get_origin();
 
     T length();
 };

@@ -1,0 +1,26 @@
+@startuml gameplay
+skinparam Style strictuml
+
+actor Bot
+actor User
+actor Vehicle
+
+usecase move
+usecase steer
+usecase collide
+usecase control
+usecase "plan path"
+usecase "read map"
+
+:Vehicle: -> collide
+:Vehicle: -> move
+:Vehicle: -> steer
+
+:Bot: -> (plan path)
+:Bot: -> (read map)
+
+:Bot: -up-|> :Vehicle:
+:User: -up-|> :Vehicle:
+:User: -> (control)
+@enduml
+

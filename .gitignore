@@ -3,3 +3,4 @@ main.o
 .vscode
 build
 .vscode/settings.json
+out/doc/class_diagram/foo.png

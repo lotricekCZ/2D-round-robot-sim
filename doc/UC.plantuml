@@ -2,12 +2,30 @@
 skinparam Style strictuml
 
 actor Bot
+' actor Point
 actor User
 actor Vehicle
 
-usecase move
-usecase steer
-usecase collide
+package Movement {
+    usecase move
+    usecase steer
+    usecase collide
+}
+
+package "Map creation" {
+
+    usecase "create map"
+    usecase "add bot"
+    usecase "add obstacle"
+    usecase "edit map"
+    
+    usecase "delete map"
+    usecase "save map"
+    usecase "load map"
+    
+}
+
+usecase "start simulation"
 usecase control
 usecase "plan path"
 usecase "read map"
@@ -22,5 +40,15 @@ usecase "read map"
 :Bot: -up-|> :Vehicle:
 :User: -up-|> :Vehicle:
 :User: -> (control)
+(control) -.> (move): <<extends>>
+:User: -> (create map)
+:User: -> (add obstacle)
+:User: -> (add bot)
+:User: -> (edit map)
+:User: -> (delete map)
+:User: -> (save map)
+:User: -> (load map)
+:User: -> (load map)
+:User: -> (start simulation)
 @enduml
 

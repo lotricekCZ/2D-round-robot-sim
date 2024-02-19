@@ -12,7 +12,7 @@ package Movement {
     usecase collide
 }
 
-package "Map creation" {
+package "Map creation" as mc {
 
     usecase "create map"
     usecase "add bot"
@@ -41,14 +41,6 @@ usecase "read map"
 :User: -up-|> :Vehicle:
 :User: -> (control)
 (control) -.> (move): <<extends>>
-:User: -> (create map)
-:User: -> (add obstacle)
-:User: -> (add bot)
-:User: -> (edit map)
-:User: -> (delete map)
-:User: -> (save map)
-:User: -> (load map)
-:User: -> (load map)
-:User: -> (start simulation)
+:User: --> mc
 @enduml
 

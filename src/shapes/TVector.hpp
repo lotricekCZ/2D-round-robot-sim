@@ -20,6 +20,8 @@ public:
     // using std::pair<TPoint<T, dims>, TPoint<T, dims>>::get<>;
     TVector();
     TVector(TPoint<T, dims>, TPoint<T, dims>);
+    static TVector normalise(TVector);
+    TVector normalise();
     TVector operator+(const TVector &rhs);
     TVector operator-(const TVector &rhs);
 
@@ -32,11 +34,12 @@ public:
     TVector operator+(const T &rhs);
     TPoint<T, dims> operator<<(const TPoint<T, dims> &rhs); // shifts the coordinate according to the vector
     TPoint<T, dims> get_origin();
-
+    TPoint<T, dims> get_point();
+    static T length(TVector);
     T length();
 };
 
-#include "TVector.tpp"
+#include "TVector.cpp"
 
 typedef TVector<float, 2> Vect2D;
 typedef TVector<float, 3> Vect3D;

@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <cinttypes>
 #include <functional>
+#include <sstream>
 
 template <typename T, uint32_t dims>
 class TPoint
@@ -16,7 +17,8 @@ class TPoint
 public:
     template <typename... Args>
     TPoint(Args...);
-
+    static std::string print(TPoint);
+    std::string print();
     static T distance(TPoint<T, dims> a, TPoint<T, dims> b);
     T distance(TPoint<T, dims> a);
     TPoint operator-(const TPoint &rhs);
@@ -26,15 +28,14 @@ public:
     TPoint operator*=(const T &rhs);
     TPoint operator-=(const TPoint &rhs);
 
+
     inline bool operator==(const TPoint &rhs)
     {
-        const T thres = 0.15; // 0.15 units // 10mm
-        /* do actual comparison */
-        return this->get_distance(rhs) <= thres;
+        return this->get_distance(rhs) <= std::numeric_limits<T>::epsilon;
     }
 };
 
-#include "TPoint.tpp"
+#include "TPoint.cpp"
 
 typedef TPoint<float, 2> Point2D;
 typedef TPoint<float, 3> Point3D;

@@ -1,6 +1,9 @@
 #ifndef TPOINT_TPP
 #define TPOINT_TPP
 #include <functional>
+#include <cinttypes>
+#include <iostream>
+#include "TPoint.hpp"
 /**
  * @brief Calculates the Euclidean distance between two points in the same dimensional space.
  *
@@ -146,4 +149,24 @@ TPoint<T, dims> TPoint<T, dims>::operator-=(const TPoint<T, dims> &rhs)
 	return *this;
 }
 
+template <typename T, uint32_t dims>
+std::string TPoint<T, dims>::print(TPoint<T, dims> point)
+{
+	std::stringstream ss;
+	ss << "(";
+	for (auto i: point.coords)
+	{
+		ss << i << ", ";
+	}
+	ss.seekp(-2, std::ios_base::cur);
+	ss << ")";
+	std::string ret = ss.str();
+	ret.pop_back();
+	return ret;
+}
+template <typename T, uint32_t dims>
+std::string TPoint<T, dims>::print()
+{
+	return TPoint<T, dims>::print(*this);
+}
 #endif /* TPOINT_TPP */

@@ -1,3 +1,9 @@
+#ifndef TVECTOR_CPP
+#define TVECTOR_CPP
+
+#include <cinttypes>
+#include "TVector.hpp"
+
 /**
  * @brief Default constructor for TVector.
  * 
@@ -32,7 +38,20 @@ TVector<T, dims>::TVector(TPoint<T, dims> a, TPoint<T, dims> b)
 template <typename T, uint32_t dims>
 T TVector<T, dims>::length()
 {
-    return TPoint<T, dims>::distance(this->first, this->second);
+    return TVector<T, dims>::length(*this);
+}
+
+/**
+ * @brief Calculates the length of the vector.
+ * 
+ * @tparam T Type of the coordinates.
+ * @tparam dims Number of dimensions.
+ * @return Length of the vector.
+ */
+template <typename T, uint32_t dims>
+T TVector<T, dims>::length(TVector<T, dims> v)
+{
+    return TPoint<T, dims>::distance(v.first, v.second);
 }
 
 /**
@@ -77,6 +96,16 @@ TPoint<T, dims> TVector<T, dims>::get_origin(){
     return this->first;
 }
 
+template <typename T, uint32_t dims>
+TVector<T, dims> TVector<T, dims>::normalise(TVector<T, dims> vec){
+    return vec / TVector<T, dims>::length(vec);
+}
+
+template <typename T, uint32_t dims>
+TVector<T, dims> TVector<T, dims>::normalise(){
+    return TVector<T, dims>::normalise(*this);
+}
+
 // Overloaded arithmetic operators
 
 template <typename T, uint32_t dims>
@@ -108,6 +137,6 @@ TVector<T, dims> TVector<T, dims>::operator + (const T& rhs){
 
 template <typename T, uint32_t dims>
 TVector<T, dims> TVector<T, dims>::operator / (const T& rhs){
-    return TVector<T, dims>(this -> first, this -> length()/rhs, this -> angle(), true);
+    return TVector<T, dims>(this -> first, this -> first + (this -> second - this -> first)/rhs);
 }
-
+#endif

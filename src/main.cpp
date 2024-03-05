@@ -1,12 +1,15 @@
 #include <iostream>
 #include "shapes/TPoint.hpp"
 #include "shapes/TVector.hpp"
+#include "shapes/TLine.hpp"
 
 int main(int argc, char **argv)
 {
 	Point2D a(1, 1);
 	Point2D b(0, 0);
+	Point2D j(-1, 1);
 	Point3D c(3, 4, 5);
+	Point3D i(-3, -4, -5);
 	Point3D d(0, 0);
 	TPoint<float, 12> e(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
 	TPoint<float, 12> f(0, 0);
@@ -24,5 +27,10 @@ int main(int argc, char **argv)
 	std::cout << Vect2D(a, b).length() << std::endl;
 	std::cout << Vect3D(c, d).length() << std::endl;
 	std::cout << Vect3D(c, d).normalise().length() << std::endl;
+	std::cout << (Vect3D(c, d).normalise() >> d).print() << std::endl;
+	std::cout << (Line3D(c, d)).print() << std::endl;
+	std::cout << Vect3D::dot(Vect3D(d, i), Vect3D(d, c)) << std::endl;
+	std::cout << Point2D::dot(a, j) << std::endl;
+	std::cout << Line2D(a, j).distance(b) << std::endl;
 	return 0;
 };

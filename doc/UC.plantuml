@@ -1,8 +1,8 @@
 @startuml gameplay
 skinparam Style strictuml
 
+actor Obstacle <<abstract>>
 actor Bot
-' actor Point
 actor User
 actor Vehicle
 
@@ -37,9 +37,11 @@ usecase "read map"
 :Bot: -> (plan path)
 :Bot: -> (read map)
 
+:Vehicle: -up-|> :Obstacle:
 :Bot: -up-|> :Vehicle:
 :User: -up-|> :Vehicle:
 :User: -> (control)
+:User: -> (start simulation)
 (control) -.> (move): <<extends>>
 :User: --> mc
 @enduml

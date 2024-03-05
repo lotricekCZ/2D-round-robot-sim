@@ -17,9 +17,15 @@ class TPoint
 public:
     template <typename... Args>
     TPoint(Args...);
-    static std::string print(TPoint);
+    TPoint(TPoint &);
+    static std::string print(const TPoint &);
     std::string print();
+    static std::array<T, dims> point(TPoint&);
     static T distance(TPoint<T, dims> a, TPoint<T, dims> b);
+    static T dot(TPoint, TPoint);
+    T dot(TPoint);
+
+    std::array<T, dims> point();
     T distance(TPoint<T, dims> a);
     TPoint operator-(const TPoint &rhs);
     TPoint operator+(const TPoint &rhs);
@@ -27,7 +33,6 @@ public:
     TPoint operator*(const T &rhs);
     TPoint operator*=(const T &rhs);
     TPoint operator-=(const TPoint &rhs);
-
 
     inline bool operator==(const TPoint &rhs)
     {

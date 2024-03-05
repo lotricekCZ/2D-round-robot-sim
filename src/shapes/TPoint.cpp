@@ -48,6 +48,18 @@ template <typename... Args>
 TPoint<T, dims>::TPoint(Args... args) : coords{{static_cast<T>(args)...}} {}
 
 /**
+ * @brief Constructs a point with the provided TPoint<T, dims>.
+ *
+ * @tparam T Type of the TPoint<T, dims>.
+ * @tparam dims Number of dimensions.
+ * @param args Arguments used to initialize TPoint<T, dims>.
+ */
+template <typename T, uint32_t dims>
+TPoint<T, dims>::TPoint(TPoint<T, dims> &point) {
+	*this = point;
+}
+
+/**
  * @brief Subtracts the coordinates of the given point from the coordinates of this point.
  *
  * @tparam T Type of the coordinates.
@@ -150,11 +162,11 @@ TPoint<T, dims> TPoint<T, dims>::operator-=(const TPoint<T, dims> &rhs)
 }
 
 template <typename T, uint32_t dims>
-std::string TPoint<T, dims>::print(TPoint<T, dims> point)
+std::string TPoint<T, dims>::print(const TPoint<T, dims>& point)
 {
 	std::stringstream ss;
 	ss << "(";
-	for (auto i: point.coords)
+	for (auto i : point.coords)
 	{
 		ss << i << ", ";
 	}
@@ -164,9 +176,34 @@ std::string TPoint<T, dims>::print(TPoint<T, dims> point)
 	ret.pop_back();
 	return ret;
 }
+
 template <typename T, uint32_t dims>
 std::string TPoint<T, dims>::print()
 {
 	return TPoint<T, dims>::print(*this);
+}
+
+template <typename T, uint32_t dims>
+std::array<T, dims> TPoint<T, dims>::point()
+{
+	return TPoint<T, dims>::point(*this);
+}
+
+template <typename T, uint32_t dims>
+std::array<T, dims> TPoint<T, dims>::point(TPoint<T, dims> &point)
+{
+	return point.coords;
+}
+
+template <typename T, uint32_t dims>
+T TPoint<T, dims>::dot(TPoint a, TPoint b)
+{
+	return std::inner_product(a.coords.begin(), a.coords.end(), b.coords.begin(), T{0});
+}
+
+template <typename T, uint32_t dims>
+T TPoint<T, dims>::dot(TPoint a)
+{
+	return TPoint<T, dims>::dot(*this, a);
 }
 #endif /* TPOINT_TPP */

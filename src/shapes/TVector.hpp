@@ -19,6 +19,8 @@ public:
     using std::pair<TPoint<T, dims>, TPoint<T, dims>>::swap;
     // using std::pair<TPoint<T, dims>, TPoint<T, dims>>::get<>;
     TVector();
+    TVector(const TVector &);
+    // TVector(TVector<T, dims>);
     TVector(TPoint<T, dims>, TPoint<T, dims>);
     static TVector normalise(TVector);
     TVector normalise();
@@ -26,7 +28,7 @@ public:
     TVector operator-(const TVector &rhs);
 
     TVector operator<<(const TVector &rhs);         // move rhs origin to lhs
-    TVector operator>>(const TPoint<T, dims> &rhs); // move rhs origin to lhs
+    TVector operator>>(TPoint<T, dims> &rhs); // move rhs origin to lhs
 
     TVector operator/(const T &rhs);
     TVector operator-(const T &rhs); // subtracts the value from TVector length
@@ -36,7 +38,12 @@ public:
     TPoint<T, dims> get_origin();
     TPoint<T, dims> get_point();
     static T length(TVector);
+    static std::string print(TVector);
+    static std::string printGeogebra(TVector);
+    std::string print();
     T length();
+    static T dot(TVector, TVector);
+    static T dot(TVector, TPoint<T, dims>);
 };
 
 #include "TVector.cpp"

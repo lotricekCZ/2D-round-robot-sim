@@ -56,9 +56,11 @@ T TLine<T, dims>::distance(TLine<T, dims> line, TPoint<T, dims> point)
 {
     try
     {
-        std::cout << "moment" << TPoint<T, dims>::dot(line.origin, point) << " and " << TPoint<T, dims>::dot(line.get_point(), point) << std::endl;
-        std::cout << "moment" << TPoint<T, dims>::dot(line.origin, point) << " and " << TPoint<T, dims>::dot(line.get_point(), point) << std::endl;
-        return TPoint<T, dims>::distance(line.at(-TPoint<T, dims>::dot(line.origin, point) / TPoint<T, dims>::dot(line.get_point(), point)), point);
+        auto denom = TPoint<T, dims>::dot(line.get_point(), line.get_point());
+        auto frac = TPoint<T, dims>::dot(line.get_point(), point - line.origin);
+
+        auto p2 = line.at(frac / denom);
+        return TPoint<T, dims>::distance(p2, point);
     }
     catch (const std::exception &e)
     {

@@ -20,8 +20,10 @@ class TLine : public TVector<T, dims>
 		// T get_angle(TLine);
 		// static T get_angle(TLine, TLine);
 		// static T get_distance(TLine, TPoint<T, dims>);
-		static T distance(TLine, TPoint<T, dims>);
 		T distance(TPoint<T, dims>);
+		T distance(TLine);
+		static T distance(TLine, TPoint<T, dims>);
+		static T distance(TLine, TLine);
 		// T get_distance(TLine);
 		// static T get_distance(TLine, TLine);
 		

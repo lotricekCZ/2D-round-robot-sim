@@ -24,10 +24,10 @@ public:
     static T distance(TPoint<T, dims> a, TPoint<T, dims> b);
     static T dot(TPoint, TPoint);
     T dot(TPoint);
-
+    static TPoint cross(TPoint, TPoint);
     std::array<T, dims> point();
     T distance(TPoint<T, dims> a);
-    TPoint operator-(const TPoint &rhs);
+    TPoint operator-(const TPoint<T, dims>& rhs) const;
     TPoint operator+(const TPoint &rhs);
     TPoint operator/(const T &rhs);
     TPoint operator*(const T &rhs);

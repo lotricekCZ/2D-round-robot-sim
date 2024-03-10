@@ -39,5 +39,20 @@ int main(int argc, char **argv)
 
 	std::cout << Line3D(l, d).print() << std::endl;
 	std::cout << Line3D(l, d).distance(k) << std::endl;
+	{
+		Point3D a(1, 2, 0);
+		Point3D b(0, 1, 2);
+		Point3D c(0, 0, 0);
+		std::cout << Vect3D::cross(Vect3D(c, a), Vect3D(c, b)).print() << std::endl;
+	}
+	{
+		Point3D a(0, 0, 0);
+		Point3D b(0.95, 1, 1);
+		Point3D c(0, 0, 1);
+		Point3D d(1, 1, 1);
+		std::cout << Line3D(a, b).print() << std::endl;
+		std::cout << Line3D(c, d).print() << std::endl;
+		std::cout << Line3D(a, b).distance(Line3D(c,d)) << std::endl;
+	}
 	return 0;
 };

@@ -36,6 +36,14 @@ TVector<T, dims>::TVector(const TVector<T, dims> &vector)
     *this = vector;
 }
 
+
+template <typename T, uint32_t dims>
+template <typename... Args>
+TVector<T, dims>::TVector(const Args&... args) {
+    this->second = TPoint<T, dims>(static_cast<T>(args)...);
+}
+
+
 /**
  * @brief Constructor for TVector taking two points.
  *
@@ -48,6 +56,21 @@ template <typename T, uint32_t dims>
 TVector<T, dims>::TVector(TPoint<T, dims> a, TPoint<T, dims> b)
 {
     this->first = a;
+    this->second = b;
+}
+
+
+/**
+ * @brief Constructor for TVector taking two points.
+ *
+ * @tparam T Type of the coordinates.
+ * @tparam dims Number of dimensions.
+ * @param a Second point.
+ */
+template <typename T, uint32_t dims>
+TVector<T, dims>::TVector(TPoint<T, dims> b)
+{
+    this->first = TPoint<T, dims>(0);
     this->second = b;
 }
 
@@ -195,8 +218,7 @@ TVector<T, dims> TVector<T, dims>::operator>>(TPoint<T, dims> &rhs)
 }
 
 template <typename T, uint32_t dims>
-std::string TVector<T, dims>::print(TVector<T, dims> vector)
-{
+std::string TVector<T, dims>::print(const TVector<T, dims>& vector) {
     return TPoint<T, dims>::print(vector.second - vector.first);
 }
 
@@ -227,7 +249,12 @@ T TVector<T, dims>::dot(TVector<T, dims> a, TPoint<T, dims> b)
     return TPoint<T, dims>::dot(a.second - a.first, b);
 }
 
-TVector<T, dims> TVector<T, dims>::operator / (const T& rhs){
-    return TVector<T, dims>(this -> first, this -> first + (this -> second - this -> first)/rhs);
+template <typename T, uint32_t dims>
+TVector<T, dims> TVector<T, dims>::cross(TVector<T, dims> v1, TVector<T, dims> v2)
+{
+    static_assert(dims == 3, "TVector: TVector dimensions must be equal to 3, for that the cross product doesn't work for any other number of dimensions.\n");
+    return TVector<T, dims>((v1.second.point().at(1) - v1.first.point().at(1)) * (v2.second.point().at(2) - v2.first.point().at(2)) - (v2.second.point().at(1) - v2.first.point().at(1)) * (v1.second.point().at(2) - v1.first.point().at(2)),
+                            (v1.second.point().at(2) - v1.first.point().at(2)) * (v2.second.point().at(0) - v2.first.point().at(0)) - (v2.second.point().at(2) - v2.first.point().at(2)) * (v1.second.point().at(0) - v1.first.point().at(0)),
+                            (v1.second.point().at(0) - v1.first.point().at(0)) * (v2.second.point().at(1) - v2.first.point().at(1)) - (v2.second.point().at(0) - v2.first.point().at(0)) * (v1.second.point().at(1) - v1.first.point().at(1)));
 }
-#endif#endif /* TVECTOR_TPP */
+/*

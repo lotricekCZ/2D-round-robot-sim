@@ -64,8 +64,27 @@ T TLine<T, dims>::distance(TLine<T, dims> line, TPoint<T, dims> point)
     }
     catch (const std::exception &e)
     {
-        std::cerr << e.what() << '\n';
-        std::cout << "moment" << std::endl;
+        std::cerr << e.what() << std::endl;
+        return std::numeric_limits<T>::infinity();
+    }
+}
+
+template <typename T, uint32_t dims>
+T TLine<T, dims>::distance(TLine<T, dims> line)
+{
+    return TLine<T, dims>::distance(*this, line);
+}
+
+template <typename T, uint32_t dims>
+T TLine<T, dims>::distance(TLine<T, dims> line1, TLine<T, dims> line2)
+{
+    try
+    {
+        return (TPoint<T, dims>::dot(line1.origin - line2.origin, TPoint<T, dims>::cross(line1.get_point(), line2.get_point())) / (TVector<T, dims>::cross(static_cast<TVector<T, dims>&>(line1), static_cast<TVector<T, dims>&>(line2)).length()));
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << e.what() << std::endl;
         return std::numeric_limits<T>::infinity();
     }
 }

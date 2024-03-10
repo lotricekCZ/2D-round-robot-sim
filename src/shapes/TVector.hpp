@@ -22,6 +22,11 @@ public:
     TVector(const TVector &);
     // TVector(TVector<T, dims>);
     TVector(TPoint<T, dims>, TPoint<T, dims>);
+    TVector(TPoint<T, dims>);
+    
+    template <typename... Args>
+    TVector(const Args &...);
+
     static TVector normalise(TVector);
     TVector normalise();
     TVector operator+(const TVector &rhs);
@@ -38,12 +43,13 @@ public:
     TPoint<T, dims> get_origin();
     TPoint<T, dims> get_point();
     static T length(TVector);
-    static std::string print(TVector);
+    static std::string print(const TVector&);
     static std::string printGeogebra(TVector);
     std::string print();
     T length();
     static T dot(TVector, TVector);
     static T dot(TVector, TPoint<T, dims>);
+    static TVector<T, dims> cross(TVector, TVector);
 };
 
 #include "TVector.cpp"

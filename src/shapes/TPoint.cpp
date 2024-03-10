@@ -68,7 +68,7 @@ TPoint<T, dims>::TPoint(TPoint<T, dims> &point) {
  * @return A new point representing the result of the subtraction.
  */
 template <typename T, uint32_t dims>
-TPoint<T, dims> TPoint<T, dims>::operator-(const TPoint<T, dims> &rhs)
+TPoint<T, dims> TPoint<T, dims>::operator-(const TPoint<T, dims>& rhs) const
 {
 	TPoint<T, dims> result;
 	std::transform(coords.begin(), coords.end(), rhs.coords.begin(), result.coords.begin(),
@@ -206,4 +206,14 @@ T TPoint<T, dims>::dot(TPoint a)
 {
 	return TPoint<T, dims>::dot(*this, a);
 }
+
+template <typename T, uint32_t dims>
+TPoint<T, dims> TPoint<T, dims>::cross(TPoint<T, dims> p1, TPoint<T, dims> p2)
+{
+    static_assert(dims == 3, "TPoint: TPoint dimensions must be equal to 3, for that the cross product doesn't work for any other number of dimensions.\n");
+    return TPoint<T, dims>((p1.coords.at(1) ) * (p2.coords.at(2)) - (p2.coords.at(1)) * (p1.coords.at(2)),
+                            (p1.coords.at(2)) * (p2.coords.at(0)) - (p2.coords.at(2)) * (p1.coords.at(0)),
+                            (p1.coords.at(0)) * (p2.coords.at(1)) - (p2.coords.at(0)) * (p1.coords.at(1)));
+}
+
 #endif /* TPOINT_TPP */

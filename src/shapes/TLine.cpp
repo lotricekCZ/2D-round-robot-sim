@@ -80,6 +80,9 @@ T TLine<T, dims>::distance(TLine<T, dims> line1, TLine<T, dims> line2)
 {
     try
     {
+        if(line1.normalise().get_point() == line2.normalise().get_point()){
+            return TVector<T, dims>(TPoint<T, dims>::cross(line1.get_point(), (line1.origin - line2.origin))).length()/line1.length();
+        }
         return (TPoint<T, dims>::dot(line1.origin - line2.origin, TPoint<T, dims>::cross(line1.get_point(), line2.get_point())) / (TVector<T, dims>::cross(static_cast<TVector<T, dims>&>(line1), static_cast<TVector<T, dims>&>(line2)).length()));
     }
     catch (const std::exception &e)

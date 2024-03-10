@@ -17,7 +17,7 @@ class TPoint
 public:
     template <typename... Args>
     TPoint(Args...);
-    TPoint(TPoint &);
+    TPoint(const TPoint &);
     static std::string print(const TPoint &);
     std::string print();
     static std::array<T, dims> point(TPoint&);
@@ -34,10 +34,7 @@ public:
     TPoint operator*=(const T &rhs);
     TPoint operator-=(const TPoint &rhs);
 
-    inline bool operator==(const TPoint &rhs)
-    {
-        return this->get_distance(rhs) <= std::numeric_limits<T>::epsilon;
-    }
+    bool operator==(const TPoint &rhs);
 };
 
 #include "TPoint.cpp"

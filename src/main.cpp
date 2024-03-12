@@ -47,12 +47,21 @@ int main(int argc, char **argv)
 	}
 	{
 		Point3D a(0, 0, 0);
-		Point3D b(0.95, 1, 1);
-		Point3D c(0, 0, 1);
+		Point3D b(1, 0, 1);
+		Point3D c(0, 1, 0);
 		Point3D d(1, 1, 1);
 		std::cout << Line3D(a, b).print() << std::endl;
 		std::cout << Line3D(c, d).print() << std::endl;
 		std::cout << Line3D(a, b).distance(Line3D(c,d)) << std::endl;
+	}
+	{
+		Point2D a(0, 0);
+		Point2D b(1, 1);
+		Point2D c(4, 5);
+		Point2D d(5, 6);
+		std::cout << Line2D(a, b).print() << std::endl;
+		std::cout << Line2D(c, d).print() << std::endl;
+		std::cout << Line2D(a, b).distance(Line2D(c,d)) << std::endl;
 	}
 	return 0;
 };

@@ -34,78 +34,100 @@ TLine<T, dims>::TLine(TPoint<T, dims> a, TPoint<T, dims> b) : TVector<T, dims>(T
 template <typename T, uint32_t dims>
 std::string TLine<T, dims>::print(const TLine<T, dims> &line)
 {
-    // std::string pointStr = TPoint<T, dims>::print(line::TPoint<T, dims>::this);
-    // std::string vectorStr = TVector<T, dims>::print(line);
-    return TPoint<T, dims>::print(line.origin) + " + t" + TVector<T, dims>::print(line);
+	// std::string pointStr = TPoint<T, dims>::print(line::TPoint<T, dims>::this);
+	// std::string vectorStr = TVector<T, dims>::print(line);
+	return TPoint<T, dims>::print(line.origin) + " + t" + TVector<T, dims>::print(line);
 }
 
 template <typename T, uint32_t dims>
 std::string TLine<T, dims>::print()
 {
-    return TLine<T, dims>::print(*this);
+	return TLine<T, dims>::print(*this);
 }
 
 template <typename T, uint32_t dims>
 T TLine<T, dims>::distance(TPoint<T, dims> point)
 {
-    return TLine<T, dims>::distance(*this, point);
+	return TLine<T, dims>::distance(*this, point);
 }
 
 template <typename T, uint32_t dims>
 T TLine<T, dims>::distance(TLine<T, dims> line, TPoint<T, dims> point)
 {
-    try
-    {
-        auto denom = TPoint<T, dims>::dot(line.get_point(), line.get_point());
-        auto frac = TPoint<T, dims>::dot(line.get_point(), point - line.origin);
+	try
+	{
+		if (dims == 2)
+		{
+			std::array<T, dims> vec = line.get_point().point();
+			std::array<T, dims> p1 = line.origin.point();
+			std::array<T, dims> p0 = point.point();
+			return std::abs(vec.at(0) * (p1.at(1) - p0.at(1)) - vec.at(1) * (p1.at(0) - p0.at(0))) / line.length();
+		}
+		auto denom = TPoint<T, dims>::dot(line.get_point(), line.get_point());
+		auto frac = TPoint<T, dims>::dot(line.get_point(), point - line.origin);
 
-        auto p2 = line.at(frac / denom);
-        return TPoint<T, dims>::distance(p2, point);
-    }
-    catch (const std::exception &e)
-    {
-        std::cerr << e.what() << std::endl;
-        return std::numeric_limits<T>::infinity();
-    }
+		auto p2 = line.at(frac / denom);
+		return TPoint<T, dims>::distance(p2, point);
+	}
+	catch (const std::exception &e)
+	{
+		std::cerr << e.what() << std::endl;
+		return std::numeric_limits<T>::infinity();
+	}
 }
 
 template <typename T, uint32_t dims>
 T TLine<T, dims>::distance(TLine<T, dims> line)
 {
-    return TLine<T, dims>::distance(*this, line);
+	return TLine<T, dims>::distance(*this, line);
 }
 
 template <typename T, uint32_t dims>
 T TLine<T, dims>::distance(TLine<T, dims> line1, TLine<T, dims> line2)
 {
-    try
-    {
-        if(line1.normalise().get_point() == line2.normalise().get_point()){
-            return TVector<T, dims>(TPoint<T, dims>::cross(line1.get_point(), (line1.origin - line2.origin))).length()/line1.length();
-        }
-        return (TPoint<T, dims>::dot(line1.origin - line2.origin, TPoint<T, dims>::cross(line1.get_point(), line2.get_point())) / (TVector<T, dims>::cross(static_cast<TVector<T, dims>&>(line1), static_cast<TVector<T, dims>&>(line2)).length()));
-    }
-    catch (const std::exception &e)
-    {
-        std::cerr << e.what() << std::endl;
-        return std::numeric_limits<T>::infinity();
-    }
+	try
+	{
+		if constexpr(dims == 2)
+		{
+			if (line1.normalise().get_point() == line2.normalise().get_point())
+			{
+				return TLine<T, dims>::distance(line1, line2.origin);
+			}
+			else
+			{
+				return 0;
+			}
+		}
+		else
+		{
+			if (line1.normalise().get_point() == line2.normalise().get_point())
+			{
+				return TVector<T, dims>(TPoint<T, dims>::cross(line1.get_point(), (line1.origin - line2.origin))).length() / line1.length();
+			}
+			return (TPoint<T, dims>::dot(line1.origin - line2.origin, TPoint<T, dims>::cross(line1.get_point(), line2.get_point())) / (TVector<T, dims>::cross(static_cast<TVector<T, dims> &>(line1), static_cast<TVector<T, dims> &>(line2)).length()));
+		}
+	}
+	catch (const std::exception &e)
+	{
+		std::cerr << e.what() << std::endl;
+		return std::numeric_limits<T>::infinity();
+	}
 }
 
 template <typename T, uint32_t dims>
 TPoint<T, dims> TLine<T, dims>::at(T a)
 {
-    try
-    {
-        std::cout << "moment" << a << std::endl;
-        return TPoint<T, dims>(this->origin + this->get_point() * a);
-    }
-    catch (const std::exception &e)
-    {
-        std::cerr << e.what() << '\n';
-        std::cout << "moment" << std::endl;
-        return TPoint<T, dims>(std::numeric_limits<T>::infinity(), std::numeric_limits<T>::infinity());
-    }
+	try
+	{
+		std::cout << "moment" << a << std::endl;
+		return TPoint<T, dims>(this->origin + this->get_point() * a);
+	}
+	catch (const std::exception &e)
+	{
+		std::cerr << e.what() << '\n';
+		std::cout << "moment" << std::endl;
+		return TPoint<T, dims>(std::numeric_limits<T>::infinity(), std::numeric_limits<T>::infinity());
+	}
 }
 
 /*

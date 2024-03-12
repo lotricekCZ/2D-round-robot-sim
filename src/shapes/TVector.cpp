@@ -21,7 +21,7 @@ TVector<T, dims>::TVector() {}
 //  */
 // template <typename T, uint32_t dims>
 // TVector<T, dims>::TVector(TVector<T, dims> &vector) {
-//     *this = vector;
+//	 *this = vector;
 // }
 
 /**
@@ -33,14 +33,14 @@ TVector<T, dims>::TVector() {}
 template <typename T, uint32_t dims>
 TVector<T, dims>::TVector(const TVector<T, dims> &vector)
 {
-    *this = vector;
+	*this = vector;
 }
 
 
 template <typename T, uint32_t dims>
 template <typename... Args>
 TVector<T, dims>::TVector(const Args&... args) {
-    this->second = TPoint<T, dims>(static_cast<T>(args)...);
+	this->second = TPoint<T, dims>(static_cast<T>(args)...);
 }
 
 
@@ -55,8 +55,8 @@ TVector<T, dims>::TVector(const Args&... args) {
 template <typename T, uint32_t dims>
 TVector<T, dims>::TVector(TPoint<T, dims> a, TPoint<T, dims> b)
 {
-    this->first = a;
-    this->second = b;
+	this->first = a;
+	this->second = b;
 }
 
 
@@ -70,8 +70,8 @@ TVector<T, dims>::TVector(TPoint<T, dims> a, TPoint<T, dims> b)
 template <typename T, uint32_t dims>
 TVector<T, dims>::TVector(TPoint<T, dims> b)
 {
-    this->first = TPoint<T, dims>(0);
-    this->second = b;
+	this->first = TPoint<T, dims>(0);
+	this->second = b;
 }
 
 /**
@@ -84,7 +84,7 @@ TVector<T, dims>::TVector(TPoint<T, dims> b)
 template <typename T, uint32_t dims>
 T TVector<T, dims>::length()
 {
-    return TVector<T, dims>::length(*this);
+	return TVector<T, dims>::length(*this);
 }
 
 /**
@@ -97,7 +97,7 @@ T TVector<T, dims>::length()
 template <typename T, uint32_t dims>
 T TVector<T, dims>::length(TVector<T, dims> v)
 {
-    return TPoint<T, dims>::distance(v.first, v.second);
+	return TPoint<T, dims>::distance(v.first, v.second);
 }
 
 /**
@@ -111,9 +111,9 @@ T TVector<T, dims>::length(TVector<T, dims> v)
 template <typename T, uint32_t dims>
 TVector<T, dims> TVector<T, dims>::operator<<(const TVector<T, dims> &rhs)
 {
-    TPoint<T, dims> difference = this->first - rhs.first; // difference of two origins
-    TVector<T, dims> diff = rhs;                          // difference of two origins
-    return TVector<T, dims>(diff.first + difference, diff.second + difference);
+	TPoint<T, dims> difference = this->first - rhs.first; // difference of two origins
+	TVector<T, dims> diff = rhs;						  // difference of two origins
+	return TVector<T, dims>(diff.first + difference, diff.second + difference);
 }
 
 /**
@@ -127,9 +127,9 @@ TVector<T, dims> TVector<T, dims>::operator<<(const TVector<T, dims> &rhs)
 template <typename T, uint32_t dims>
 TPoint<T, dims> TVector<T, dims>::operator<<(const TPoint<T, dims> &rhs)
 {
-    TPoint<T, dims> difference = this->second - this->first; // difference of two origins
-    TPoint<T, dims> orig = rhs;                              // difference of two origins
-    return orig + difference;
+	TPoint<T, dims> difference = this->second - this->first; // difference of two origins
+	TPoint<T, dims> orig = rhs;							  // difference of two origins
+	return orig + difference;
 }
 
 /**
@@ -142,7 +142,7 @@ TPoint<T, dims> TVector<T, dims>::operator<<(const TPoint<T, dims> &rhs)
 template <typename T, uint32_t dims>
 TPoint<T, dims> TVector<T, dims>::get_origin()
 {
-    return this->first;
+	return this->first;
 }
 
 /**
@@ -155,19 +155,19 @@ TPoint<T, dims> TVector<T, dims>::get_origin()
 template <typename T, uint32_t dims>
 TPoint<T, dims> TVector<T, dims>::get_point()
 {
-    return this->second;
+	return this->second;
 }
 
 template <typename T, uint32_t dims>
 TVector<T, dims> TVector<T, dims>::normalise(TVector<T, dims> vec)
 {
-    return vec / TVector<T, dims>::length(vec);
+	return vec / TVector<T, dims>::length(vec);
 }
 
 template <typename T, uint32_t dims>
 TVector<T, dims> TVector<T, dims>::normalise()
 {
-    return TVector<T, dims>::normalise(*this);
+	return TVector<T, dims>::normalise(*this);
 }
 
 // Overloaded arithmetic operators
@@ -175,86 +175,86 @@ TVector<T, dims> TVector<T, dims>::normalise()
 template <typename T, uint32_t dims>
 TVector<T, dims> TVector<T, dims>::operator+(const TVector<T, dims> &rhs)
 {
-    TVector<T, dims> add = (*this << rhs);
-    return (*this << TVector<T, dims>(this->first + add.first, this->second + add.second));
+	TVector<T, dims> add = (*this << rhs);
+	return (*this << TVector<T, dims>(this->first + add.first, this->second + add.second));
 }
 
 template <typename T, uint32_t dims>
 TVector<T, dims> TVector<T, dims>::operator-(const TVector<T, dims> &rhs)
 {
-    TVector<T, dims> add = (*this << rhs);
-    return (*this << TVector<T, dims>(this->first - add.first, this->second - add.second));
+	TVector<T, dims> add = (*this << rhs);
+	return (*this << TVector<T, dims>(this->first - add.first, this->second - add.second));
 }
 
 template <typename T, uint32_t dims>
 TVector<T, dims> TVector<T, dims>::operator*(const T &rhs)
 {
-    return TVector<T, dims>(this->first, this->second * rhs - this->first, true);
+	return TVector<T, dims>(this->first, this->second * rhs - this->first, true);
 }
 
 template <typename T, uint32_t dims>
 TVector<T, dims> TVector<T, dims>::operator-(const T &rhs)
 {
-    return this->extend(this->length() - rhs);
+	return this->extend(this->length() - rhs);
 }
 
 template <typename T, uint32_t dims>
 TVector<T, dims> TVector<T, dims>::operator+(const T &rhs)
 {
-    return this->extend(this->length() + rhs);
+	return this->extend(this->length() + rhs);
 }
 
 template <typename T, uint32_t dims>
 TVector<T, dims> TVector<T, dims>::operator/(const T &rhs)
 {
-    return TVector<T, dims>(this->first, this->first + (this->second - this->first) / rhs);
+	return TVector<T, dims>(this->first, this->first + (this->second - this->first) / rhs);
 }
 
 template <typename T, uint32_t dims>
 TVector<T, dims> TVector<T, dims>::operator>>(TPoint<T, dims> &rhs)
 {
-    TPoint<T, dims> diff = rhs - this->first;
-    return TVector<T, dims>(this->first + diff, this->second + diff);
+	TPoint<T, dims> diff = rhs - this->first;
+	return TVector<T, dims>(this->first + diff, this->second + diff);
 }
 
 template <typename T, uint32_t dims>
 std::string TVector<T, dims>::print(const TVector<T, dims>& vector) {
-    return TPoint<T, dims>::print(vector.second - vector.first);
+	return TPoint<T, dims>::print(vector.second - vector.first);
 }
 
 template <typename T, uint32_t dims>
 std::string TVector<T, dims>::printGeogebra(TVector<T, dims> vector)
 {
-    static_assert(dims <= 3, "TVector: dimensions bigger than 3D are not yet supported, or present in geogebra");
-    std::stringstream ss;
-    ss << "=Vector[" << TPoint<T, dims>::print(vector.first) << "," << TPoint<T, dims>::print(vector.second) << "]";
-    return ss.str();
+	static_assert(dims <= 3, "TVector: dimensions bigger than 3D are not yet supported, or present in geogebra");
+	std::stringstream ss;
+	ss << "=Vector[" << TPoint<T, dims>::print(vector.first) << "," << TPoint<T, dims>::print(vector.second) << "]";
+	return ss.str();
 }
 
 template <typename T, uint32_t dims>
 std::string TVector<T, dims>::print()
 {
-    return TVector<T, dims>::print(*this);
+	return TVector<T, dims>::print(*this);
 }
 
 template <typename T, uint32_t dims>
 T TVector<T, dims>::dot(TVector a, TVector b)
 {
-    return TPoint<T, dims>::dot(a.second - a.first, b.second - b.first);
+	return TPoint<T, dims>::dot(a.second - a.first, b.second - b.first);
 }
 
 template <typename T, uint32_t dims>
 T TVector<T, dims>::dot(TVector<T, dims> a, TPoint<T, dims> b)
 {
-    return TPoint<T, dims>::dot(a.second - a.first, b);
+	return TPoint<T, dims>::dot(a.second - a.first, b);
 }
 
 template <typename T, uint32_t dims>
 TVector<T, dims> TVector<T, dims>::cross(TVector<T, dims> v1, TVector<T, dims> v2)
 {
-    static_assert(dims == 3, "TVector: TVector dimensions must be equal to 3, for that the cross product doesn't work for any other number of dimensions.\n");
-    return TVector<T, dims>((v1.second.point().at(1) - v1.first.point().at(1)) * (v2.second.point().at(2) - v2.first.point().at(2)) - (v2.second.point().at(1) - v2.first.point().at(1)) * (v1.second.point().at(2) - v1.first.point().at(2)),
-                            (v1.second.point().at(2) - v1.first.point().at(2)) * (v2.second.point().at(0) - v2.first.point().at(0)) - (v2.second.point().at(2) - v2.first.point().at(2)) * (v1.second.point().at(0) - v1.first.point().at(0)),
-                            (v1.second.point().at(0) - v1.first.point().at(0)) * (v2.second.point().at(1) - v2.first.point().at(1)) - (v2.second.point().at(0) - v2.first.point().at(0)) * (v1.second.point().at(1) - v1.first.point().at(1)));
+	static_assert(dims == 3, "TVector: TVector dimensions must be equal to 3, for that the cross product doesn't work for any other number of dimensions.\n");
+	return TVector<T, dims>((v1.second.point().at(1) - v1.first.point().at(1)) * (v2.second.point().at(2) - v2.first.point().at(2)) - (v2.second.point().at(1) - v2.first.point().at(1)) * (v1.second.point().at(2) - v1.first.point().at(2)),
+							(v1.second.point().at(2) - v1.first.point().at(2)) * (v2.second.point().at(0) - v2.first.point().at(0)) - (v2.second.point().at(2) - v2.first.point().at(2)) * (v1.second.point().at(0) - v1.first.point().at(0)),
+							(v1.second.point().at(0) - v1.first.point().at(0)) * (v2.second.point().at(1) - v2.first.point().at(1)) - (v2.second.point().at(0) - v2.first.point().at(0)) * (v1.second.point().at(1) - v1.first.point().at(1)));
 }
-/*
+#endif /* TVECTOR_TPP */

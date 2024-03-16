@@ -26,7 +26,8 @@ public:
     
     template <typename... Args>
     TVector(const Args &...);
-
+    // d stands for difference
+    T d(uint32_t);
     static TVector normalise(TVector);
     TVector normalise();
     TVector operator+(const TVector &rhs);
@@ -42,6 +43,7 @@ public:
     TPoint<T, dims> operator<<(const TPoint<T, dims> &rhs); // shifts the coordinate according to the vector
     TPoint<T, dims> get_origin();
     TPoint<T, dims> get_point();
+    static T d(TVector<T, dims> v, uint32_t index);
     static T length(TVector);
     static std::string print(const TVector&);
     static std::string printGeogebra(TVector);

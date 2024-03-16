@@ -2,6 +2,7 @@
 #include "shapes/TPoint.hpp"
 #include "shapes/TVector.hpp"
 #include "shapes/TLine.hpp"
+#include "shapes/TCircle.hpp"
 
 int main(int argc, char **argv)
 {
@@ -52,7 +53,7 @@ int main(int argc, char **argv)
 		Point3D d(1, 1, 1);
 		std::cout << Line3D(a, b).print() << std::endl;
 		std::cout << Line3D(c, d).print() << std::endl;
-		std::cout << Line3D(a, b).distance(Line3D(c,d)) << std::endl;
+		std::cout << Line3D(a, b).distance(Line3D(c, d)) << std::endl;
 	}
 	{
 		Point2D a(0, 0);
@@ -61,7 +62,34 @@ int main(int argc, char **argv)
 		Point2D d(5, 6);
 		std::cout << Line2D(a, b).print() << std::endl;
 		std::cout << Line2D(c, d).print() << std::endl;
-		std::cout << Line2D(a, b).distance(Line2D(c,d)) << std::endl;
+		std::cout << Line2D(a, b).distance(Line2D(c, d)) << std::endl;
+	}
+	{
+		Point2D a(0, 0);
+		Point2D b(1, 1);
+		std::cout << Vect2D::printGeogebra(Vect2D(a, b)) << std::endl;
+		std::cout << Vect2D::printGeogebra((Vect2D(a, b) * 1.5)) << std::endl;
+	}
+	{
+		Point2D a(0, 0);
+		Point2D b(2, 1);
+		Point2D c(4, 5);
+		Point2D d(5, 6);
+		// std::cout << Circle2D(4, a).print() << std::endl;
+		// std::cout << Circle2D(5, c).print() << std::endl;
+		// Circle2D(5, c).intersection(Circle2D(4, a));
+
+		// std::cout << Circle2D(4, d).print() << std::endl;
+		// std::cout << Circle2D(5, c).print() << std::endl;
+		// Circle2D(5, c).intersection(Circle2D(4, d));
+
+		std::cout << Circle2D(4, d).print() << std::endl;
+		std::cout << Circle2D(4, b).print() << std::endl;
+		Circle2D(4, b).intersection(Circle2D(4, d));
+
+		// std::cout << Circle2D(4, d).print() << std::endl;
+		// std::cout << Circle2D(4, a).print() << std::endl;
+		// Circle2D(4, a).intersection(Circle2D(4, d));
 	}
 	return 0;
 };

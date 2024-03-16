@@ -36,13 +36,12 @@ TVector<T, dims>::TVector(const TVector<T, dims> &vector)
 	*this = vector;
 }
 
-
 template <typename T, uint32_t dims>
 template <typename... Args>
-TVector<T, dims>::TVector(const Args&... args) {
+TVector<T, dims>::TVector(const Args &...args)
+{
 	this->second = TPoint<T, dims>(static_cast<T>(args)...);
 }
-
 
 /**
  * @brief Constructor for TVector taking two points.
@@ -58,7 +57,6 @@ TVector<T, dims>::TVector(TPoint<T, dims> a, TPoint<T, dims> b)
 	this->first = a;
 	this->second = b;
 }
-
 
 /**
  * @brief Constructor for TVector taking two points.
@@ -128,7 +126,7 @@ template <typename T, uint32_t dims>
 TPoint<T, dims> TVector<T, dims>::operator<<(const TPoint<T, dims> &rhs)
 {
 	TPoint<T, dims> difference = this->second - this->first; // difference of two origins
-	TPoint<T, dims> orig = rhs;							  // difference of two origins
+	TPoint<T, dims> orig = rhs;								 // difference of two origins
 	return orig + difference;
 }
 
@@ -189,7 +187,7 @@ TVector<T, dims> TVector<T, dims>::operator-(const TVector<T, dims> &rhs)
 template <typename T, uint32_t dims>
 TVector<T, dims> TVector<T, dims>::operator*(const T &rhs)
 {
-	return TVector<T, dims>(this->first, this->second * rhs - this->first, true);
+	return TVector<T, dims>(this->first, this->first + (this->second - this->first) * rhs);
 }
 
 template <typename T, uint32_t dims>
@@ -217,11 +215,26 @@ TVector<T, dims> TVector<T, dims>::operator>>(TPoint<T, dims> &rhs)
 	return TVector<T, dims>(this->first + diff, this->second + diff);
 }
 
+/**
+ * @brief Prints the vector in a human-readable format.
+ *
+ * @tparam T The type of the vector components.
+ * @param vector The vector to print.
+ * @return std::string A string representation of the vector.
+ */
 template <typename T, uint32_t dims>
-std::string TVector<T, dims>::print(const TVector<T, dims>& vector) {
+std::string TVector<T, dims>::print(const TVector<T, dims> &vector)
+{
 	return TPoint<T, dims>::print(vector.second - vector.first);
 }
 
+/**
+ * @brief Prints the vector in a format suitable for GeoGebra.
+ *
+ * @tparam T The type of the vector components.
+ * @param vector The vector to print.
+ * @return std::string A string representation of the vector for GeoGebra.
+ */
 template <typename T, uint32_t dims>
 std::string TVector<T, dims>::printGeogebra(TVector<T, dims> vector)
 {
@@ -231,24 +244,55 @@ std::string TVector<T, dims>::printGeogebra(TVector<T, dims> vector)
 	return ss.str();
 }
 
+/**
+ * @brief Prints the vector in a human-readable format.
+ *
+ * @tparam T The type of the vector components.
+ * @param vector The vector to print.
+ * @return std::string A string representation of the vector.
+ */
 template <typename T, uint32_t dims>
 std::string TVector<T, dims>::print()
 {
 	return TVector<T, dims>::print(*this);
 }
 
+/**
+ * @brief Calculates the dot product of two vectors.
+ *
+ * @tparam T The type of the vector components.
+ * @param a The first vector.
+ * @param b The second vector.
+ * @return T The dot product of the two vectors.
+ */
 template <typename T, uint32_t dims>
 T TVector<T, dims>::dot(TVector a, TVector b)
 {
 	return TPoint<T, dims>::dot(a.second - a.first, b.second - b.first);
 }
 
+/**
+ * @brief Calculates the dot product of a vector and a point.
+ *
+ * @tparam T The type of the vector components.
+ * @param a The vector.
+ * @param b The point.
+ * @return T The dot product of the vector and the point.
+ */
 template <typename T, uint32_t dims>
 T TVector<T, dims>::dot(TVector<T, dims> a, TPoint<T, dims> b)
 {
 	return TPoint<T, dims>::dot(a.second - a.first, b);
 }
 
+/**
+ * @brief Calculates the cross product of two vectors.
+ *
+ * @tparam T The type of the vector components.
+ * @param v1 The first vector.
+ * @param v2 The second vector.
+ * @return TVector<T, dims> The cross product of the two vectors.
+ */
 template <typename T, uint32_t dims>
 TVector<T, dims> TVector<T, dims>::cross(TVector<T, dims> v1, TVector<T, dims> v2)
 {
@@ -256,5 +300,17 @@ TVector<T, dims> TVector<T, dims>::cross(TVector<T, dims> v1, TVector<T, dims> v
 	return TVector<T, dims>((v1.second.point().at(1) - v1.first.point().at(1)) * (v2.second.point().at(2) - v2.first.point().at(2)) - (v2.second.point().at(1) - v2.first.point().at(1)) * (v1.second.point().at(2) - v1.first.point().at(2)),
 							(v1.second.point().at(2) - v1.first.point().at(2)) * (v2.second.point().at(0) - v2.first.point().at(0)) - (v2.second.point().at(2) - v2.first.point().at(2)) * (v1.second.point().at(0) - v1.first.point().at(0)),
 							(v1.second.point().at(0) - v1.first.point().at(0)) * (v2.second.point().at(1) - v2.first.point().at(1)) - (v2.second.point().at(0) - v2.first.point().at(0)) * (v1.second.point().at(1) - v1.first.point().at(1)));
+}
+
+template <typename T, uint32_t dims>
+T TVector<T, dims>::d(uint32_t index)
+{
+	return d(*this, index);
+}
+
+template <typename T, uint32_t dims>
+T TVector<T, dims>::d(TVector<T, dims> v, uint32_t index)
+{
+	return v.get_point().point().at(index) - v.get_origin().point().at(index);
 }
 #endif /* TVECTOR_TPP */

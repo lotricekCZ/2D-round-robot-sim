@@ -32,13 +32,20 @@ public:
     static std::vector<TPoint<T, dims>> intersection(TCircle, TLine<T, dims>); // function to decide if sth intersects
     static std::vector<TPoint<T, dims>> intersection(TCircle k, TCircle c);
 
+    static std::vector<TLine<T, dims>> tangents(TCircle c, TPoint<T, dims> point);
+    static std::vector<TLine<T, dims>> tangents(TCircle a, TCircle b);
+    static void tangents(TPoint<T, dims> c, T r1, T r2, std::vector<TLine<T, dims>> &ans);
     static TPoint<T, dims> at(TCircle&, T);
     bool inside(TPoint<T, dims> a);
     bool is_on(TPoint<T, dims> c, T epsilon = std::numeric_limits<T>::epsilon);
 
+    std::vector<TPoint<T, dims>> tangent_points(TPoint<T, dims> point);
+    std::vector<TPoint<T, dims>> points();
+
     std::vector<TPoint<T, dims>> intersection(TLine<T, dims>); // function to decide if sth intersects
     std::vector<TPoint<T, dims>> intersection(TCircle);
     TPoint<T, dims> at(T);
+    std::vector<TLine<T, dims>> tangents(TPoint<T, dims> point);
     std::string print();
     std::string print(TCircle &);
 
@@ -50,6 +57,7 @@ public:
     T distance(TLine<T, dims>);
     T distance(TPoint<T, dims>, TPoint<T, dims>);
 
+    bool on_segment(TPoint<T, dims>, TPoint<T, dims>, TPoint<T, dims>, bool);
     bool operator==(const TCircle &rhs)
     {
         return this->center == rhs.center && this->radius == rhs.radius;

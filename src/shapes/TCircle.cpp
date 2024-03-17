@@ -126,11 +126,10 @@ template <typename T, uint32_t dims>
 std::vector<TPoint<T, dims>> TCircle<T, dims>::intersection(TCircle k, TCircle c)
 {
 	std::vector<TPoint<T, dims>> ret;
-	auto vec = TVector<T, dims>(k.center, c.center) * ((std::pow(k.radius, 2)) / (std::pow(k.radius, 2) + std::pow(c.radius, 2)));
-	std::cout << vec.get_point().print() << std::endl;
+	auto dist = TVector<T, dims>(k.center, c.center);
 
-	T alpha = std::acos(vec.length() / (k.radius));
-	T theta = std::atan2((vec.d(1)), (vec.d(0)));
+	T alpha = std::acos((std::pow(k.radius, 2) + std::pow(dist.length(), 2) - std::pow(c.radius, 2)) / (2 * k.radius * dist.length()));
+	T theta = std::atan2((dist.d(1)), (dist.d(0)));
 	std::cout << k.at((theta + alpha) / (2 * M_PI)).print() << std::endl;
 	std::cout << k.at((theta - alpha) / (2 * M_PI)).print() << std::endl;
 	return ret;
@@ -178,6 +177,72 @@ TPoint<T, dims> TCircle<T, dims>::at(T par)
 {
 	return TCircle<T, dims>::at(*this, par);
 }
+
+// template <typename T, uint32_t dims>
+// void TCircle<T, dims>::TCircle_tangents (TPoint<T, dims> c, T r1, T r2, std::vector<TLine<T, dims>> & ans) {
+//     T r = r2 - r1;
+//     T z = std::pow(c.x, 2) + std::pow(c.y, 2);
+//     T d = z - std::pow(r, 2);
+//     if (d < -(1e-4))  return;
+//     d = std::sqrt(std::abs(d));
+//     TLine<T, dims> l;
+//     l.a = (c.x * r + c.y * d) / z;
+//     l.b = (c.y * r - c.x * d) / z;
+//     l.c = r1;
+//     ans.emplace_back((c.x * r + c.y * d) / z, (c.y * r - c.x * d) / z, r1);
+// }
+
+// template <typename T, uint32_t dims>
+// std::vector<TLine<T, dims>> TCircle<T, dims>::TCircle_tangents(TCircle a, TCircle b) {
+//     std::vector<TLine<T, dims>> ans;
+// 	for (int i=-1; i<=1; i+=2)
+// 		for (int j=-1; j<=1; j+=2)
+// 			TCircle_tangents (b.center-a.center, a.radius*i, b.radius*j, ans);
+// 	for (size_t i=0; i<ans.size(); ++i)
+// 		ans[i].c -= ans[i].a * a.center.x + ans[i].b * a.center.y;
+// 	return ans;
+// }
+
+// template <typename T, uint32_t dims>
+// std::vector<TPoint<T, dims>> TCircle<T, dims>::tangent_points(TCircle c, TPoint<T, dims> point){
+// 	T diff_x = point.x - c.center.x;
+// 	T diff_y = point.y - c.center.y;
+// 	T dxr = -diff_y;
+// 	T dyr = diff_x;
+// 	T distance = c.center.distance(point);
+// 	std::vector<TPoint<T, dims>> ret;
+// 	if (distance >= c.radius){
+// 		T rho = c.radius / distance;
+// 		T ad = std::pow(rho, 2);
+// 		T bd = rho * std::sqrt(1-std::pow(rho, 2));
+// 		ret.assign({TPoint<T, dims>(c.center.x + ad * diff_x + bd * dxr, c.center.y + ad * diff_y + bd * dyr),
+// 					TPoint<T, dims>(c.center.x + ad * diff_x - bd * dxr, c.center.y + ad * diff_y - bd * dyr)});
+// 		}
+// 	return ret;
+// }
+
+// template <typename T, uint32_t dims>
+// std::vector<TPoint<T, dims>> TCircle<T, dims>::tangent_points(TPoint<T, dims> point){
+// 	return TCircle<T, dims>::tangent_points(*this, point);
+// }
+
+// template <typename T, uint32_t dims>
+// std::vector<TLine<T, dims>> TCircle<T, dims>::tangents(TCircle c, TPoint<T, dims> point){
+// 	std::vector<TLine<T, dims>> ret;
+// 	if(c.is_on(point)){
+// 		ret.push_back(TLine<T, dims>(c.center, point).make_perpendicular(point));
+// 		return ret;
+// 		}
+// 	for(auto i: TCircle<T, dims>::tangent_points(c, point))
+// 		ret.emplace_back(point, i);
+// 	return ret;
+// }
+
+// template <typename T, uint32_t dims>
+// std::vector<TLine<T, dims>> TCircle<T, dims>::tangents(TPoint<T, dims> point){
+// 	return TCircle<T, dims>::tangents(*this, point);
+// }
+
 /**
  * @brief Print the circle equation.
  *
@@ -206,5 +271,104 @@ std::string TCircle<T, dims>::print(TCircle<T, dims> &a)
 	ss << TPoint<T, dims>::print(a.center) << " + " << a.radius << "(cos(2 π t), sin(2 π t))";
 	return ss.str();
 }
+
+// template <typename T, uint32_t dims>
+// bool TCircle<T, dims>::on_segment(TPoint<T, dims> start, TPoint<T, dims> end, TPoint<T, dims> point, bool angle){
+// 	if(!is_on(point)){
+// 		return false;
+// 		}
+
+// 	TLine<T, dims> cut(start, end);
+// 	TLine<T, dims> perp = cut.make_perpendicular(this -> center);
+
+// 	std::vector<TPoint<T, dims>> intersections = intersection(perp, (*this));
+// 	/// it's sure there are exactly two intersections, both do have exact same distance to start and end
+// 	T d0 = start.distance(intersections[0]);
+// 	T d1 = start.distance(intersections[1]);
+// 	T max;
+// 	TPoint<T, dims>* p_center;
+// 	if(d0 > d1){ // checks which of them is further -> that one also has bigger angle
+// 		p_center = &intersections[0];
+// 		max = d0;
+// 		}else{
+// 			p_center = &intersections[1];
+// 			max = d1;
+// 			}
+
+// 	// returns true if the point is on bigger segment if bigger angle is set (1)
+// 	// it is checked by a fact that it is actually closer than start/end
+// 	// if that is not the case, it already is on the TCircle, so it must be on the smaller angle
+// 	return angle == (p_center -> distance(point) < max);
+// 	};
+
+// template <typename T, uint32_t dims>
+// std::vector<TCircle<T, dims>> TCircle<T, dims>::TCircles(TLine<T, dims> a, TLine<T, dims> b, T radius){
+// 	std::vector<TCircle> ret;
+// 	TPoint<T, dims> intersection = a.intersection(b);
+// 	if(intersection.is_invalid()){
+// 		return ret;
+// 	}
+// 	T angle = a.get_angle(b);
+// 	//~ std::cout << intersection.print() << std::endl;
+// 	ret.emplace_back(intersection.make_global(TPoint<T, dims>(0, radius / (sin(angle/2))), ((a.get_angle() + b.get_angle())/2)-pi_const), radius);
+// 	ret.emplace_back(intersection.make_global(TPoint<T, dims>(0, -radius / (sin(angle/2))), ((a.get_angle() + b.get_angle())/2)-pi_const), radius);
+// 	ret.emplace_back(intersection.make_global(TPoint<T, dims>(radius / (sin(pi_const/2 -angle/2)), 0), ((a.get_angle() + b.get_angle())/2)-pi_const), radius);
+// 	ret.emplace_back(intersection.make_global(TPoint<T, dims>(-radius / (sin(pi_const/2 -angle/2)), 0), ((a.get_angle() + b.get_angle())/2)-pi_const), radius);
+
+// 	return ret;
+// 	}
+
+// template <typename T, uint32_t dims>
+// T TCircle<T, dims>::distance(TCircle ci, TPoint<T, dims> co){ // gets the distance from circumference
+// 	return std::abs(co.distance(ci.center) - ci.radius);
+// 	}
+
+// T TCircle<T, dims>::distance(TPoint<T, dims> co){ // gets the distance from circumference
+// 	return distance((*this), co);
+// 	}
+
+// T TCircle<T, dims>::distance(TCircle ci, TLine<T, dims> l){ // gets the distance from circumference
+// 	TLine<T, dims> p = l.make_perpendicular(ci.center);
+// 	T distance_intersection = ci.center.distance(p.intersection(l));
+// 	T distance_to_circumference = distance_intersection - ci.radius;
+
+// 	return ((distance_to_circumference) < 0)? 0: distance_to_circumference;
+// 	}
+
+// template <typename T, uint32_t dims>
+// T TCircle<T, dims>::distance(TLine<T, dims> li){ // gets the distance from circumference
+// 	return distance((*this), li);
+// 	}
+
+// template <typename T, uint32_t dims>
+// T TCircle<T, dims>::distance(TCircle c, TPoint<T, dims> a, TPoint<T, dims> b){
+// 	std::array<T, 2> distances_ab = {c.center.distance(a), c.center.distance(b)};
+
+// 	if((c.radius < distances_ab[0]) ^ (c.radius < distances_ab[1])){
+// 		/// fact that one of the TPoint<T, dims> is closer and the other further means that it has on_segment intersection
+// 		return 0;
+// 		}
+
+// 	TLine<T, dims> l(a, b);
+// 	std::vector<TPoint<T, dims>> intersections = c.intersection(l);
+// 	if(intersections.size() == 0){
+// 		/// means the segment is outside - treat it as a TLine<T, dims> for some part
+// 		TLine<T, dims> p = l.make_perpendicular(c.center);
+
+// 		TPoint<T, dims> inter = p.intersection(l);
+// 		std::cout << c.center.print() << std::endl;
+// 		std::cout << p.print() << std::endl;
+// 		std::cout << inter.print() << std::endl;
+// 		return std::abs(((l.on_segment(inter, a, b))? c.center.distance(inter):
+// 									((distances_ab[0] < distances_ab[1])? distances_ab[0]: distances_ab[1])) - c.radius);
+// 		}
+
+// 	return std::abs((distances_ab[0] > distances_ab[1]? distances_ab[0]: distances_ab[1]) - c.radius);
+// 	}
+
+// template <typename T, uint32_t dims>
+// T TCircle<T, dims>::distance(TPoint<T, dims> a, TPoint<T, dims> b){
+// 	return distance((*this), a, b);
+// 	}
 
 #endif

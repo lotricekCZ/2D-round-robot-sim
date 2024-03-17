@@ -84,8 +84,8 @@ int main(int argc, char **argv)
 		// Circle2D(5, c).intersection(Circle2D(4, d));
 
 		std::cout << Circle2D(4, d).print() << std::endl;
-		std::cout << Circle2D(4, b).print() << std::endl;
-		Circle2D(4, b).intersection(Circle2D(4, d));
+		std::cout << Circle2D(5, b).print() << std::endl;
+		Circle2D(5, b).intersection(Circle2D(4, d));
 
 		// std::cout << Circle2D(4, d).print() << std::endl;
 		// std::cout << Circle2D(4, a).print() << std::endl;

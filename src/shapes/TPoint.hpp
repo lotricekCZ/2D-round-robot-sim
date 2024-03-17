@@ -19,6 +19,7 @@ public:
 	TPoint(Args...);
 	TPoint(const TPoint &);
 	static std::string print(const TPoint &);
+	static std::string print(const std::vector<TPoint>&);
 	std::string print();
 	static std::array<T, dims> point(TPoint&);
 	static T distance(TPoint<T, dims> a, TPoint<T, dims> b);

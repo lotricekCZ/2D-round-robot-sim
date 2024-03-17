@@ -47,7 +47,8 @@ public:
     TPoint<T, dims> at(T);
     std::vector<TLine<T, dims>> tangents(TPoint<T, dims> point);
     std::string print();
-    std::string print(TCircle &);
+    static std::string print(TCircle &);
+    
 
     static T distance(TCircle, TPoint<T, dims>);
     static T distance(TCircle, TLine<T, dims>);

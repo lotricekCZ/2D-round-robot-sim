@@ -163,6 +163,17 @@ TPoint<T, dims> TPoint<T, dims>::operator-=(const TPoint<T, dims> &rhs)
 }
 
 template <typename T, uint32_t dims>
+std::string TPoint<T, dims>::print(const std::vector<TPoint<T, dims>> &arr)
+{
+	std::stringstream ss;
+	for(auto p: arr)
+		ss << p.print() << "\n";
+	std::string ret = ss.str();
+	ret.pop_back();
+	return ret;
+}
+
+template <typename T, uint32_t dims>
 std::string TPoint<T, dims>::print(const TPoint<T, dims> &point)
 {
 	std::stringstream ss;

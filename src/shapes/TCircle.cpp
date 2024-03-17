@@ -96,6 +96,16 @@ std::vector<TPoint<T, dims>> TCircle<T, dims>::intersection(TCircle<T, dims> c, 
 	static_assert(dims == 2, "TCircle: dimensions other than 2D are not yet supported");
 	std::vector<TPoint<T, dims>> ret;
 	// Implement intersection calculation here
+	auto d = l.distance(c.center);
+	if (d > c.radius)
+		return ret;
+	T alpha = std::acos(d / c.radius);
+	T beta = std::atan2(l.d(1), l.d(0)) + M_PI_2;
+
+	ret.push_back(c.at((beta + alpha) / (2 * M_PI)));
+	if (std::abs(alpha) > std::numeric_limits<T>::epsilon())
+		ret.push_back(c.at((beta - alpha) / (2 * M_PI)));
+
 	return ret;
 }
 
@@ -127,11 +137,13 @@ std::vector<TPoint<T, dims>> TCircle<T, dims>::intersection(TCircle k, TCircle c
 {
 	std::vector<TPoint<T, dims>> ret;
 	auto dist = TVector<T, dims>(k.center, c.center);
-
+	if (dist.length() > (k.radius + c.radius))
+		return ret;
 	T alpha = std::acos((std::pow(k.radius, 2) + std::pow(dist.length(), 2) - std::pow(c.radius, 2)) / (2 * k.radius * dist.length()));
 	T theta = std::atan2((dist.d(1)), (dist.d(0)));
-	std::cout << k.at((theta + alpha) / (2 * M_PI)).print() << std::endl;
-	std::cout << k.at((theta - alpha) / (2 * M_PI)).print() << std::endl;
+	ret.push_back(k.at((theta + alpha) / (2 * M_PI)));
+	if (std::abs(alpha) > std::numeric_limits<T>::epsilon())
+		ret.push_back(k.at((theta - alpha) / (2 * M_PI)));
 	return ret;
 }
 

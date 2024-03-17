@@ -85,7 +85,41 @@ int main(int argc, char **argv)
 
 		std::cout << Circle2D(4, d).print() << std::endl;
 		std::cout << Circle2D(5, b).print() << std::endl;
-		Circle2D(5, b).intersection(Circle2D(4, d));
+		std::cout << Point2D::print(Circle2D(5, b).intersection(Circle2D(4, d))) << std::endl;
+
+		// std::cout << Circle2D(4, d).print() << std::endl;
+		// std::cout << Circle2D(4, a).print() << std::endl;
+		// Circle2D(4, a).intersection(Circle2D(4, d));
+	}
+	{
+		Point2D a(0, 0);
+		Point2D b(2, 1);
+		Point2D c(4, 5);
+		Point2D d(5, 6);
+		// std::cout << Circle2D(4, a).print() << std::endl;
+		// std::cout << Circle2D(5, c).print() << std::endl;
+		// Circle2D(5, c).intersection(Circle2D(4, a));
+
+		// std::cout << Circle2D(4, d).print() << std::endl;
+		// std::cout << Circle2D(5, c).print() << std::endl;
+		// Circle2D(5, c).intersection(Circle2D(4, d));
+
+		std::cout << Circle2D(4, d).print() << std::endl;
+		std::cout << Circle2D(5, b).print() << std::endl;
+		std::cout << Point2D::print(Circle2D(5, b).intersection(Circle2D(4, d))) << std::endl;
+
+		// std::cout << Circle2D(4, d).print() << std::endl;
+		// std::cout << Circle2D(4, a).print() << std::endl;
+		// Circle2D(4, a).intersection(Circle2D(4, d));
+	}
+	{
+		Point2D a(0, 6);
+		Point2D b(10, 0);
+		Point2D c(2, 2);
+
+		std::cout << Circle2D(3, c).print() << std::endl;
+		std::cout << Line2D(a, b).print() << std::endl;
+		std::cout << Point2D::print(Circle2D(3, c).intersection(Line2D(a, b))) << std::endl;
 
 		// std::cout << Circle2D(4, d).print() << std::endl;
 		// std::cout << Circle2D(4, a).print() << std::endl;

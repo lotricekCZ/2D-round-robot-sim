@@ -46,7 +46,7 @@ public:
     static T d(TVector<T, dims> v, uint32_t index);
     static T length(TVector);
     static std::string print(const TVector&);
-    static std::string printGeogebra(TVector);
+    static std::string print_geogebra(TVector);
     std::string print();
     T length();
     static T dot(TVector, TVector);

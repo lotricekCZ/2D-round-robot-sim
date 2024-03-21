@@ -236,7 +236,7 @@ std::string TVector<T, dims>::print(const TVector<T, dims> &vector)
  * @return std::string A string representation of the vector for GeoGebra.
  */
 template <typename T, uint32_t dims>
-std::string TVector<T, dims>::printGeogebra(TVector<T, dims> vector)
+std::string TVector<T, dims>::print_geogebra(TVector<T, dims> vector)
 {
 	static_assert(dims <= 3, "TVector: dimensions bigger than 3D are not yet supported, or present in geogebra");
 	std::stringstream ss;

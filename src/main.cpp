@@ -67,8 +67,8 @@ int main(int argc, char **argv)
 	{
 		Point2D a(0, 0);
 		Point2D b(1, 1);
-		std::cout << Vect2D::printGeogebra(Vect2D(a, b)) << std::endl;
-		std::cout << Vect2D::printGeogebra((Vect2D(a, b) * 1.5)) << std::endl;
+		std::cout << Vect2D::print_geogebra(Vect2D(a, b)) << std::endl;
+		std::cout << Vect2D::print_geogebra((Vect2D(a, b) * 1.5)) << std::endl;
 	}
 	{
 		Point2D a(0, 0);
@@ -120,10 +120,17 @@ int main(int argc, char **argv)
 		std::cout << Circle2D(3, c).print() << std::endl;
 		std::cout << Line2D(a, b).print() << std::endl;
 		std::cout << Point2D::print(Circle2D(3, c).intersection(Line2D(a, b))) << std::endl;
+	}
+	{
+		Point2D a(0, 6);
+		Point2D b(10, 0);
+		Point2D c(2, 2);
 
-		// std::cout << Circle2D(4, d).print() << std::endl;
-		// std::cout << Circle2D(4, a).print() << std::endl;
-		// Circle2D(4, a).intersection(Circle2D(4, d));
+		std::cout << Circle2D(3, a).print() << std::endl;
+		std::cout << Circle2D(4, b).print() << std::endl;
+		for(auto i: Circle2D(3, a).tangents(Circle2D(4, b)))
+			std::cout << i.print() << std::endl;
+
 	}
 	return 0;
 };

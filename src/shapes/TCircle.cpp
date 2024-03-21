@@ -96,8 +96,8 @@ std::vector<TPoint<T, dims>> TCircle<T, dims>::intersection(TCircle<T, dims> c, 
 	static_assert(dims == 2, "TCircle: dimensions other than 2D are not yet supported");
 	std::vector<TPoint<T, dims>> ret;
 	// Implement intersection calculation here
-	auto d = l.distance(c.center);
-	if (d > c.radius)
+	auto d = c.distance(l);
+	if (d != 0)
 		return ret;
 	T alpha = std::acos(d / c.radius);
 	T beta = std::atan2(l.d(1), l.d(0)) + M_PI_2;
@@ -190,30 +190,31 @@ TPoint<T, dims> TCircle<T, dims>::at(T par)
 	return TCircle<T, dims>::at(*this, par);
 }
 
-// template <typename T, uint32_t dims>
-// void TCircle<T, dims>::TCircle_tangents (TPoint<T, dims> c, T r1, T r2, std::vector<TLine<T, dims>> & ans) {
-//     T r = r2 - r1;
-//     T z = std::pow(c.x, 2) + std::pow(c.y, 2);
-//     T d = z - std::pow(r, 2);
-//     if (d < -(1e-4))  return;
-//     d = std::sqrt(std::abs(d));
-//     TLine<T, dims> l;
-//     l.a = (c.x * r + c.y * d) / z;
-//     l.b = (c.y * r - c.x * d) / z;
-//     l.c = r1;
-//     ans.emplace_back((c.x * r + c.y * d) / z, (c.y * r - c.x * d) / z, r1);
-// }
+template <typename T, uint32_t dims>
+std::vector<TLine<T, dims>> TCircle<T, dims>::tangents(TCircle<T, dims> a, TCircle<T, dims> b)
+{
+	static_assert(dims == 2, "TCircle::circle_tangents is 2D only");
+	std::vector<TLine<T, dims>> ans;
+	TVector<T, dims> c2c(a.center, b.center); // center-to-center vector
 
-// template <typename T, uint32_t dims>
-// std::vector<TLine<T, dims>> TCircle<T, dims>::TCircle_tangents(TCircle a, TCircle b) {
-//     std::vector<TLine<T, dims>> ans;
-// 	for (int i=-1; i<=1; i+=2)
-// 		for (int j=-1; j<=1; j+=2)
-// 			TCircle_tangents (b.center-a.center, a.radius*i, b.radius*j, ans);
-// 	for (size_t i=0; i<ans.size(); ++i)
-// 		ans[i].c -= ans[i].a * a.center.x + ans[i].b * a.center.y;
-// 	return ans;
-// }
+	if (c2c.length() > (a.radius + b.radius))
+	{
+		T alpha = acos(a.radius / (c2c.length()*(a.radius/(a.radius+b.radius))));
+		T theta = std::atan2((c2c.d(1)), (c2c.d(0)));
+		ans.emplace_back(a.at((theta + alpha) / (2 * M_PI)), b.at((theta + alpha + M_PI) / (2 * M_PI)));
+		ans.emplace_back(a.at((theta - alpha) / (2 * M_PI)), b.at((theta - alpha + M_PI) / (2 * M_PI)));
+	}
+
+	// for (size_t i = 0; i < ans.size(); ++i)
+	// 	ans[i].c -= ans[i].a * a.center.x + ans[i].b * a.center.y;
+	return ans;
+}
+
+template <typename T, uint32_t dims>
+std::vector<TLine<T, dims>> TCircle<T, dims>::tangents(TCircle<T, dims> a)
+{
+	return TCircle<T, dims>::tangents(*this, a);
+}
 
 // template <typename T, uint32_t dims>
 // std::vector<TPoint<T, dims>> TCircle<T, dims>::tangent_points(TCircle c, TPoint<T, dims> point){
@@ -330,27 +331,30 @@ std::string TCircle<T, dims>::print(TCircle<T, dims> &a)
 // 	return ret;
 // 	}
 
-// template <typename T, uint32_t dims>
-// T TCircle<T, dims>::distance(TCircle ci, TPoint<T, dims> co){ // gets the distance from circumference
-// 	return std::abs(co.distance(ci.center) - ci.radius);
-// 	}
+template <typename T, uint32_t dims>
+T TCircle<T, dims>::distance(TCircle<T, dims> circ, TPoint<T, dims> point)
+{ // gets the distance from circumference
+	return std::abs(point.distance(circ.center) - circ.radius);
+}
 
-// T TCircle<T, dims>::distance(TPoint<T, dims> co){ // gets the distance from circumference
-// 	return distance((*this), co);
-// 	}
+template <typename T, uint32_t dims>
+T TCircle<T, dims>::distance(TPoint<T, dims> co)
+{ // gets the distance from circumference
+	return distance((*this), co);
+}
 
-// T TCircle<T, dims>::distance(TCircle ci, TLine<T, dims> l){ // gets the distance from circumference
-// 	TLine<T, dims> p = l.make_perpendicular(ci.center);
-// 	T distance_intersection = ci.center.distance(p.intersection(l));
-// 	T distance_to_circumference = distance_intersection - ci.radius;
+template <typename T, uint32_t dims>
+T TCircle<T, dims>::distance(TCircle<T, dims> ci, TLine<T, dims> l)
+{ // gets the distance from circumference
+	auto p = l.distance(ci.center);
+	return (ci.radius > p) ? 0 : p;
+}
 
-// 	return ((distance_to_circumference) < 0)? 0: distance_to_circumference;
-// 	}
-
-// template <typename T, uint32_t dims>
-// T TCircle<T, dims>::distance(TLine<T, dims> li){ // gets the distance from circumference
-// 	return distance((*this), li);
-// 	}
+template <typename T, uint32_t dims>
+T TCircle<T, dims>::distance(TLine<T, dims> li)
+{ // gets the distance from circumference
+	return distance((*this), li);
+}
 
 // template <typename T, uint32_t dims>
 // T TCircle<T, dims>::distance(TCircle c, TPoint<T, dims> a, TPoint<T, dims> b){

@@ -46,6 +46,7 @@ public:
     std::vector<TPoint<T, dims>> intersection(TCircle);
     TPoint<T, dims> at(T);
     std::vector<TLine<T, dims>> tangents(TPoint<T, dims> point);
+    std::vector<TLine<T, dims>> tangents(TCircle c);
     std::string print();
     static std::string print(TCircle &);
     

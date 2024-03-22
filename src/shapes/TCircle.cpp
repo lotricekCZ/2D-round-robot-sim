@@ -197,16 +197,16 @@ std::vector<TLine<T, dims>> TCircle<T, dims>::tangents(TCircle<T, dims> a, TCirc
 	std::vector<TLine<T, dims>> ans;
 	TVector<T, dims> c2c(a.center, b.center); // center-to-center vector
 
+	T theta = std::atan2((c2c.d(1)), (c2c.d(0)));
+	T alpha = std::acos((a.radius-b.radius) / (c2c.length()));
+	ans.emplace_back(a.at((theta + alpha) / (2 * M_PI)), b.at((theta + alpha) / (2 * M_PI)));
+	ans.emplace_back(a.at((theta - alpha) / (2 * M_PI)), b.at((theta - alpha) / (2 * M_PI)));
 	if (c2c.length() > (a.radius + b.radius))
 	{
-		T alpha = acos(a.radius / (c2c.length()*(a.radius/(a.radius+b.radius))));
-		T theta = std::atan2((c2c.d(1)), (c2c.d(0)));
+		alpha = std::acos((a.radius+b.radius) / (c2c.length()));
 		ans.emplace_back(a.at((theta + alpha) / (2 * M_PI)), b.at((theta + alpha + M_PI) / (2 * M_PI)));
 		ans.emplace_back(a.at((theta - alpha) / (2 * M_PI)), b.at((theta - alpha + M_PI) / (2 * M_PI)));
 	}
-
-	// for (size_t i = 0; i < ans.size(); ++i)
-	// 	ans[i].c -= ans[i].a * a.center.x + ans[i].b * a.center.y;
 	return ans;
 }
 

@@ -128,7 +128,11 @@ int main(int argc, char **argv)
 
 		std::cout << Circle2D(3, a).print() << std::endl;
 		std::cout << Circle2D(4, b).print() << std::endl;
+		std::cout << Circle2D(1, c).print() << std::endl;
+
 		for(auto i: Circle2D(3, a).tangents(Circle2D(4, b)))
+			std::cout << i.print() << std::endl;
+		for(auto i: Circle2D(1, c).tangents(Circle2D(4, b)))
 			std::cout << i.print() << std::endl;
 
 	}

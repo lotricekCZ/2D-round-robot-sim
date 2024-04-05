@@ -15,7 +15,7 @@ template <typename T, uint32_t dims>
 class TLine : public TVector<T, dims>
 {
 	public:
-        TPoint<T, dims> origin;
+		TPoint<T, dims> origin;
 		// T get_angle();
 		// T get_angle(TLine);
 		// static T get_angle(TLine, TLine);
@@ -37,7 +37,7 @@ class TLine : public TVector<T, dims>
 		// static TLine make_axis(TLine, TLine);
 		static std::string print(const TLine&);
 		std::string print();
-        TPoint<T, dims> at(T);
+		TPoint<T, dims> at(T);
 		
 		
 		// static bool on_segment(TPoint<T, dims>, TPoint<T, dims>, TPoint<T, dims>);

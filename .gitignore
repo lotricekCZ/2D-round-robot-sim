@@ -6,3 +6,5 @@ build
 out/doc/class_diagram/foo.png
 docs/
 obj/
+src/user_interface/ui
+src/main

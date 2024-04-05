@@ -190,25 +190,41 @@ TPoint<T, dims> TCircle<T, dims>::at(T par)
 	return TCircle<T, dims>::at(*this, par);
 }
 
+/**
+ * @brief Calculates the tangents of two circles in 2D.
+ * 
+ * @tparam T The data type of circle points (e.g., float, double, etc.).
+ * @tparam dims The number of dimensions in which the circles reside. Only 2D circles are supported.
+ * @param a The first circle.
+ * @param b The second circle.
+ * @return std::vector<TLine<T, dims>> A vector containing the tangents of the two circles.
+ */
 template <typename T, uint32_t dims>
 std::vector<TLine<T, dims>> TCircle<T, dims>::tangents(TCircle<T, dims> a, TCircle<T, dims> b)
 {
-	static_assert(dims == 2, "TCircle::circle_tangents is 2D only");
+	static_assert(dims == 2, "TCircle::tangents is supported only for 2D circles");
 	std::vector<TLine<T, dims>> ans;
-	TVector<T, dims> c2c(a.center, b.center); // center-to-center vector
+	TVector<T, dims> c2c(a.center, b.center); // vector from center of circle to center of circle
 
+	// Calculate angles for tangents
 	T theta = std::atan2((c2c.d(1)), (c2c.d(0)));
-	T alpha = std::acos((a.radius-b.radius) / (c2c.length()));
+	T alpha = std::acos((a.radius - b.radius) / (c2c.length()));
+
+	// Add the first pair of tangents
 	ans.emplace_back(a.at((theta + alpha) / (2 * M_PI)), b.at((theta + alpha) / (2 * M_PI)));
 	ans.emplace_back(a.at((theta - alpha) / (2 * M_PI)), b.at((theta - alpha) / (2 * M_PI)));
+
+	// If the distance between circle centers is greater than the sum of their radii, add another pair of tangents
 	if (c2c.length() > (a.radius + b.radius))
 	{
-		alpha = std::acos((a.radius+b.radius) / (c2c.length()));
+		alpha = std::acos((a.radius + b.radius) / (c2c.length()));
 		ans.emplace_back(a.at((theta + alpha) / (2 * M_PI)), b.at((theta + alpha + M_PI) / (2 * M_PI)));
 		ans.emplace_back(a.at((theta - alpha) / (2 * M_PI)), b.at((theta - alpha + M_PI) / (2 * M_PI)));
 	}
+
 	return ans;
 }
+
 
 template <typename T, uint32_t dims>
 std::vector<TLine<T, dims>> TCircle<T, dims>::tangents(TCircle<T, dims> a)

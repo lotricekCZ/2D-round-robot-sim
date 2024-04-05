@@ -2,6 +2,7 @@
 #define TPOINT_HPP
 
 #include <cmath>
+#include <vector>
 #include <array>
 #include <numeric>
 #include <algorithm>
@@ -42,5 +43,9 @@ public:
 
 typedef TPoint<float, 2> Point2D;
 typedef TPoint<float, 3> Point3D;
+template <typename T, uint32_t dims>
+using TPoints = std::vector<TPoint<T, dims>>;
+typedef std::vector<Point2D> Points2D;
+typedef std::vector<Point3D> Points3D;
 
 #endif /* TPOINT_HPP */

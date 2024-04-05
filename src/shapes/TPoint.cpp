@@ -47,6 +47,10 @@ template <typename T, uint32_t dims>
 template <typename... Args>
 TPoint<T, dims>::TPoint(Args... args) : coords{{static_cast<T>(args)...}} {}
 
+// template <typename T, uint32_t dims>
+// TPoint<T, dims>::TPoint(const TPoint<T, dims> &point) {
+//		 this->coords = point.coords;
+//	 }
 /**
  * @brief Constructs a point with the provided TPoint<T, dims>.
  *

@@ -2,13 +2,13 @@
 #include <QWidget>
 
 int main(int argc, char *argv[]) {
-    
-    QApplication app(argc, argv);
+	
+	QApplication app(argc, argv);
 
-    QWidget window;
+	QWidget window;
 
-    window.setWindowTitle("Editor");
-    window.show();
+	window.setWindowTitle("Editor");
+	window.show();
 
-    return app.exec();
+	return app.exec();
 }

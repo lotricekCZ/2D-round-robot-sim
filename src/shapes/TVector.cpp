@@ -313,4 +313,39 @@ T TVector<T, dims>::d(TVector<T, dims> v, uint32_t index)
 {
 	return v.get_point().point().at(index) - v.get_origin().point().at(index);
 }
+
+/*
+template <typename T, uint32_t dims>
+TPoint<T, dims> TVector<T, dims>::get_point(){
+	return (((type >> 1) & 1)? second: TPoint<T, dims>::make_local(second.x, second.y, first));
+	}
+
+
+template <typename T, uint32_t dims>
+T TVector<T, dims>::angle(){
+	return (type >> 1)? first.get_gamma(second): second.y;
+	}
+
+
+template <typename T, uint32_t dims>
+TVector<T, dims> TVector<T, dims>::extend(TVector<T, dims> v, T length){
+	return TVector<T, dims>(v.first, length, v.angle(), true); // to_coords = true
+	}
+
+
+template <typename T, uint32_t dims>
+TVector<T, dims> TVector<T, dims>::extend(T length){
+	return extend(*this, length);
+	}
+
+template <typename T, uint32_t dims>
+TVector<T, dims> TVector<T, dims>::swap(TVector<T, dims> v){
+	return TVector<T, dims>(v.get_point(), v.get_origin());
+	}
+
+template <typename T, uint32_t dims>
+TVector<T, dims> TVector<T, dims>::swap(){
+	return TVector<T, dims>::swap(*this);
+	}
+*/
 #endif /* TVECTOR_TPP */

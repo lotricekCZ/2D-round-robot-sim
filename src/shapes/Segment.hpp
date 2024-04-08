@@ -9,15 +9,17 @@
 class Segment
 {
 private:
-	std::variant<Circle2D, Line2D> formula;
+	std::variant<std::monostate, Circle2D, Line2D> formula; // nullptr is available only on creation
 	std::array<float, 2> range;
-
 public:
-	Segment(std::variant<Circle2D, Line2D> &, std::array<float, 2> &);
+	Segment(Circle2D &, std::array<float, 2> &);
+	Segment(Line2D &, std::array<float, 2> &);
 	~Segment();
 
 	void assign_range(std::array<float, 2> &);
-	void assign_formula(std::variant<Circle2D, Line2D> &);
+	void assign_formula(Line2D &);
+	void assign_formula(Circle2D &);
+	std::variant<Circle2D, Line2D> get_formula();
 
 	static Points2D intersection(Segment &, Segment &);
 	static Points2D intersection(Segment &, Line2D &);

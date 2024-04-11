@@ -18,7 +18,7 @@ template <typename T, uint32_t dims>
 template <typename... Args>
 TCircle<T, dims>::TCircle(T r, Args... args)
 {
-	this->center = TPoint<T, dims>(args...);
+	this->circle_center = TPoint<T, dims>(args...);
 	this->radius = r;
 }
 
@@ -33,7 +33,7 @@ TCircle<T, dims>::TCircle(T r, Args... args)
 template <typename T, uint32_t dims>
 TCircle<T, dims>::TCircle(T r, TPoint<T, dims> c)
 {
-	this->center = c;
+	this->circle_center = c;
 	this->radius = r;
 }
 
@@ -49,7 +49,7 @@ TCircle<T, dims>::TCircle(T r, TPoint<T, dims> c)
 template <typename T, uint32_t dims>
 bool TCircle<T, dims>::inside(TPoint<T, dims> a)
 {
-	return TPoint<T, dims>::distance(center, a) < radius;
+	return TPoint<T, dims>::distance(circle_center, a) < radius;
 }
 
 /**
@@ -65,7 +65,7 @@ bool TCircle<T, dims>::inside(TPoint<T, dims> a)
 template <typename T, uint32_t dims>
 bool TCircle<T, dims>::is_on(TPoint<T, dims> c, T epsilon)
 {
-	return std::abs(TPoint<T, dims>::distance(center, c) - radius) <= epsilon;
+	return std::abs(TPoint<T, dims>::distance(circle_center, c) - radius) <= epsilon;
 }
 
 /**
@@ -136,7 +136,7 @@ template <typename T, uint32_t dims>
 std::vector<TPoint<T, dims>> TCircle<T, dims>::intersection(TCircle k, TCircle c)
 {
 	std::vector<TPoint<T, dims>> ret;
-	auto dist = TVector<T, dims>(k.center, c.center);
+	auto dist = TVector<T, dims>(k.circle_center, c.circle_center);
 	if (dist.length() > (k.radius + c.radius))
 		return ret;
 	T alpha = std::acos((std::pow(k.radius, 2) + std::pow(dist.length(), 2) - std::pow(c.radius, 2)) / (2 * k.radius * dist.length()));
@@ -173,7 +173,7 @@ std::vector<TPoint<T, dims>> TCircle<T, dims>::intersection(TCircle c)
 template <typename T, uint32_t dims>
 TPoint<T, dims> TCircle<T, dims>::at(TCircle<T, dims> &circ, T par)
 {
-	return circ.center + TPoint<T, dims>(std::cos(2 * M_PI * par), std::sin(2 * M_PI * par)) * circ.radius;
+	return circ.circle_center + TPoint<T, dims>(std::cos(2 * M_PI * par), std::sin(2 * M_PI * par)) * circ.radius;
 }
 
 /**
@@ -204,7 +204,7 @@ std::vector<TLine<T, dims>> TCircle<T, dims>::tangents(TCircle<T, dims> a, TCirc
 {
 	static_assert(dims == 2, "TCircle::tangents is supported only for 2D circles");
 	std::vector<TLine<T, dims>> ans;
-	TVector<T, dims> c2c(a.center, b.center); // vector from center of circle to center of circle
+	TVector<T, dims> c2c(a.circle_center, b.circle_center); // vector from center of circle to center of circle
 
 	// Calculate angles for tangents
 	T theta = std::atan2((c2c.d(1)), (c2c.d(0)));
@@ -297,7 +297,7 @@ template <typename T, uint32_t dims>
 std::string TCircle<T, dims>::print(TCircle<T, dims> &a)
 {
 	std::stringstream ss;
-	ss << TPoint<T, dims>::print(a.center) << " + " << a.radius << "(cos(2 π t), sin(2 π t))";
+	ss << TPoint<T, dims>::print(a.circle_center) << " + " << a.radius << "(cos(2 π t), sin(2 π t))";
 	return ss.str();
 }
 
@@ -350,7 +350,7 @@ std::string TCircle<T, dims>::print(TCircle<T, dims> &a)
 template <typename T, uint32_t dims>
 T TCircle<T, dims>::distance(TCircle<T, dims> circ, TPoint<T, dims> point)
 { // gets the distance from circumference
-	return std::abs(point.distance(circ.center) - circ.radius);
+	return std::abs(point.distance(circ.circle_center) - circ.radius);
 }
 
 template <typename T, uint32_t dims>
@@ -362,7 +362,7 @@ T TCircle<T, dims>::distance(TPoint<T, dims> co)
 template <typename T, uint32_t dims>
 T TCircle<T, dims>::distance(TCircle<T, dims> ci, TLine<T, dims> l)
 { // gets the distance from circumference
-	auto p = l.distance(ci.center);
+	auto p = l.distance(ci.circle_center);
 	return (ci.radius > p) ? 0 : p;
 }
 
@@ -402,5 +402,18 @@ T TCircle<T, dims>::distance(TLine<T, dims> li)
 // T TCircle<T, dims>::distance(TPoint<T, dims> a, TPoint<T, dims> b){
 // 	return distance((*this), a, b);
 // 	}
+
+
+template <typename T, uint32_t dims>
+TPoint<T, dims> TCircle<T, dims>::center(TCircle<T, dims> circle)
+{
+	return circle.circle_center;
+}
+
+template <typename T, uint32_t dims>
+TPoint<T, dims> TCircle<T, dims>::center()
+{
+	return TCircle<T, dims>::center(*this);
+}
 
 #endif

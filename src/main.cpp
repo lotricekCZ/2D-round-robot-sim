@@ -3,6 +3,7 @@
 #include "shapes/TVector.hpp"
 #include "shapes/TLine.hpp"
 #include "shapes/TCircle.hpp"
+#include "shapes/Segment.hpp"
 
 int main(int argc, char **argv)
 {
@@ -130,11 +131,22 @@ int main(int argc, char **argv)
 		std::cout << Circle2D(4, b).print() << std::endl;
 		std::cout << Circle2D(1, c).print() << std::endl;
 
-		for(auto i: Circle2D(3, a).tangents(Circle2D(4, b)))
+		for (auto i : Circle2D(3, a).tangents(Circle2D(4, b)))
 			std::cout << i.print() << std::endl;
-		for(auto i: Circle2D(1, c).tangents(Circle2D(4, b)))
+		for (auto i : Circle2D(1, c).tangents(Circle2D(4, b)))
 			std::cout << i.print() << std::endl;
+	}
+	{
+		Point2D a(0, 6);
+		Point2D b(2, 8.2362);
+		Point2D c(-3, 6);
 
+		Segment segment(Circle2D(3, a), {0.125, 0.375});
+		std::cout << b.print() << "\n"
+				  << c.print() << std::endl;
+		std::cout << Circle2D(3, a).print() << std::endl;
+		std::cout << std::boolalpha << Circle2D(3, a).is_on(b) << " " << std::boolalpha << Circle2D(3, a).is_on(c) << std::endl;
+		std::cout << std::boolalpha << segment.is_on(b) << " " << std::boolalpha << segment.is_on(c) << std::endl;
 	}
 	return 0;
 };

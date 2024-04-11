@@ -18,7 +18,7 @@ template <typename T, uint32_t dims>
 class TCircle
 {
 	T radius = 1;
-	TPoint<T, dims> center;
+	TPoint<T, dims> circle_center;
 
 public:
 	TCircle(T radius, TPoint<T, dims>);
@@ -37,8 +37,9 @@ public:
 	static void tangents(TPoint<T, dims> c, T r1, T r2, std::vector<TLine<T, dims>> &ans);
 	static TPoint<T, dims> at(TCircle&, T);
 	bool inside(TPoint<T, dims> a);
-	bool is_on(TPoint<T, dims> c, T epsilon = std::numeric_limits<T>::epsilon);
-
+	bool is_on(TPoint<T, dims> c, T epsilon = std::numeric_limits<T>::epsilon());
+	static TPoint<T, dims> center(TCircle);
+	TPoint<T, dims> center();
 	std::vector<TPoint<T, dims>> tangent_points(TPoint<T, dims> point);
 	std::vector<TPoint<T, dims>> points();
 

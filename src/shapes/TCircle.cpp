@@ -65,7 +65,7 @@ bool TCircle<T, dims>::inside(TPoint<T, dims> a)
 template <typename T, uint32_t dims>
 bool TCircle<T, dims>::is_on(TPoint<T, dims> c, T epsilon)
 {
-	return std::abs(TPoint<T, dims>::distance(circle_center, c) - radius) <= epsilon;
+	return TCircle<T, dims>::distance(*this, c) <= epsilon;
 }
 
 /**

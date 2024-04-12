@@ -37,7 +37,7 @@ public:
 	static void tangents(TPoint<T, dims> c, T r1, T r2, std::vector<TLine<T, dims>> &ans);
 	static TPoint<T, dims> at(TCircle&, T);
 	bool inside(TPoint<T, dims> a);
-	bool is_on(TPoint<T, dims> c, T epsilon = std::numeric_limits<T>::epsilon());
+	bool is_on(TPoint<T, dims> c, T epsilon = std::numeric_limits<T>::epsilon() * 2048);
 	static TPoint<T, dims> center(TCircle);
 	TPoint<T, dims> center();
 	std::vector<TPoint<T, dims>> tangent_points(TPoint<T, dims> point);
@@ -60,7 +60,6 @@ public:
 	T distance(TLine<T, dims>);
 	T distance(TPoint<T, dims>, TPoint<T, dims>);
 
-	bool on_segment(TPoint<T, dims>, TPoint<T, dims>, TPoint<T, dims>, bool);
 	bool operator==(const TCircle &rhs)
 	{
 		return this->center == rhs.center && this->radius == rhs.radius;

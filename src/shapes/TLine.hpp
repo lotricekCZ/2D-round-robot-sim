@@ -20,16 +20,19 @@ class TLine : public TVector<T, dims>
 		// T get_angle(TLine);
 		// static T get_angle(TLine, TLine);
 		// static T get_distance(TLine, TPoint<T, dims>);
-		T distance(TPoint<T, dims>);
-		T distance(TLine);
-		static T distance(TLine, TPoint<T, dims>);
-		static T distance(TLine, TLine);
-		// T get_distance(TLine);
-		// static T get_distance(TLine, TLine);
-		
 		TLine();
 		// TLine(TVector<T, dims>);
 		TLine(TPoint<T, dims>, TPoint<T, dims>);
+
+		T distance(TPoint<T, dims>);
+		T distance(TLine);
+		static T distance(TLine, const TPoint<T, dims>&);
+		static T distance(TLine, TLine);
+		// T get_distance(TLine);
+		// static T get_distance(TLine, TLine);
+		bool is_on(const TPoint<T, dims>&);
+		static bool is_on(const TLine &line, const TPoint<T, dims>& point, T epsilon = std::numeric_limits<T>::epsilon() * 2048);
+		
 		
 		// TLine make_parallel(TPoint<T, dims>);
 		// TLine make_perpendicular(TPoint<T, dims>);
@@ -37,7 +40,7 @@ class TLine : public TVector<T, dims>
 		// static TLine make_axis(TLine, TLine);
 		static std::string print(const TLine&);
 		std::string print();
-		TPoint<T, dims> at(T);
+		TPoint<T, dims> at(const T&);
 		
 		
 		// static bool on_segment(TPoint<T, dims>, TPoint<T, dims>, TPoint<T, dims>);

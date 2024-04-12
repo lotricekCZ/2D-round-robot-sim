@@ -52,7 +52,7 @@ T TLine<T, dims>::distance(TPoint<T, dims> point)
 }
 
 template <typename T, uint32_t dims>
-T TLine<T, dims>::distance(TLine<T, dims> line, TPoint<T, dims> point)
+T TLine<T, dims>::distance(TLine<T, dims> line, const TPoint<T, dims>& point)
 {
 	try
 	{
@@ -60,13 +60,13 @@ T TLine<T, dims>::distance(TLine<T, dims> line, TPoint<T, dims> point)
 		{
 			std::array<T, dims> vec = line.get_point().point();
 			std::array<T, dims> p1 = line.origin.point();
-			std::array<T, dims> p0 = point.point();
+			std::array<T, dims> p0 = const_cast <TPoint<T, dims>&>(point).point();
 			return std::abs(vec.at(0) * (p1.at(1) - p0.at(1)) - vec.at(1) * (p1.at(0) - p0.at(0))) / line.length();
 		}
-		auto denom = TPoint<T, dims>::dot(line.get_point(), line.get_point());
-		auto frac = TPoint<T, dims>::dot(line.get_point(), point - line.origin);
+		T denom = TPoint<T, dims>::dot(line.get_point(), line.get_point());
+		T frac = TPoint<T, dims>::dot(line.get_point(), point - line.origin);
 
-		auto p2 = line.at(frac / denom);
+		TPoint<T, dims> p2 = line.at(frac / denom);
 		return TPoint<T, dims>::distance(p2, point);
 	}
 	catch (const std::exception &e)
@@ -87,7 +87,7 @@ T TLine<T, dims>::distance(TLine<T, dims> line1, TLine<T, dims> line2)
 {
 	try
 	{
-		if constexpr(dims == 2)
+		if constexpr (dims == 2)
 		{
 			if (line1.normalise().get_point() == line2.normalise().get_point())
 			{
@@ -115,11 +115,10 @@ T TLine<T, dims>::distance(TLine<T, dims> line1, TLine<T, dims> line2)
 }
 
 template <typename T, uint32_t dims>
-TPoint<T, dims> TLine<T, dims>::at(T a)
+TPoint<T, dims> TLine<T, dims>::at(const T& a)
 {
 	try
 	{
-		std::cout << "moment" << a << std::endl;
 		return TPoint<T, dims>(this->origin + this->get_point() * a);
 	}
 	catch (const std::exception &e)
@@ -128,6 +127,15 @@ TPoint<T, dims> TLine<T, dims>::at(T a)
 		std::cout << "moment" << std::endl;
 		return TPoint<T, dims>(std::numeric_limits<T>::infinity(), std::numeric_limits<T>::infinity());
 	}
+}
+template <typename T, uint32_t dims>
+bool TLine<T, dims>::is_on(const TPoint<T, dims>& point) {
+	return TLine<T, dims>::is_on(*this, point);
+}
+
+template <typename T, uint32_t dims>
+bool TLine<T, dims>::is_on(const TLine<T, dims>& line, const TPoint<T, dims>& point, T epsilon) {
+	return TLine<T, dims>::distance(line, point) <= epsilon;
 }
 
 /*

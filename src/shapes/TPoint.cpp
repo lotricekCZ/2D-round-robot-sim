@@ -14,7 +14,7 @@
  * @return The Euclidean distance between points 'a' and 'b'.
  */
 template <typename T, uint32_t dims>
-T TPoint<T, dims>::distance(TPoint<T, dims> a, TPoint<T, dims> b)
+T TPoint<T, dims>::distance(const TPoint<T, dims> &a, const TPoint<T, dims> &b)
 {
 	return std::sqrt(std::inner_product(a.coords.begin(), a.coords.end(), b.coords.begin(), T(0),
 										std::plus<T>(), [](T ap, T bp)
@@ -30,7 +30,7 @@ T TPoint<T, dims>::distance(TPoint<T, dims> a, TPoint<T, dims> b)
  * @return The Euclidean distance between the current point and point 'a'.
  */
 template <typename T, uint32_t dims>
-T TPoint<T, dims>::distance(TPoint<T, dims> a)
+T TPoint<T, dims>::distance(const TPoint<T, dims> &a)
 {
 	return distance(*this, a);
 }
@@ -170,7 +170,7 @@ template <typename T, uint32_t dims>
 std::string TPoint<T, dims>::print(const std::vector<TPoint<T, dims>> &arr)
 {
 	std::stringstream ss;
-	for(auto p: arr)
+	for (auto p : arr)
 		ss << p.print() << "\n";
 	std::string ret = ss.str();
 	ret.pop_back();
@@ -202,11 +202,11 @@ std::string TPoint<T, dims>::print()
 template <typename T, uint32_t dims>
 std::array<T, dims> TPoint<T, dims>::point()
 {
-	return TPoint<T, dims>::point(*this);
+	return TPoint<T, dims>::point((const TPoint<T, dims>&)*this);
 }
 
 template <typename T, uint32_t dims>
-std::array<T, dims> TPoint<T, dims>::point(TPoint<T, dims> &point)
+std::array<T, dims> TPoint<T, dims>::point(const TPoint<T, dims> &point)
 {
 	return point.coords;
 }

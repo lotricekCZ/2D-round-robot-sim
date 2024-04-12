@@ -14,6 +14,7 @@ private:
 public:
 	Segment(const Circle2D &, const std::array<float, 2> &);
 	Segment(const Line2D &, const std::array<float, 2> &);
+	Segment(const Point2D &start, const Point2D &end);
 	~Segment();
 
 	void assign_range(const std::array<float, 2> &);
@@ -41,7 +42,8 @@ public:
 
 	static Line2D bisector(Segment &);
 	Line2D bisector();
-	
+	static std::string print(Segment &);
+	std::string print();
 	static bool is_on(Segment &, Point2D &);
 	bool is_on(Point2D &);
 };

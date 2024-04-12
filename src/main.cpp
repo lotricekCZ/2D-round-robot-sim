@@ -141,12 +141,31 @@ int main(int argc, char **argv)
 		Point2D b(2, 8.2362);
 		Point2D c(-3, 6);
 
+		std::cout << Segment(a, b).print() << std::endl;
 		Segment segment(Circle2D(3, a), {0.125, 0.375});
 		std::cout << b.print() << "\n"
 				  << c.print() << std::endl;
-		std::cout << Circle2D(3, a).print() << std::endl;
+		std::cout << segment.print() << std::endl;
+		std::cout << Circle2D(3, a).distance(b) << std::endl;
 		std::cout << std::boolalpha << Circle2D(3, a).is_on(b) << " " << std::boolalpha << Circle2D(3, a).is_on(c) << std::endl;
 		std::cout << std::boolalpha << segment.is_on(b) << " " << std::boolalpha << segment.is_on(c) << std::endl;
+	}
+	{
+		Point2D a(0, 6);
+		Point2D b(-2, 6);
+		Point2D c(-3, 6);
+		Point2D d(-3, 6.1);
+		Point2D e(-2.8, 6);
+		Point2D f(0.1, 5.9);
+
+		std::cout << Segment(a, c).print() << std::endl;
+		Segment segment(a, c);
+		std::cout << b.print() << "\n"
+				  << c.print() << std::endl;
+		std::cout << segment.print() << std::endl;
+		std::cout << std::boolalpha << segment.is_on(b) << " " << std::boolalpha << segment.is_on(c) << std::endl;
+		std::cout << std::boolalpha << segment.is_on(d) << " " << std::boolalpha << segment.is_on(e) << std::endl;
+		std::cout << std::boolalpha << segment.is_on(a) << " " << std::boolalpha << segment.is_on(f) << std::endl;
 	}
 	return 0;
 };

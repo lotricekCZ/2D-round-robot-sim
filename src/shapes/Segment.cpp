@@ -14,6 +14,12 @@ Segment::Segment(const Line2D &formula, const std::array<float, 2> &range)
 	this->assign_formula(formula);
 	this->assign_range(range);
 }
+Segment::Segment(const Point2D &start, const Point2D &end)
+{
+	Line2D line(start, end);
+	this->assign_formula(line);
+	this->assign_range({0, Point2D::distance(start, end) / Vect2D::length(Vect2D(start, end).normalise())});
+}
 
 Segment::~Segment()
 {
@@ -83,6 +89,7 @@ float Segment::distance(Line2D &line)
 float Segment::distance(Circle2D &circle)
 {
 }
+
 float Segment::distance(Point2D &point)
 {
 	return Segment::distance(*this, point);
@@ -118,7 +125,12 @@ bool Segment::is_on(Segment &segment, Point2D &point)
 	}
 	case type::line:
 	{
-		break;
+		Line2D line = std::get<type::line>(formula);
+
+		return line.is_on(point) 
+				&& (((line.get_origin()).distance(line.at(segment.range.at(1)))) 
+					- (line.at(segment.range.at(1)).distance(point) + line.get_origin().distance(point))
+					<= std::numeric_limits<float>::epsilon() * 2048);
 	}
 	}
 }
@@ -131,11 +143,41 @@ std::variant<Circle2D, Line2D> Segment::get_formula()
 {
 	return std::visit([](auto &&arg) -> std::variant<Circle2D, Line2D>
 					  { 
-		using T = std::decay_t<decltype(arg)>;
-        if constexpr (std::is_same_v<T, std::monostate>) {
-            throw std::runtime_error("std::monostate detected, runtime rejected.");
-        } else {
-            return arg;
-        } },
+					  using T = std::decay_t<decltype(arg)>;
+        			  if constexpr (std::is_same_v<T, std::monostate>) {
+        			      throw std::runtime_error("std::monostate detected, runtime rejected.");
+        			  } else {
+        			      return arg;
+        			  } },
 					  this->formula);
+}
+
+std::string Segment::print(Segment &segment)
+{
+	enum type
+	{
+		circle,
+		line
+	};
+	std::stringstream ss;
+	std::variant<Circle2D, Line2D> formula = segment.get_formula();
+	switch (formula.index())
+	{
+	case type::circle:
+	{
+		ss << Circle2D::print(std::get<type::circle>(formula));
+		break;
+	}
+	case type::line:
+	{
+		ss << Line2D::print(std::get<type::line>(formula));
+		break;
+	}
+	}
+	ss << "\n(" << segment.range.at(0) << " <= t <= " << segment.range.at(1) << ")";
+	return ss.str();
+}
+std::string Segment::print()
+{
+	return Segment::print(*this);
 }

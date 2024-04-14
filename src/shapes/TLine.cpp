@@ -129,7 +129,10 @@ std::optional<TPoint<T, dims>> TLine<T, dims>::intersection(const TLine<T, dims>
 			return {};
 
 		T parameter = (TPoint<T, dims>::distance((TPoint<T, dims>::cross((second.origin - first.origin), static_cast<TVector<T, dims>>(second).get_point())), static_cast<TVector<T, dims>>(first).get_origin())) / (TVector<T, dims>::cross(static_cast<const TVector<T, dims> &>(first), static_cast<const TVector<T, dims> &>(second)).length());
-		return static_cast<TLine<T, dims>>(first).at(-parameter);
+		auto cand = static_cast<TLine<T, dims>>(first).at(-parameter);
+		if(static_cast<TLine<T, dims>>(second).is_on(cand))
+			return cand;
+		return static_cast<TLine<T, dims>>(first).at(parameter);
 	}
 	else if constexpr (dims == 2)
 	{

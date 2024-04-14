@@ -17,7 +17,8 @@ class TPoint
 
 public:
 	template <typename... Args>
-	TPoint(Args...);
+	TPoint(T arg, Args...);
+	TPoint();
 	TPoint(const TPoint &);
 	static std::string print(const TPoint &);
 	static std::string print(const std::vector<TPoint> &);

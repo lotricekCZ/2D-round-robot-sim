@@ -45,12 +45,16 @@ T TPoint<T, dims>::distance(const TPoint<T, dims> &a)
  */
 template <typename T, uint32_t dims>
 template <typename... Args>
-TPoint<T, dims>::TPoint(Args... args) : coords{{static_cast<T>(args)...}} {}
+TPoint<T, dims>::TPoint(T arg, Args... args) : coords{{arg, static_cast<T>(args)...}} {}
 
 // template <typename T, uint32_t dims>
 // TPoint<T, dims>::TPoint(const TPoint<T, dims> &point) {
 //		 this->coords = point.coords;
 //	 }
+template <typename T, uint32_t dims>
+TPoint<T, dims>::TPoint() {
+		 this->coords.fill(0);
+	 }
 /**
  * @brief Constructs a point with the provided TPoint<T, dims>.
  *

@@ -123,19 +123,27 @@ bool TLine<T, dims>::is_on(const TLine<T, dims> &line, const TPoint<T, dims> &po
 template <typename T, uint32_t dims>
 std::optional<TPoint<T, dims>> TLine<T, dims>::intersection(const TLine<T, dims> &first, const TLine<T, dims> &second)
 {
+	if (TLine<T, dims>::distance(first, second) >= (std::numeric_limits<T>::epsilon() * 1024))
+		return {};
 	if constexpr (dims == 3)
 	{
-		if (TLine<T, dims>::distance(first, second) >= (std::numeric_limits<T>::epsilon() * 1024))
-			return {};
-
 		T parameter = (TPoint<T, dims>::distance((TPoint<T, dims>::cross((second.origin - first.origin), static_cast<TVector<T, dims>>(second).get_point())), static_cast<TVector<T, dims>>(first).get_origin())) / (TVector<T, dims>::cross(static_cast<const TVector<T, dims> &>(first), static_cast<const TVector<T, dims> &>(second)).length());
 		auto cand = static_cast<TLine<T, dims>>(first).at(-parameter);
-		if(static_cast<TLine<T, dims>>(second).is_on(cand))
+		if (static_cast<TLine<T, dims>>(second).is_on(cand))
 			return cand;
 		return static_cast<TLine<T, dims>>(first).at(parameter);
 	}
-	else if constexpr (dims == 2)
+	if constexpr (dims == 2)
 	{
+		auto p0 = static_cast<TPoint<T, dims>>(first.origin).point();
+		auto p1 = static_cast<TPoint<T, dims>>(second.origin).point();
+		auto v0 = static_cast<TVector<T, dims>>(first).get_point().point();
+		auto v1 = static_cast<TVector<T, dims>>(second).get_point().point();
+		T parameter = (v1.at(0)* (p1.at(1) - p0.at(1)) + v1.at(1)* (p0.at(0) - p1.at(0))) / (v1.at(0) * v0.at(1) - v1.at(1) * v0.at(0));
+		// auto cand = static_cast<TLine<T, dims>>(first).at(-parameter);
+		// if (static_cast<TLine<T, dims>>(second).is_on(cand))
+		// 	return cand;
+		return static_cast<TLine<T, dims>>(first).at(parameter);
 	}
 	return {};
 }

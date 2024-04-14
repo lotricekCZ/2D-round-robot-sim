@@ -184,5 +184,17 @@ int main(int argc, char **argv)
 		std::cout << Line3D(d, b).print() << std::endl;
 		std::cout << Line3D::intersection(Line3D(a, c), Line3D(b, d)).value().print() << std::endl;
 	}
+	{
+		Point2D a(0, 6);
+		Point2D b(-2, 4);
+		Point2D c(-3, 6);
+		Point2D d(0, 4);
+
+		// std::cout << Line3D(a, b).intersection(Line3D(c, d)).value().print() << std::endl;
+		std::cout << Line2D(a, b).print() << std::endl;
+		std::cout << Segment(c, d).print() << std::endl;
+		for (auto i : Segment::intersection(Segment(d, c), Line2D(a, b)))
+			std::cout << i.print() << std::endl;
+	}
 	return 0;
 };

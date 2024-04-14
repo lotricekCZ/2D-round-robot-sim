@@ -25,20 +25,20 @@ public:
 	void assign_range(const std::array<float, 2> &);
 	void assign_formula(const Line2D &);
 	void assign_formula(const Circle2D &);
-	std::variant<Circle2D, Line2D> get_formula();
+	std::variant<Circle2D, Line2D> get_formula() const;
 
-	static Points2D intersection(Segment &, Segment &);
-	static Points2D intersection(Segment &, Line2D &);
-	static Points2D intersection(Segment &, Circle2D &);
+	static Points2D intersection(const Segment &, const Segment &);
+	static Points2D intersection(const Segment &, const Line2D &);
+	static Points2D intersection(const Segment &, const Circle2D &);
 
-	Points2D intersection(Segment &);
-	Points2D intersection(Line2D &);
-	Points2D intersection(Circle2D &);
+	Points2D intersection(const Segment &);
+	Points2D intersection(const Line2D &);
+	Points2D intersection(const Circle2D &);
 
-	static float distance(Segment &, Segment &);
-	static float distance(Segment &, Line2D &);
-	static float distance(Segment &, Circle2D &);
-	static float distance(Segment &, Point2D &);
+	static float distance(const Segment &, const Segment &);
+	static float distance(const Segment &, const Line2D &);
+	static float distance(const Segment &, const Circle2D &);
+	static float distance(const Segment &, const Point2D &);
 
 	float distance(Segment &);
 	float distance(Line2D &);
@@ -49,8 +49,8 @@ public:
 	Line2D bisector();
 	static std::string print(Segment &);
 	std::string print();
-	static bool is_on(Segment &, Point2D &);
-	bool is_on(Point2D &);
+	static bool is_on(const Segment &, const Point2D &);
+	bool is_on(const Point2D &) const ;
 };
 
 #endif

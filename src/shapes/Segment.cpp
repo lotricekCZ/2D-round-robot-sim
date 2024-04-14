@@ -3,6 +3,7 @@
 #include <variant>
 #include <type_traits>
 #include <cmath>
+#include <execution>
 #include <cinttypes>
 
 Segment::Segment(const Circle2D &formula, const std::array<float, 2> &range)
@@ -41,14 +42,14 @@ void Segment::assign_formula(const Circle2D &formula)
 	this->formula = formula;
 }
 
-Points2D Segment::intersection(Segment &first, Segment &second)
+Points2D Segment::intersection(const Segment &first, const Segment &second)
 {
 	Points2D ret;
 
 	return ret;
 }
 
-Points2D Segment::intersection(Segment &segment, Line2D &line)
+Points2D Segment::intersection(const Segment &segment, const Line2D &line)
 {
 	Points2D ret;
 	auto formula = segment.get_formula();
@@ -62,49 +63,52 @@ Points2D Segment::intersection(Segment &segment, Line2D &line)
 	case type::line:
 	{
 		auto point = Line2D::intersection(std::get<type::line>(formula), line);
-		if(point)
+		if (point)
 			ret.push_back(point.value());
 		break;
 	}
 	}
-	/// TODO: filtering by is_on
+	
+	std::remove_if(std::execution::par_unseq, ret.begin(), ret.end(), [&](auto &point) -> bool
+				   { return !segment.is_on(point); });
+
 	return ret;
 }
 
-Points2D Segment::intersection(Segment &segment, Circle2D &circle)
+Points2D Segment::intersection(const Segment &segment, const Circle2D &circle)
 {
 	Points2D ret;
 	return ret;
 }
 
-Points2D Segment::intersection(Segment &segment)
+Points2D Segment::intersection(const Segment &segment)
 {
 	return Segment::intersection(*this, segment);
 }
 
-Points2D Segment::intersection(Line2D &line)
+Points2D Segment::intersection(const Line2D &line)
 {
 	return Segment::intersection(*this, line);
 }
 
-Points2D Segment::intersection(Circle2D &circle)
+Points2D Segment::intersection(const Circle2D &circle)
 {
 	return Segment::intersection(*this, circle);
 }
 
-float Segment::distance(Segment &first, Segment &second)
+float Segment::distance(const Segment &first, const Segment &second)
 {
 }
 
-float Segment::distance(Segment &segment, Line2D &line)
+float Segment::distance(const Segment &segment, const Line2D &line)
 {
 }
 
-float Segment::distance(Segment &segment, Circle2D &circle)
+float Segment::distance(const Segment &segment, const Circle2D &circle)
 {
 }
 
-float Segment::distance(Segment &segment, Point2D &point)
+float Segment::distance(const Segment &segment, const Point2D &point)
 {
 }
 
@@ -132,7 +136,7 @@ Line2D Segment::bisector()
 	return Segment::bisector(*this);
 }
 
-bool Segment::is_on(Segment &segment, Point2D &point)
+bool Segment::is_on(const Segment &segment, const Point2D &point)
 {
 	std::variant<Circle2D, Line2D> formula = segment.get_formula();
 	switch (formula.index())
@@ -149,17 +153,16 @@ bool Segment::is_on(Segment &segment, Point2D &point)
 	case type::line:
 	{
 		Line2D line = std::get<type::line>(formula);
-
 		return line.is_on(point) && (((line.get_origin()).distance(line.at(segment.range.at(1)))) - (line.at(segment.range.at(1)).distance(point) + line.get_origin().distance(point)) <= std::numeric_limits<float>::epsilon() * 2048);
 	}
 	}
 }
-bool Segment::is_on(Point2D &point)
+bool Segment::is_on(const Point2D &point) const
 {
 	return Segment::is_on(*this, point);
 }
 
-std::variant<Circle2D, Line2D> Segment::get_formula()
+std::variant<Circle2D, Line2D> Segment::get_formula() const
 {
 	return std::visit([](auto &&arg) -> std::variant<Circle2D, Line2D>
 					  { 

@@ -1,4 +1,5 @@
 #include "Segment.hpp"
+#include "TVector.hpp"
 #include <variant>
 #include <type_traits>
 #include <cmath>
@@ -42,26 +43,53 @@ void Segment::assign_formula(const Circle2D &formula)
 
 Points2D Segment::intersection(Segment &first, Segment &second)
 {
+	Points2D ret;
+
+	return ret;
 }
 
 Points2D Segment::intersection(Segment &segment, Line2D &line)
 {
+	Points2D ret;
+	auto formula = segment.get_formula();
+	switch (formula.index())
+	{
+	case type::circle:
+	{
+		ret = Circle2D::intersection(std::get<type::circle>(formula), line);
+		break;
+	}
+	case type::line:
+	{
+		auto point = Line2D::intersection(std::get<type::line>(formula), line);
+		if(point)
+			ret.push_back(point.value());
+		break;
+	}
+	}
+	/// TODO: filtering by is_on
+	return ret;
 }
 
 Points2D Segment::intersection(Segment &segment, Circle2D &circle)
 {
+	Points2D ret;
+	return ret;
 }
 
 Points2D Segment::intersection(Segment &segment)
 {
+	return Segment::intersection(*this, segment);
 }
 
 Points2D Segment::intersection(Line2D &line)
 {
+	return Segment::intersection(*this, line);
 }
 
 Points2D Segment::intersection(Circle2D &circle)
 {
+	return Segment::intersection(*this, circle);
 }
 
 float Segment::distance(Segment &first, Segment &second)
@@ -106,11 +134,6 @@ Line2D Segment::bisector()
 
 bool Segment::is_on(Segment &segment, Point2D &point)
 {
-	enum type
-	{
-		circle,
-		line
-	};
 	std::variant<Circle2D, Line2D> formula = segment.get_formula();
 	switch (formula.index())
 	{
@@ -127,10 +150,7 @@ bool Segment::is_on(Segment &segment, Point2D &point)
 	{
 		Line2D line = std::get<type::line>(formula);
 
-		return line.is_on(point) 
-				&& (((line.get_origin()).distance(line.at(segment.range.at(1)))) 
-					- (line.at(segment.range.at(1)).distance(point) + line.get_origin().distance(point))
-					<= std::numeric_limits<float>::epsilon() * 2048);
+		return line.is_on(point) && (((line.get_origin()).distance(line.at(segment.range.at(1)))) - (line.at(segment.range.at(1)).distance(point) + line.get_origin().distance(point)) <= std::numeric_limits<float>::epsilon() * 2048);
 	}
 	}
 }
@@ -154,11 +174,6 @@ std::variant<Circle2D, Line2D> Segment::get_formula()
 
 std::string Segment::print(Segment &segment)
 {
-	enum type
-	{
-		circle,
-		line
-	};
 	std::stringstream ss;
 	std::variant<Circle2D, Line2D> formula = segment.get_formula();
 	switch (formula.index())

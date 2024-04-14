@@ -9,6 +9,11 @@
 class Segment
 {
 private:
+	enum type
+	{
+		circle,
+		line
+	};
 	std::variant<std::monostate, Circle2D, Line2D> formula; // nullptr is available only on creation
 	std::array<float, 2> range;
 public:

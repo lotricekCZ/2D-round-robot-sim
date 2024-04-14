@@ -224,7 +224,7 @@ T TPoint<T, dims>::dot(TPoint a)
 }
 
 template <typename T, uint32_t dims>
-TPoint<T, dims> TPoint<T, dims>::cross(TPoint<T, dims> p1, TPoint<T, dims> p2)
+TPoint<T, dims> TPoint<T, dims>::cross(const TPoint<T, dims>& p1, const TPoint<T, dims>& p2)
 {
 	static_assert(dims == 3, "TPoint: TPoint dimensions must be equal to 3, for that the cross product doesn't work for any other number of dimensions.\n");
 	return TPoint<T, dims>((p1.coords.at(1)) * (p2.coords.at(2)) - (p2.coords.at(1)) * (p1.coords.at(2)),

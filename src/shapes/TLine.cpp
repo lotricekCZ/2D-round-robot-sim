@@ -1,27 +1,7 @@
-/*
- * TLine.cpp
- *
- * Copyright 2021 Jakub Ramašeuski <jakub@skaryna.net>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
- * MA 02110-1301, USA.
- *
- *
- */
-
+#include <optional>
 #include "TLine.hpp"
+#include "TPoint.hpp"
+#include "TVector.hpp"
 
 #ifndef LINE_CPP
 #define LINE_CPP
@@ -52,7 +32,7 @@ T TLine<T, dims>::distance(TPoint<T, dims> point)
 }
 
 template <typename T, uint32_t dims>
-T TLine<T, dims>::distance(TLine<T, dims> line, const TPoint<T, dims>& point)
+T TLine<T, dims>::distance(TLine<T, dims> line, const TPoint<T, dims> &point)
 {
 	try
 	{
@@ -60,7 +40,7 @@ T TLine<T, dims>::distance(TLine<T, dims> line, const TPoint<T, dims>& point)
 		{
 			std::array<T, dims> vec = line.get_point().point();
 			std::array<T, dims> p1 = line.origin.point();
-			std::array<T, dims> p0 = const_cast <TPoint<T, dims>&>(point).point();
+			std::array<T, dims> p0 = const_cast<TPoint<T, dims> &>(point).point();
 			return std::abs(vec.at(0) * (p1.at(1) - p0.at(1)) - vec.at(1) * (p1.at(0) - p0.at(0))) / line.length();
 		}
 		T denom = TPoint<T, dims>::dot(line.get_point(), line.get_point());
@@ -115,7 +95,7 @@ T TLine<T, dims>::distance(TLine<T, dims> line1, TLine<T, dims> line2)
 }
 
 template <typename T, uint32_t dims>
-TPoint<T, dims> TLine<T, dims>::at(const T& a)
+TPoint<T, dims> TLine<T, dims>::at(const T &a)
 {
 	try
 	{
@@ -129,15 +109,39 @@ TPoint<T, dims> TLine<T, dims>::at(const T& a)
 	}
 }
 template <typename T, uint32_t dims>
-bool TLine<T, dims>::is_on(const TPoint<T, dims>& point) {
+bool TLine<T, dims>::is_on(const TPoint<T, dims> &point)
+{
 	return TLine<T, dims>::is_on(*this, point);
 }
 
 template <typename T, uint32_t dims>
-bool TLine<T, dims>::is_on(const TLine<T, dims>& line, const TPoint<T, dims>& point, T epsilon) {
+bool TLine<T, dims>::is_on(const TLine<T, dims> &line, const TPoint<T, dims> &point, T epsilon)
+{
 	return TLine<T, dims>::distance(line, point) <= epsilon;
 }
 
+template <typename T, uint32_t dims>
+std::optional<TPoint<T, dims>> TLine<T, dims>::intersection(const TLine<T, dims> &first, const TLine<T, dims> &second)
+{
+	if constexpr (dims == 3)
+	{
+		if (TLine<T, dims>::distance(first, second) >= (std::numeric_limits<T>::epsilon() * 1024))
+			return {};
+
+		T parameter = (TPoint<T, dims>::distance((TPoint<T, dims>::cross((second.origin - first.origin), static_cast<TVector<T, dims>>(second).get_point())), static_cast<TVector<T, dims>>(first).get_origin())) / (TVector<T, dims>::cross(static_cast<const TVector<T, dims> &>(first), static_cast<const TVector<T, dims> &>(second)).length());
+		return static_cast<TLine<T, dims>>(first).at(-parameter);
+	}
+	else if constexpr (dims == 2)
+	{
+	}
+	return {};
+}
+
+template <typename T, uint32_t dims>
+std::optional<TPoint<T, dims>> TLine<T, dims>::intersection(const TLine<T, dims> &line)
+{
+	return TLine<T, dims>::intersection(*this, line);
+}
 /*
 TLine<T, dims>::TLine(T angle, T c){
 	this -> b = 1;

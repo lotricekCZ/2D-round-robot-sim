@@ -167,5 +167,19 @@ int main(int argc, char **argv)
 		std::cout << std::boolalpha << segment.is_on(d) << " " << std::boolalpha << segment.is_on(e) << std::endl;
 		std::cout << std::boolalpha << segment.is_on(a) << " " << std::boolalpha << segment.is_on(f) << std::endl;
 	}
+	{
+		Point3D a(0, 6);
+		Point3D b(-2, 4);
+		Point3D c(-3, 6);
+		Point3D d(2, 7);
+
+		// std::cout << Line3D(a, b).intersection(Line3D(c, d)).value().print() << std::endl;
+		std::cout << Line3D(a, b).print() << std::endl;
+		std::cout << Line3D(c, d).print() << std::endl;
+		std::cout << Line3D::intersection(Line3D(a, b), Line3D(c, d)).value().print() << std::endl;
+		std::cout << Line3D(a, c).print() << std::endl;
+		std::cout << Line3D(d, b).print() << std::endl;
+		std::cout << Line3D::intersection(Line3D(a, c), Line3D(b, d)).value().print() << std::endl;
+	}
 	return 0;
 };

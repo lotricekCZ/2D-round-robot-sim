@@ -26,7 +26,7 @@ public:
 	static T distance(const TPoint<T, dims> &a, const TPoint<T, dims> &b);
 	static T dot(TPoint, TPoint);
 	T dot(TPoint);
-	static TPoint cross(TPoint, TPoint);
+	static TPoint cross(const TPoint&, const TPoint&);
 	std::array<T, dims> point();
 	T distance(const TPoint<T, dims> &a);
 	TPoint operator-(const TPoint<T, dims> &rhs) const;

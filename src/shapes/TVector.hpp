@@ -25,7 +25,7 @@ public:
 	TVector(TPoint<T, dims>);
 	
 	template <typename... Args>
-	TVector(const Args &...);
+	TVector(T arg, const Args &...);
 	// d stands for difference
 	T d(uint32_t);
 	static TVector normalise(TVector);

@@ -2,6 +2,7 @@
 #include <string>
 #include <cmath>
 #include <vector>
+#include <optional>
 #include <iostream>
 #include <inttypes.h>
 
@@ -33,6 +34,8 @@ class TLine : public TVector<T, dims>
 		bool is_on(const TPoint<T, dims>&);
 		static bool is_on(const TLine &line, const TPoint<T, dims>& point, T epsilon = std::numeric_limits<T>::epsilon() * 2048);
 		
+		static std::optional<TPoint<T, dims>> intersection(const TLine &, const TLine &);
+		std::optional<TPoint<T, dims>> intersection(const TLine&);
 		
 		// TLine make_parallel(TPoint<T, dims>);
 		// TLine make_perpendicular(TPoint<T, dims>);

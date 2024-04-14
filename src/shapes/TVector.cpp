@@ -38,9 +38,9 @@ TVector<T, dims>::TVector(const TVector<T, dims> &vector)
 
 template <typename T, uint32_t dims>
 template <typename... Args>
-TVector<T, dims>::TVector(const Args &...args)
+TVector<T, dims>::TVector(T arg, const Args &...args)
 {
-	this->second = TPoint<T, dims>(static_cast<T>(args)...);
+	this->second = TPoint<T, dims>(arg, static_cast<T>(args)...);
 }
 
 /**

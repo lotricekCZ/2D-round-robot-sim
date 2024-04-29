@@ -170,6 +170,14 @@ TPoint<T, dims> TPoint<T, dims>::operator-=(const TPoint<T, dims> &rhs)
 	return *this;
 }
 
+/**
+ * @brief Generates a string representation of a vector of points.
+ * 
+ * This method generates a string representation of a vector of points.
+ * 
+ * @param arr The vector of points.
+ * @return std::string The string representation of the vector of points.
+ */
 template <typename T, uint32_t dims>
 std::string TPoint<T, dims>::print(const std::vector<TPoint<T, dims>> &arr)
 {
@@ -181,6 +189,14 @@ std::string TPoint<T, dims>::print(const std::vector<TPoint<T, dims>> &arr)
 	return ret;
 }
 
+/**
+ * @brief Generates a string representation of the given point.
+ * 
+ * This method generates a string representation of the specified point.
+ * 
+ * @param point The point to be represented as a string.
+ * @return std::string The string representation of the point.
+ */
 template <typename T, uint32_t dims>
 std::string TPoint<T, dims>::print(const TPoint<T, dims> &point)
 {
@@ -197,36 +213,85 @@ std::string TPoint<T, dims>::print(const TPoint<T, dims> &point)
 	return ret;
 }
 
+/**
+ * @brief Generates a string representation of this point.
+ * 
+ * This method generates a string representation of this point.
+ * 
+ * @return std::string The string representation of this point.
+ */
 template <typename T, uint32_t dims>
 std::string TPoint<T, dims>::print()
 {
 	return TPoint<T, dims>::print(*this);
 }
 
+/**
+ * @brief Retrieves the coordinates of this point as an array.
+ * 
+ * This method retrieves the coordinates of this point as an array.
+ * 
+ * @return std::array<T, dims> The coordinates of this point.
+ */
 template <typename T, uint32_t dims>
 std::array<T, dims> TPoint<T, dims>::point()
 {
 	return TPoint<T, dims>::point((const TPoint<T, dims>&)*this);
 }
 
+/**
+ * @brief Retrieves the coordinates of the given point as an array.
+ * 
+ * This method retrieves the coordinates of the specified point as an array.
+ * 
+ * @param point The point.
+ * @return std::array<T, dims> The coordinates of the point.
+ */
 template <typename T, uint32_t dims>
 std::array<T, dims> TPoint<T, dims>::point(const TPoint<T, dims> &point)
 {
 	return point.coords;
 }
 
+/**
+ * @brief Computes the dot product of two points.
+ * 
+ * This method computes the dot product of two points.
+ * 
+ * @param a The first point.
+ * @param b The second point.
+ * @return T The dot product of the two points.
+ */
 template <typename T, uint32_t dims>
 T TPoint<T, dims>::dot(TPoint a, TPoint b)
 {
 	return std::inner_product(a.coords.begin(), a.coords.end(), b.coords.begin(), T{0});
 }
 
+/**
+ * @brief Computes the dot product of this point with another point.
+ * 
+ * This method computes the dot product of this point with the specified point.
+ * 
+ * @param a The other point.
+ * @return T The dot product of this point with the other point.
+ */
 template <typename T, uint32_t dims>
 T TPoint<T, dims>::dot(TPoint a)
 {
 	return TPoint<T, dims>::dot(*this, a);
 }
 
+/**
+ * @brief Computes the cross product of two 3-dimensional points.
+ * 
+ * This method computes the cross product of two 3-dimensional points.
+ * 
+ * @param p1 The first point.
+ * @param p2 The second point.
+ * @return TPoint<T, dims> The cross product of the two points.
+ * @throw std::logic_error Thrown if the dimensions of the points are not equal to 3.
+ */
 template <typename T, uint32_t dims>
 TPoint<T, dims> TPoint<T, dims>::cross(const TPoint<T, dims>& p1, const TPoint<T, dims>& p2)
 {
@@ -236,9 +301,18 @@ TPoint<T, dims> TPoint<T, dims>::cross(const TPoint<T, dims>& p1, const TPoint<T
 						   (p1.coords.at(0)) * (p2.coords.at(1)) - (p2.coords.at(0)) * (p1.coords.at(1)));
 }
 
+/**
+ * @brief Checks if this point is equal to another point.
+ * 
+ * This method checks if this point is equal to the specified point.
+ * 
+ * @param rhs The other point.
+ * @return true if the points are equal, false otherwise.
+ */
 template <typename T, uint32_t dims>
 bool TPoint<T, dims>::operator==(const TPoint<T, dims> &rhs)
 {
 	return this->distance(rhs) <= std::numeric_limits<T>::epsilon();
 }
+
 #endif /* TPOINT_TPP */

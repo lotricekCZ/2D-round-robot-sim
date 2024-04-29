@@ -6,31 +6,69 @@
 #ifndef LINE_CPP
 #define LINE_CPP
 
+/**
+ * @brief Constructs a line passing through two given points.
+ * 
+ * This constructor initializes a line passing through two given points.
+ * 
+ * @param a The first point.
+ * @param b The second point.
+ */
 template <typename T, uint32_t dims>
 TLine<T, dims>::TLine(TPoint<T, dims> a, TPoint<T, dims> b) : TVector<T, dims>(TVector<T, dims>(TPoint<T, dims>(), b - a).normalise()), origin(a)
 {
 }
 
+/**
+ * @brief Generates a string representation of the given line.
+ * 
+ * This method generates a string representation of the specified line.
+ * 
+ * @param line The line to be represented as a string.
+ * @return std::string The string representation of the line.
+ */
 template <typename T, uint32_t dims>
 std::string TLine<T, dims>::print(const TLine<T, dims> &line)
 {
-	// std::string pointStr = TPoint<T, dims>::print(line::TPoint<T, dims>::this);
-	// std::string vectorStr = TVector<T, dims>::print(line);
-	return TPoint<T, dims>::print(line.origin) + " + t" + TVector<T, dims>::print(line);
+    return TPoint<T, dims>::print(line.origin) + " + t" + TVector<T, dims>::print(line);
 }
 
+/**
+ * @brief Generates a string representation of this line.
+ * 
+ * This method generates a string representation of this line.
+ * 
+ * @return std::string The string representation of this line.
+ */
 template <typename T, uint32_t dims>
 std::string TLine<T, dims>::print()
 {
-	return TLine<T, dims>::print(*this);
+    return TLine<T, dims>::print(*this);
 }
 
+/**
+ * @brief Computes the distance from this line to a given point.
+ * 
+ * This method computes the distance from this line to the specified point.
+ * 
+ * @param point The point for which the distance is computed.
+ * @return T The distance from this line to the point.
+ */
 template <typename T, uint32_t dims>
 T TLine<T, dims>::distance(TPoint<T, dims> point)
 {
-	return TLine<T, dims>::distance(*this, point);
+    return TLine<T, dims>::distance(*this, point);
 }
 
+/**
+ * @brief Computes the distance from a given line to a given point.
+ * 
+ * This method computes the distance from the specified line to the specified point.
+ * 
+ * @param line The line.
+ * @param point The point.
+ * @return T The distance from the line to the point.
+ */
 template <typename T, uint32_t dims>
 T TLine<T, dims>::distance(TLine<T, dims> line, const TPoint<T, dims> &point)
 {
@@ -59,9 +97,18 @@ T TLine<T, dims>::distance(TLine<T, dims> line, const TPoint<T, dims> &point)
 template <typename T, uint32_t dims>
 T TLine<T, dims>::distance(TLine<T, dims> line)
 {
-	return TLine<T, dims>::distance(*this, line);
+    return TLine<T, dims>::distance(*this, line);
 }
 
+/**
+ * @brief Computes the distance between two lines.
+ * 
+ * This method computes the distance between two lines.
+ * 
+ * @param line1 The first line.
+ * @param line2 The second line.
+ * @return T The distance between the two lines.
+ */
 template <typename T, uint32_t dims>
 T TLine<T, dims>::distance(TLine<T, dims> line1, TLine<T, dims> line2)
 {
@@ -94,6 +141,14 @@ T TLine<T, dims>::distance(TLine<T, dims> line1, TLine<T, dims> line2)
 	}
 }
 
+/**
+ * @brief Computes the point on this line at a given parameter value.
+ * 
+ * This method computes the point on this line at the specified parameter value.
+ * 
+ * @param a The parameter value.
+ * @return TPoint<T, dims> The point on this line at the parameter value.
+ */
 template <typename T, uint32_t dims>
 TPoint<T, dims> TLine<T, dims>::at(const T &a)
 {
@@ -114,12 +169,31 @@ bool TLine<T, dims>::is_on(const TPoint<T, dims> &point)
 	return TLine<T, dims>::is_on(*this, point);
 }
 
+/**
+ * @brief Checks if a given point lies on a given line within a specified epsilon.
+ * 
+ * This method checks if the specified point lies on the specified line within the specified epsilon.
+ * 
+ * @param line The line to check.
+ * @param point The point to check.
+ * @param epsilon The epsilon value.
+ * @return bool True if the point lies on the line within the epsilon, false otherwise.
+ */
 template <typename T, uint32_t dims>
 bool TLine<T, dims>::is_on(const TLine<T, dims> &line, const TPoint<T, dims> &point, T epsilon)
 {
 	return TLine<T, dims>::distance(line, point) <= epsilon;
 }
 
+/**
+ * @brief Computes the intersection point of two lines.
+ * 
+ * This method computes the intersection point of two lines.
+ * 
+ * @param first The first line.
+ * @param second The second line.
+ * @return std::optional<TPoint<T, dims>> The intersection point if it exists, otherwise std::nullopt.
+ */
 template <typename T, uint32_t dims>
 std::optional<TPoint<T, dims>> TLine<T, dims>::intersection(const TLine<T, dims> &first, const TLine<T, dims> &second)
 {
@@ -148,11 +222,20 @@ std::optional<TPoint<T, dims>> TLine<T, dims>::intersection(const TLine<T, dims>
 	return {};
 }
 
+/**
+ * @brief Computes the intersection point of this line with another line.
+ * 
+ * This method computes the intersection point of this line with another line.
+ * 
+ * @param line The other line.
+ * @return std::optional<TPoint<T, dims>> The intersection point if it exists, otherwise std::nullopt.
+ */
 template <typename T, uint32_t dims>
 std::optional<TPoint<T, dims>> TLine<T, dims>::intersection(const TLine<T, dims> &line)
 {
-	return TLine<T, dims>::intersection(*this, line);
+    return TLine<T, dims>::intersection(*this, line);
 }
+
 /*
 TLine<T, dims>::TLine(T angle, T c){
 	this -> b = 1;

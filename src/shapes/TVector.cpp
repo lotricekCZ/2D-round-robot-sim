@@ -302,17 +302,35 @@ TVector<T, dims> TVector<T, dims>::cross(TVector<T, dims> v1, TVector<T, dims> v
 							(v1.second.point().at(0) - v1.first.point().at(0)) * (v2.second.point().at(1) - v2.first.point().at(1)) - (v2.second.point().at(0) - v2.first.point().at(0)) * (v1.second.point().at(1) - v1.first.point().at(1)));
 }
 
+/**
+ * @brief Computes the component of the vector along the specified dimension.
+ * 
+ * This method computes the component of the vector along the specified dimension.
+ * 
+ * @param index The dimension index.
+ * @return T The component along the specified dimension.
+ */
 template <typename T, uint32_t dims>
 T TVector<T, dims>::d(uint32_t index)
 {
 	return d(*this, index);
 }
 
+/**
+ * @brief Computes the component of the vector along the specified dimension.
+ * 
+ * This method computes the component of the vector along the specified dimension.
+ * 
+ * @param v The vector.
+ * @param index The dimension index.
+ * @return T The component along the specified dimension.
+ */
 template <typename T, uint32_t dims>
 T TVector<T, dims>::d(TVector<T, dims> v, uint32_t index)
 {
 	return v.get_point().point().at(index) - v.get_origin().point().at(index);
 }
+
 
 /*
 template <typename T, uint32_t dims>

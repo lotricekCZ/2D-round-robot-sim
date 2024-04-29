@@ -225,6 +225,16 @@ std::vector<TLine<T, dims>> TCircle<T, dims>::tangents(TCircle<T, dims> a, TCirc
 	return ans;
 }
 
+
+/**
+ * @brief Computes tangents between this circle and another circle.
+ * 
+ * This method calculates the tangents between this circle and the provided circle.
+ * It returns a vector of lines representing the tangents.
+ * 
+ * @param a The other circle to compute tangents with.
+ * @return std::vector<TLine<T, dims>> Vector of lines representing the tangents between this circle and the provided circle.
+ */
 template <typename T, uint32_t dims>
 std::vector<TLine<T, dims>> TCircle<T, dims>::tangents(TCircle<T, dims> a)
 {
@@ -346,31 +356,66 @@ std::string TCircle<T, dims>::print(TCircle<T, dims> &a)
 // 	return ret;
 // 	}
 
+/**
+ * @brief Computes the distance from a point to the circumference of a circle.
+ * 
+ * This method calculates the distance from a given point to the circumference of the circle.
+ * 
+ * @param circ The circle to which the distance is computed.
+ * @param point The point for which the distance to the circumference is calculated.
+ * @return T The distance from the point to the circumference of the circle.
+ */
 template <typename T, uint32_t dims>
 T TCircle<T, dims>::distance(TCircle<T, dims> circ, TPoint<T, dims> point)
-{ // gets the distance from circumference
-	return std::abs(point.distance(circ.circle_center) - circ.radius);
+{
+    return std::abs(point.distance(circ.circle_center) - circ.radius);
 }
 
+/**
+ * @brief Computes the distance from a point to the circumference of this circle.
+ * 
+ * This method calculates the distance from a given point to the circumference of this circle.
+ * 
+ * @param co The point for which the distance to the circumference is calculated.
+ * @return T The distance from the point to the circumference of this circle.
+ */
 template <typename T, uint32_t dims>
 T TCircle<T, dims>::distance(TPoint<T, dims> co)
-{ // gets the distance from circumference
-	return distance((*this), co);
+{
+    return distance((*this), co);
 }
 
+/**
+ * @brief Computes the distance from a circle to the circumference of another circle.
+ * 
+ * This method calculates the distance from the circumference of a given circle to the circumference of another circle.
+ * 
+ * @param ci The circle to which the distance is computed.
+ * @param l The line for which the distance to the circumference is calculated.
+ * @return T The distance from the circumference of the circle to the line.
+ */
 template <typename T, uint32_t dims>
 T TCircle<T, dims>::distance(TCircle<T, dims> ci, TLine<T, dims> l)
-{ // gets the distance from circumference
-	auto p = l.distance(ci.circle_center);
-	std::cout << std::abs(ci.radius - p) << std::endl;
-	return ((ci.radius >= p)) ? 0 : p;
+{
+    auto p = l.distance(ci.circle_center);
+    std::cout << std::abs(ci.radius - p) << std::endl;
+    return ((ci.radius >= p)) ? 0 : p;
 }
 
+/**
+ * @brief Computes the distance from this circle to the circumference of a line.
+ * 
+ * This method calculates the distance from the circumference of this circle to a given line.
+ * 
+ * @param li The line for which the distance to the circumference is calculated.
+ * @return T The distance from the circumference of this circle to the line.
+ */
 template <typename T, uint32_t dims>
 T TCircle<T, dims>::distance(TLine<T, dims> li)
-{ // gets the distance from circumference
-	return distance((*this), li);
+{
+    return distance((*this), li);
 }
+
 
 // template <typename T, uint32_t dims>
 // T TCircle<T, dims>::distance(TCircle c, TPoint<T, dims> a, TPoint<T, dims> b){
@@ -403,16 +448,32 @@ T TCircle<T, dims>::distance(TLine<T, dims> li)
 // 	return distance((*this), a, b);
 // 	}
 
+/**
+ * @brief Computes the center point of the given circle.
+ * 
+ * This method returns the center point of the specified circle.
+ * 
+ * @param circle The circle for which the center point is computed.
+ * @return TPoint<T, dims> The center point of the circle.
+ */
 template <typename T, uint32_t dims>
 TPoint<T, dims> TCircle<T, dims>::center(TCircle<T, dims> circle)
 {
-	return circle.circle_center;
+    return circle.circle_center;
 }
 
+/**
+ * @brief Computes the center point of this circle.
+ * 
+ * This method returns the center point of this circle.
+ * 
+ * @return TPoint<T, dims> The center point of this circle.
+ */
 template <typename T, uint32_t dims>
 TPoint<T, dims> TCircle<T, dims>::center()
 {
-	return TCircle<T, dims>::center(*this);
+    return TCircle<T, dims>::center(*this);
 }
+
 
 #endif

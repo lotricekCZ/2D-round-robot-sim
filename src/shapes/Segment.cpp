@@ -6,16 +6,36 @@
 #include <execution>
 #include <cinttypes>
 
+/**
+ * @brief Constructs a segment from a circle formula and range.
+ *
+ * @param formula Circle2D formula defining the segment.
+ * @param range Range of the segment.
+ */
 Segment::Segment(const Circle2D &formula, const std::array<float, 2> &range)
 {
 	this->assign_formula(formula);
 	this->assign_range(range);
 }
+
+/**
+ * @brief Constructs a segment from a line formula and range.
+ *
+ * @param formula Line2D formula defining the segment.
+ * @param range Range of the segment.
+ */
 Segment::Segment(const Line2D &formula, const std::array<float, 2> &range)
 {
 	this->assign_formula(formula);
 	this->assign_range(range);
 }
+
+/**
+ * @brief Constructs a segment from start and end points.
+ *
+ * @param start Starting point of the segment.
+ * @param end Ending point of the segment.
+ */
 Segment::Segment(const Point2D &start, const Point2D &end)
 {
 	Line2D line(start, end);
@@ -23,32 +43,64 @@ Segment::Segment(const Point2D &start, const Point2D &end)
 	this->assign_range({0, Point2D::distance(start, end) / Vect2D::length(Vect2D(start, end).normalise())});
 }
 
+/**
+ * @brief Destroys the segment object.
+ */
 Segment::~Segment()
 {
 }
 
+/**
+ * @brief Assigns the range of the segment.
+ *
+ * @param range Range of the segment.
+ */
 void Segment::assign_range(const std::array<float, 2> &range)
 {
 	this->range = range;
 }
 
+/**
+ * @brief Assigns the formula of the segment as a line.
+ *
+ * @param formula Line2D formula of the segment.
+ */
 void Segment::assign_formula(const Line2D &formula)
 {
 	this->formula = formula;
 }
 
+/**
+ * @brief Assigns the formula of the segment as a circle.
+ *
+ * @param formula Circle2D formula of the segment.
+ */
 void Segment::assign_formula(const Circle2D &formula)
 {
 	this->formula = formula;
 }
 
+/**
+ * @brief Finds the intersection points between two segments.
+ *
+ * @param first First segment.
+ * @param second Second segment.
+ * @return Intersection points between the two segments.
+ */
 Points2D Segment::intersection(const Segment &first, const Segment &second)
 {
 	Points2D ret;
-	
+
 	return ret;
 }
 
+/**
+ * @brief Finds the intersection points between a segment and a line.
+ *
+ * @param segment Segment to intersect with the line.
+ * @param line Line to intersect with the segment.
+ * @return Intersection points between the segment and the line.
+ */
 Points2D Segment::intersection(const Segment &segment, const Line2D &line)
 {
 	Points2D ret;
@@ -75,6 +127,15 @@ Points2D Segment::intersection(const Segment &segment, const Line2D &line)
 	return ret;
 }
 
+/**
+ * @brief Computes the intersection points between a segment and a circle.
+ * 
+ * This method computes the intersection points between the specified segment and circle.
+ * 
+ * @param segment The segment.
+ * @param circle The circle.
+ * @return Points2D The intersection points.
+ */
 Points2D Segment::intersection(const Segment &segment, const Circle2D &circle)
 {
 	Points2D ret;
@@ -97,16 +158,40 @@ Points2D Segment::intersection(const Segment &segment, const Circle2D &circle)
 	return ret;
 }
 
+/**
+ * @brief Computes the intersection points between two segments.
+ * 
+ * This method computes the intersection points between the two specified segments.
+ * 
+ * @param segment The first segment.
+ * @return Points2D The intersection points.
+ */
 Points2D Segment::intersection(const Segment &segment)
 {
 	return Segment::intersection(*this, segment);
 }
 
+/**
+ * @brief Computes the intersection points between a segment and a line.
+ * 
+ * This method computes the intersection points between the specified segment and line.
+ * 
+ * @param line The line.
+ * @return Points2D The intersection points.
+ */
 Points2D Segment::intersection(const Line2D &line)
 {
 	return Segment::intersection(*this, line);
 }
 
+/**
+ * @brief Computes the intersection points between a segment and a circle.
+ * 
+ * This method computes the intersection points between the specified segment and circle.
+ * 
+ * @param circle The circle.
+ * @return Points2D The intersection points.
+ */
 Points2D Segment::intersection(const Circle2D &circle)
 {
 	return Segment::intersection(*this, circle);
@@ -156,6 +241,15 @@ Line2D Segment::bisector()
 	return Segment::bisector(*this);
 }
 
+/**
+ * @brief Checks if a point lies on a segment.
+ * 
+ * This method checks if the specified point lies on the specified segment.
+ * 
+ * @param segment The segment.
+ * @param point The point.
+ * @return true if the point lies on the segment, false otherwise.
+ */
 bool Segment::is_on(const Segment &segment, const Point2D &point)
 {
 	std::variant<Circle2D, Line2D> formula = segment.get_formula();
@@ -177,24 +271,48 @@ bool Segment::is_on(const Segment &segment, const Point2D &point)
 	}
 	}
 }
+
+/**
+ * @brief Checks if a point lies on this segment.
+ * 
+ * This method checks if the specified point lies on this segment.
+ * 
+ * @param point The point.
+ * @return true if the point lies on this segment, false otherwise.
+ */
 bool Segment::is_on(const Point2D &point) const
 {
 	return Segment::is_on(*this, point);
 }
 
+/**
+ * @brief Retrieves the formula (either circle or line) of the segment.
+ * 
+ * This method retrieves the formula (either circle or line) of the segment.
+ * 
+ * @return std::variant<Circle2D, Line2D> The formula of the segment.
+ */
 std::variant<Circle2D, Line2D> Segment::get_formula() const
 {
 	return std::visit([](auto &&arg) -> std::variant<Circle2D, Line2D>
 					  { 
-					  using T = std::decay_t<decltype(arg)>;
-        			  if constexpr (std::is_same_v<T, std::monostate>) {
-        			      throw std::runtime_error("std::monostate detected, runtime rejected.");
-        			  } else {
-        			      return arg;
-        			  } },
+						  using T = std::decay_t<decltype(arg)>;
+						  if constexpr (std::is_same_v<T, std::monostate>) {
+							  throw std::runtime_error("std::monostate detected, runtime rejected.");
+						  } else {
+							  return arg;
+						  } },
 					  this->formula);
 }
 
+/**
+ * @brief Generates a string representation of the segment.
+ * 
+ * This method generates a string representation of the specified segment.
+ * 
+ * @param segment The segment.
+ * @return std::string The string representation of the segment.
+ */
 std::string Segment::print(Segment &segment)
 {
 	std::stringstream ss;
@@ -215,6 +333,14 @@ std::string Segment::print(Segment &segment)
 	ss << "\n(" << segment.range.at(0) << " <= t <= " << segment.range.at(1) << ")";
 	return ss.str();
 }
+
+/**
+ * @brief Generates a string representation of this segment.
+ * 
+ * This method generates a string representation of this segment.
+ * 
+ * @return std::string The string representation of this segment.
+ */
 std::string Segment::print()
 {
 	return Segment::print(*this);

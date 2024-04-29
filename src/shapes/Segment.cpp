@@ -45,7 +45,7 @@ void Segment::assign_formula(const Circle2D &formula)
 Points2D Segment::intersection(const Segment &first, const Segment &second)
 {
 	Points2D ret;
-
+	
 	return ret;
 }
 
@@ -68,7 +68,7 @@ Points2D Segment::intersection(const Segment &segment, const Line2D &line)
 		break;
 	}
 	}
-	
+
 	std::remove_if(std::execution::par_unseq, ret.begin(), ret.end(), [&](auto &point) -> bool
 				   { return !segment.is_on(point); });
 
@@ -78,6 +78,22 @@ Points2D Segment::intersection(const Segment &segment, const Line2D &line)
 Points2D Segment::intersection(const Segment &segment, const Circle2D &circle)
 {
 	Points2D ret;
+	auto formula = segment.get_formula();
+	switch (formula.index())
+	{
+	case type::circle:
+	{
+		ret = Circle2D::intersection(std::get<type::circle>(formula), circle);
+		break;
+	}
+	case type::line:
+	{
+		ret = Circle2D::intersection(circle, std::get<type::line>(formula));
+		break;
+	}
+	}
+	std::remove_if(std::execution::par_unseq, ret.begin(), ret.end(), [&](auto &point) -> bool
+				   { return !segment.is_on(point); });
 	return ret;
 }
 
@@ -98,6 +114,7 @@ Points2D Segment::intersection(const Circle2D &circle)
 
 float Segment::distance(const Segment &first, const Segment &second)
 {
+
 }
 
 float Segment::distance(const Segment &segment, const Line2D &line)
@@ -114,12 +131,15 @@ float Segment::distance(const Segment &segment, const Point2D &point)
 
 float Segment::distance(Segment &segment)
 {
+	return Segment::distance(*this, segment);
 }
 float Segment::distance(Line2D &line)
 {
+	return Segment::distance(*this, line);
 }
 float Segment::distance(Circle2D &circle)
 {
+	return Segment::distance(*this, circle);
 }
 
 float Segment::distance(Point2D &point)

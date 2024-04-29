@@ -96,8 +96,8 @@ std::vector<TPoint<T, dims>> TCircle<T, dims>::intersection(TCircle<T, dims> c, 
 	static_assert(dims == 2, "TCircle: dimensions other than 2D are not yet supported");
 	std::vector<TPoint<T, dims>> ret;
 	// Implement intersection calculation here
-	auto d = c.distance(l);
-	if (d != 0)
+	auto d = l.distance(c.center());
+	if (d > c.radius)
 		return ret;
 	T alpha = std::acos(d / c.radius);
 	T beta = std::atan2(l.d(1), l.d(0)) + M_PI_2;
@@ -192,7 +192,7 @@ TPoint<T, dims> TCircle<T, dims>::at(T par)
 
 /**
  * @brief Calculates the tangents of two circles in 2D.
- * 
+ *
  * @tparam T The data type of circle points (e.g., float, double, etc.).
  * @tparam dims The number of dimensions in which the circles reside. Only 2D circles are supported.
  * @param a The first circle.
@@ -224,7 +224,6 @@ std::vector<TLine<T, dims>> TCircle<T, dims>::tangents(TCircle<T, dims> a, TCirc
 
 	return ans;
 }
-
 
 template <typename T, uint32_t dims>
 std::vector<TLine<T, dims>> TCircle<T, dims>::tangents(TCircle<T, dims> a)
@@ -363,7 +362,8 @@ template <typename T, uint32_t dims>
 T TCircle<T, dims>::distance(TCircle<T, dims> ci, TLine<T, dims> l)
 { // gets the distance from circumference
 	auto p = l.distance(ci.circle_center);
-	return (ci.radius > p) ? 0 : p;
+	std::cout << std::abs(ci.radius - p) << std::endl;
+	return ((ci.radius >= p)) ? 0 : p;
 }
 
 template <typename T, uint32_t dims>
@@ -402,7 +402,6 @@ T TCircle<T, dims>::distance(TLine<T, dims> li)
 // T TCircle<T, dims>::distance(TPoint<T, dims> a, TPoint<T, dims> b){
 // 	return distance((*this), a, b);
 // 	}
-
 
 template <typename T, uint32_t dims>
 TPoint<T, dims> TCircle<T, dims>::center(TCircle<T, dims> circle)

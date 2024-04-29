@@ -196,5 +196,17 @@ int main(int argc, char **argv)
 		for (auto i : Segment::intersection(Segment(d, c), Line2D(a, b)))
 			std::cout << i.print() << std::endl;
 	}
+	{
+		Point2D a(0, 6);
+		Point2D b(-2, 10);
+		Point2D c(0, 0);
+
+		// std::cout << Line3D(a, b).intersection(Line3D(c, d)).value().print() << std::endl;
+		Segment segment(Circle2D(3, a), {0.125, 0.375});
+		std::cout << Line2D(b, c).print() << std::endl;
+		std::cout << segment.print() << std::endl;
+		for (auto i : Segment::intersection(segment, Line2D(b, c)))
+			std::cout << i.print() << std::endl;
+	}
 	return 0;
 };

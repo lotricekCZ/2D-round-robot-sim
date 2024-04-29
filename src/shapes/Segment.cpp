@@ -1,6 +1,7 @@
 #include "Segment.hpp"
 #include "TVector.hpp"
 #include <variant>
+#include <optional>
 #include <type_traits>
 #include <cmath>
 #include <execution>
@@ -129,9 +130,9 @@ Points2D Segment::intersection(const Segment &segment, const Line2D &line)
 
 /**
  * @brief Computes the intersection points between a segment and a circle.
- * 
+ *
  * This method computes the intersection points between the specified segment and circle.
- * 
+ *
  * @param segment The segment.
  * @param circle The circle.
  * @return Points2D The intersection points.
@@ -160,9 +161,9 @@ Points2D Segment::intersection(const Segment &segment, const Circle2D &circle)
 
 /**
  * @brief Computes the intersection points between two segments.
- * 
+ *
  * This method computes the intersection points between the two specified segments.
- * 
+ *
  * @param segment The first segment.
  * @return Points2D The intersection points.
  */
@@ -173,9 +174,9 @@ Points2D Segment::intersection(const Segment &segment)
 
 /**
  * @brief Computes the intersection points between a segment and a line.
- * 
+ *
  * This method computes the intersection points between the specified segment and line.
- * 
+ *
  * @param line The line.
  * @return Points2D The intersection points.
  */
@@ -186,9 +187,9 @@ Points2D Segment::intersection(const Line2D &line)
 
 /**
  * @brief Computes the intersection points between a segment and a circle.
- * 
+ *
  * This method computes the intersection points between the specified segment and circle.
- * 
+ *
  * @param circle The circle.
  * @return Points2D The intersection points.
  */
@@ -199,11 +200,29 @@ Points2D Segment::intersection(const Circle2D &circle)
 
 float Segment::distance(const Segment &first, const Segment &second)
 {
-
 }
 
 float Segment::distance(const Segment &segment, const Line2D &line)
 {
+	auto formula = segment.get_formula();
+	switch (formula.index())
+	{
+	case type::circle:
+	{
+		Circle2D::intersection(std::get<type::circle>(formula), circle);
+		break;
+	}
+	case type::line:
+	{
+		auto inter = std::get<type::line>(formula).intersection(line);
+		if (inter && segment.is_on(inter.value()))
+			return 0;
+		Points2D c = {Segment::at(segment, segment.range.at(0)).value(), Segment::at(segment, segment.range.at(1)).value()};
+		return std::min(static_cast<Line2D>(line).distance(c.at(0)), static_cast<Line2D>(line).distance(c.at(1)));
+	}
+	}
+
+	return std::numeric_limits<float>::infinity();
 }
 
 float Segment::distance(const Segment &segment, const Circle2D &circle)
@@ -234,6 +253,20 @@ float Segment::distance(Point2D &point)
 
 Line2D Segment::bisector(Segment &segment)
 {
+	auto formula = segment.get_formula();
+	switch (formula.index())
+	{
+	case type::circle:
+	{
+		return Line2D(std::get<type::circle>(formula).center(),
+					  (segment.at(segment.range.at(0)).value() + segment.at(segment.range.at(1)).value()) / 2);
+	}
+	case type::line:
+	{
+		auto l = std::get<type::line>(formula).get_point().point();
+		return Line2D(Vect2D(l.at(1), -l.at(0)), (segment.at(segment.range.at(0)).value() + segment.at(segment.range.at(1)).value()) / 2);
+	}
+	}
 }
 
 Line2D Segment::bisector()
@@ -243,9 +276,9 @@ Line2D Segment::bisector()
 
 /**
  * @brief Checks if a point lies on a segment.
- * 
+ *
  * This method checks if the specified point lies on the specified segment.
- * 
+ *
  * @param segment The segment.
  * @param point The point.
  * @return true if the point lies on the segment, false otherwise.
@@ -274,9 +307,9 @@ bool Segment::is_on(const Segment &segment, const Point2D &point)
 
 /**
  * @brief Checks if a point lies on this segment.
- * 
+ *
  * This method checks if the specified point lies on this segment.
- * 
+ *
  * @param point The point.
  * @return true if the point lies on this segment, false otherwise.
  */
@@ -287,9 +320,9 @@ bool Segment::is_on(const Point2D &point) const
 
 /**
  * @brief Retrieves the formula (either circle or line) of the segment.
- * 
+ *
  * This method retrieves the formula (either circle or line) of the segment.
- * 
+ *
  * @return std::variant<Circle2D, Line2D> The formula of the segment.
  */
 std::variant<Circle2D, Line2D> Segment::get_formula() const
@@ -307,9 +340,9 @@ std::variant<Circle2D, Line2D> Segment::get_formula() const
 
 /**
  * @brief Generates a string representation of the segment.
- * 
+ *
  * This method generates a string representation of the specified segment.
- * 
+ *
  * @param segment The segment.
  * @return std::string The string representation of the segment.
  */
@@ -336,12 +369,41 @@ std::string Segment::print(Segment &segment)
 
 /**
  * @brief Generates a string representation of this segment.
- * 
+ *
  * This method generates a string representation of this segment.
- * 
+ *
  * @return std::string The string representation of this segment.
  */
 std::string Segment::print()
 {
 	return Segment::print(*this);
+}
+
+std::optional<Point2D> Segment::at(Segment segment, float parameter)
+{
+	std::variant<Circle2D, Line2D> formula = segment.get_formula();
+	switch (formula.index())
+	{
+	case type::line:
+	{
+		Point2D p = std::get<type::line>(formula).at(parameter);
+		if (segment.is_on(p))
+			return p;
+		break;
+	}
+
+	case type::circle:
+	{
+		Point2D p = std::get<type::circle>(formula).at(parameter);
+		if (segment.is_on(p))
+			return p;
+		break;
+	}
+	}
+	return {};
+}
+
+std::optional<Point2D> Segment::at(float parameter)
+{
+	return Segment::at(*this, parameter);
 }

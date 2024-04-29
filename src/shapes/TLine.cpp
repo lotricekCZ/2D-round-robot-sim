@@ -18,6 +18,18 @@ template <typename T, uint32_t dims>
 TLine<T, dims>::TLine(TPoint<T, dims> a, TPoint<T, dims> b) : TVector<T, dims>(TVector<T, dims>(TPoint<T, dims>(), b - a).normalise()), origin(a)
 {
 }
+/**
+ * @brief Constructs a line passing through two given points.
+ * 
+ * This constructor initializes a line passing through two given points.
+ * 
+ * @param a The first point.
+ * @param b The second point.
+ */
+template <typename T, uint32_t dims>
+TLine<T, dims>::TLine(TVector<T, dims> dir, TPoint<T, dims> src) : TVector<T, dims>(dir.normalise()), origin(src)
+{
+}
 
 /**
  * @brief Generates a string representation of the given line.

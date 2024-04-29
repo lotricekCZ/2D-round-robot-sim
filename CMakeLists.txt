@@ -17,6 +17,7 @@ file(GLOB SOURCE_FILES
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
+find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
 link_directories(${CMAKE_CURRENT_SOURCE_DIR}/build)
 
@@ -50,17 +51,19 @@ set(CMAKE_CXX_FLAGS "-std=c++17 -g")
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 target_link_libraries(${PROJECT_NAME} Threads::Threads
                         point line circle vector polygon segment
+						Qt5::Widgets
 					)
-
 
 enable_testing()
 add_executable(line_to_line ${TEST}/shapes/line_line.cpp)
 add_executable(line_to_circle ${TEST}/shapes/line_circle.cpp)
 add_executable(segment_to_line ${TEST}/shapes/segment_line.cpp)
+add_executable(interface_test ${TEST}/general/ui.cpp)
 
 target_link_libraries(line_to_line point line)
 target_link_libraries(line_to_line point line circle)
 target_link_libraries(segment_to_line point line circle segment)
+target_link_libraries(interface_test Qt5::Widgets Qt5::Core)
 
 # LINE TO LINE TESTS
 add_test(NAME "l2l1" COMMAND line_to_line 0 4 4 3 0 0 8 4)
@@ -97,5 +100,7 @@ set_property (TEST "l2c4"
 # SEGMENT TO LINE TESTS
 
 add_test(NAME "s2l1" COMMAND segment_to_line 0 0 4 2 2 2 4 1)
-# set_property (TEST "s2l1"
-# 	PROPERTY PASS_REGULAR_EXPRESSION "0 \\(3\\.14194, 2\\.51355\\) \\(3\\.68733, 2\\.94986\\)")
+set_property (TEST "s2l1"
+	PROPERTY PASS_REGULAR_EXPRESSION "0 \\(3, 1\\.5\\) \\+ t\\(-0\\.447214, -0\\.894427\\) \\(3, 1\\.5\\)")
+
+add_test(NAME "uit1" COMMAND interface_test)

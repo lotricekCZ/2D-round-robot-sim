@@ -16,6 +16,7 @@ private:
 	};
 	std::variant<std::monostate, Circle2D, Line2D> formula; // nullptr is available only on creation
 	std::array<float, 2> range;
+
 public:
 	Segment(const Circle2D &, const std::array<float, 2> &);
 	Segment(const Line2D &, const std::array<float, 2> &);
@@ -45,12 +46,14 @@ public:
 	float distance(Circle2D &);
 	float distance(Point2D &);
 
+	static std::optional<Point2D> at(Segment segment, float parameter);
+	std::optional<Point2D> at(float parameter);
 	static Line2D bisector(Segment &);
 	Line2D bisector();
 	static std::string print(Segment &);
 	std::string print();
 	static bool is_on(const Segment &, const Point2D &);
-	bool is_on(const Point2D &) const ;
+	bool is_on(const Point2D &) const;
 };
 
 #endif

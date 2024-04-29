@@ -30,7 +30,6 @@ int main(int argc, char **argv)
 		Segment f(c, d);
 
 		std::cout << Segment::distance(f, e) << " ";
-		std::cout << f.bisector().print() << " ";
 		for (auto i : Segment::intersection(f, e))
 			std::cout << i.print() << " ";
 		std::cout << std::endl;

@@ -67,7 +67,7 @@ std::string TLine<T, dims>::print()
  * @return T The distance from this line to the point.
  */
 template <typename T, uint32_t dims>
-T TLine<T, dims>::distance(TPoint<T, dims> point)
+T TLine<T, dims>::distance(TPoint<T, dims> point) const
 {
     return TLine<T, dims>::distance(*this, point);
 }

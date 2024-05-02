@@ -32,22 +32,24 @@ public:
 	static Points2D intersection(const Segment &, const Line2D &);
 	static Points2D intersection(const Segment &, const Circle2D &);
 
-	Points2D intersection(const Segment &);
-	Points2D intersection(const Line2D &);
-	Points2D intersection(const Circle2D &);
+	Points2D intersection(const Segment &) const;
+	Points2D intersection(const Line2D &) const;
+	Points2D intersection(const Circle2D &) const;
 
 	static float distance(const Segment &, const Segment &);
 	static float distance(const Segment &, const Line2D &);
 	static float distance(const Segment &, const Circle2D &);
 	static float distance(const Segment &, const Point2D &);
 
-	float distance(Segment &);
-	float distance(Line2D &);
-	float distance(Circle2D &);
-	float distance(Point2D &);
+	float distance(const Segment &) const;
+	float distance(const Line2D &) const;
+	float distance(const Circle2D &) const;
+	float distance(const Point2D &) const;
+	Point2D start() const;
+	Point2D end() const;
 
 	static std::optional<Point2D> at(Segment segment, float parameter);
-	std::optional<Point2D> at(float parameter);
+	std::optional<Point2D> at(float parameter) const;
 	static Line2D bisector(Segment &);
 	Line2D bisector();
 	static std::string print(Segment &);

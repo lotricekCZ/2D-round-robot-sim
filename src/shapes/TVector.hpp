@@ -42,7 +42,7 @@ public:
 	TVector operator+(const T &rhs);
 	TPoint<T, dims> operator<<(const TPoint<T, dims> &rhs); // shifts the coordinate according to the vector
 	TPoint<T, dims> get_origin();
-	TPoint<T, dims> get_point();
+	TPoint<T, dims> get_point() const;
 	static T d(TVector<T, dims> v, uint32_t index);
 	static T length(TVector);
 	static std::string print(const TVector&);

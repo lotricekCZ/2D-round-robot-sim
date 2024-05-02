@@ -25,7 +25,7 @@ class TLine : public TVector<T, dims>
 		TLine(TVector<T, dims>, TPoint<T, dims> src = TPoint<T, dims>(0));
 		TLine(TPoint<T, dims>, TPoint<T, dims>);
 
-		T distance(TPoint<T, dims>);
+		T distance(TPoint<T, dims>) const;
 		T distance(TLine);
 		static T distance(TLine, const TPoint<T, dims>&);
 		static T distance(TLine, TLine);

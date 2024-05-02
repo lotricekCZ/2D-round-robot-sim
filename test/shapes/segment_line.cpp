@@ -14,7 +14,6 @@ int main(int argc, char **argv)
 		Segment f(c, {atof(argv[8]), atof(argv[9])});
 
 		std::cout << Segment::distance(f, e) << " ";
-
 		for (auto i : Segment::intersection(f, e))
 			std::cout << i.print() << " ";
 		std::cout << std::endl;

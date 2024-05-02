@@ -151,7 +151,7 @@ TPoint<T, dims> TVector<T, dims>::get_origin()
  * @return Origin point of the vector.
  */
 template <typename T, uint32_t dims>
-TPoint<T, dims> TVector<T, dims>::get_point()
+TPoint<T, dims> TVector<T, dims>::get_point() const
 {
 	return this->second;
 }

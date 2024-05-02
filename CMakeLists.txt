@@ -103,4 +103,16 @@ add_test(NAME "s2l1" COMMAND segment_to_line 0 0 4 2 2 2 4 1)
 set_property (TEST "s2l1"
 	PROPERTY PASS_REGULAR_EXPRESSION "0 \\(3, 1\\.5\\) \\+ t\\(-0\\.447214, -0\\.894427\\) \\(3, 1\\.5\\)")
 
-add_test(NAME "uit1" COMMAND interface_test)
+add_test(NAME "s2l2" COMMAND segment_to_line -6 0 0 6 6 4 1 0 0.25)
+set_property (TEST "s2l2"
+	PROPERTY PASS_REGULAR_EXPRESSION "4\\.94975")
+
+
+add_test(NAME "s2l3" COMMAND segment_to_line -6 0 0 6 6 4 1 0.5 0.25)
+set_property (TEST "s2l3"
+	PROPERTY PASS_REGULAR_EXPRESSION "4\\.65685")
+
+add_test(NAME "s2l4" COMMAND segment_to_line -6 0 0 6 6 4 1 0.360 0.25)
+set_property (TEST "s2l4"
+	PROPERTY PASS_REGULAR_EXPRESSION "4\\.66129")
+# add_test(NAME "uit1" COMMAND interface_test)

@@ -30,7 +30,7 @@ T TPoint<T, dims>::distance(const TPoint<T, dims> &a, const TPoint<T, dims> &b)
  * @return The Euclidean distance between the current point and point 'a'.
  */
 template <typename T, uint32_t dims>
-T TPoint<T, dims>::distance(const TPoint<T, dims> &a)
+T TPoint<T, dims>::distance(const TPoint<T, dims> &a) const
 {
 	return distance(*this, a);
 }

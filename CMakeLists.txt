@@ -55,14 +55,18 @@ target_link_libraries(${PROJECT_NAME} Threads::Threads
 					)
 
 enable_testing()
-add_executable(line_to_line ${TEST}/shapes/line_line.cpp)
-add_executable(line_to_circle ${TEST}/shapes/line_circle.cpp)
-add_executable(segment_to_line ${TEST}/shapes/segment_line.cpp)
-add_executable(interface_test ${TEST}/general/ui.cpp)
+add_executable(line_to_line 		${TEST}/shapes/line_line.cpp)
+add_executable(line_to_circle 		${TEST}/shapes/line_circle.cpp)
+add_executable(segment_to_line 		${TEST}/shapes/segment_line.cpp)
+add_executable(segment_to_segment 	${TEST}/shapes/segment_segment.cpp)
+add_executable(segment_to_point 	${TEST}/shapes/segment_point.cpp)
+add_executable(interface_test 		${TEST}/general/ui.cpp)	
 
 target_link_libraries(line_to_line point line)
 target_link_libraries(line_to_line point line circle)
 target_link_libraries(segment_to_line point line circle segment)
+target_link_libraries(segment_to_segment point line circle segment)
+target_link_libraries(segment_to_point point line circle segment)
 target_link_libraries(interface_test Qt5::Widgets Qt5::Core)
 
 # LINE TO LINE TESTS
@@ -115,4 +119,34 @@ set_property (TEST "s2l3"
 add_test(NAME "s2l4" COMMAND segment_to_line -6 0 0 6 6 4 1 0.360 0.25)
 set_property (TEST "s2l4"
 	PROPERTY PASS_REGULAR_EXPRESSION "4\\.66129")
+
+# SEGMENT TO POINT TESTS
+
+add_test(NAME "s2p1" COMMAND segment_to_point 0 3 3 2 2 0.25 0.375)
+set_property (TEST "s2p1"
+	PROPERTY PASS_REGULAR_EXPRESSION "1\\.63899")
+
+add_test(NAME "s2p2" COMMAND segment_to_point 0 3 -3 3 -2 6)
+set_property (TEST "s2p2"
+	PROPERTY PASS_REGULAR_EXPRESSION "2\\.84605")
+
+add_test(NAME "s2p3" COMMAND segment_to_point 0 3 -3 -2 -2 1)
+set_property (TEST "s2p3"
+	PROPERTY PASS_REGULAR_EXPRESSION "2\\.82843")
+
+# SEGMENT TO SEGMENT TESTS
+
+add_test(NAME "s2s1" COMMAND segment_to_segment 0 4 2 6 3 2 2.5 5)
+set_property (TEST "s2s1"
+	PROPERTY PASS_REGULAR_EXPRESSION "1\\.06066 \\(2\\.75, 3\\.5\\) \\+ t\\(0\\.986394, 0\\.164399\\)")
+
+add_test(NAME "s2s2" COMMAND segment_to_segment 0 4 1 5.5 3 2 1 0 0.375)
+set_property (TEST "s2s2"
+	PROPERTY PASS_REGULAR_EXPRESSION "2\\.62497 \\(0\\.5, 4\\.75\\) \\+ t\\(0\\.83205, -0\\.5547\\)")
+
+add_test(NAME "s2s3" COMMAND segment_to_segment 3 2 5 2 1 3 -0.25 0.375 0 0.375)
+set_property (TEST "s2s3"
+	PROPERTY PASS_REGULAR_EXPRESSION "4\\.65685")
+
+
 # add_test(NAME "uit1" COMMAND interface_test)

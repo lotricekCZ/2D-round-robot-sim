@@ -56,6 +56,10 @@ public:
 	std::string print();
 	static bool is_on(const Segment &, const Point2D &);
 	bool is_on(const Point2D &) const;
+private:
+	static float distance_lin(const Segment &, const Segment &);
+	static float distance_cir(const Segment &, const Segment &);
+	static float distance_cmb(const Segment &, const Segment &);
 };
 
 #endif

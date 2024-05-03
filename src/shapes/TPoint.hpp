@@ -29,7 +29,7 @@ public:
 	T dot(TPoint);
 	static TPoint cross(const TPoint&, const TPoint&);
 	std::array<T, dims> point();
-	T distance(const TPoint<T, dims> &a);
+	T distance(const TPoint<T, dims> &a) const;
 	TPoint operator-(const TPoint<T, dims> &rhs) const;
 	TPoint operator+(const TPoint &rhs);
 	TPoint operator/(const T &rhs);

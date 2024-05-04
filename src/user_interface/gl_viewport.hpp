@@ -29,18 +29,26 @@
 
 #ifndef GL_VIEWPORT_HPP
 #define GL_VIEWPORT_HPP
+class Helper;
 
 class Viewport : public QOpenGLWidget, public QOpenGLFunctions
 {
     // Q_OBJECT
 public:
     Viewport(QWidget *parent = nullptr);
+    QTimer *timer;
     Viewport() = delete;
     ~Viewport();
-
+public slots:
+    void animate();
 protected:
+    void timerEvent(QTimerEvent *event) override;
     void initializeGL() override;
     void paintGL() override;
+private:
+    float move = 1;
+    Helper *helper;
+    int elapsed;
 };
 
 #endif

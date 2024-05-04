@@ -1,3 +1,6 @@
+/**
+ * @author Jakub Ramašeuski (xramas01); 2024
+*/
 #include <iostream>
 #include "../../src/shapes/TPoint.hpp"
 #include "../../src/shapes/TLine.hpp"

@@ -17,6 +17,8 @@ file(GLOB SOURCE_FILES
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
+# find_package(OpenGL REQUIRED)
+# find_package(GLUT REQUIRED)
 find_package(Qt5 COMPONENTS 
 				LinguistTools           RemoteObjects
 				Help                    QuickWidgets
@@ -80,12 +82,14 @@ add_library(obstacle		SHARED ${ACTORS}/obstacle.cpp)
 add_library(vehicle 		SHARED ${ACTORS}/vehicle.cpp)
 
 add_library(interface 		SHARED ${INTERFACE}/interface.cpp)
+add_library(viewport		SHARED ${INTERFACE}/gl_viewport.cpp)
 
 target_link_libraries(vector point)
 target_link_libraries(line point vector)
 target_link_libraries(circle point line)
 target_link_libraries(segment point line)
-target_link_libraries(interface Qt5::Widgets Qt5::UiTools)
+target_link_libraries(viewport Qt5::Widgets Qt5::Gui Qt5::OpenGL)
+target_link_libraries(interface Qt5::Widgets Qt5::UiTools viewport)
 
 
 
@@ -113,7 +117,7 @@ target_link_libraries(segment_to_line point line circle segment)
 target_link_libraries(segment_to_segment point line circle segment)
 target_link_libraries(segment_to_point point line circle segment)
 target_link_libraries(interface_test Qt5::Widgets Qt5::Core)
-target_link_libraries(interface_test_final interface)
+target_link_libraries(interface_test_final interface viewport)
 
 # LINE TO LINE TESTS
 add_test(NAME "l2l1" COMMAND line_to_line 0 4 4 3 0 0 8 4)

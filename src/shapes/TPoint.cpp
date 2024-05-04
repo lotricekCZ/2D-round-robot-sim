@@ -1,3 +1,6 @@
+/**
+ * @author Jakub Ramašeuski (xramas01); 2024
+*/
 #ifndef TPOINT_TPP
 #define TPOINT_TPP
 #include <functional>

@@ -1,3 +1,6 @@
+/**
+ * @author Jakub Ramašeuski (xramas01); 2024
+*/
 #include <cinttypes>
 #include <memory>
 #include <optional>

@@ -17,7 +17,6 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
-#include <QtWidgets/QOpenGLWidget>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QTableWidget>
@@ -26,6 +25,7 @@
 #include <QtWidgets/QWidget>
 #include <QKeyEvent>
 #include <QUiLoader>
+#include "gl_viewport.hpp"
 
 class interface : public QMainWindow
 {
@@ -64,7 +64,7 @@ private:
     QGridLayout *grid_layout_4;
     QToolButton *b_obstacle;
     QToolButton *b_vehicle;
-    QOpenGLWidget *openGL_widget;
+    Viewport *openGL_widget;
     QMenuBar *menubar;
     QMenu *menuopen;
     QStatusBar *statusbar;

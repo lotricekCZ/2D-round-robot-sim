@@ -1,3 +1,6 @@
+/**
+ * @author Jakub Ramašeuski (xramas01); 2024
+*/
 #include "interface.hpp"
 
 interface::interface() : QMainWindow()
@@ -190,7 +193,7 @@ void interface::setupUi(QMainWindow *MainWindow)
 
 	horizontal_layout->addLayout(vertical_layout_2);
 
-	openGL_widget = new QOpenGLWidget(horizontal_layout_widget);
+	openGL_widget = new Viewport(horizontal_layout_widget);
 	openGL_widget->setObjectName(QString::fromUtf8("openGL_widget"));
 	QSizePolicy sizePolicy4(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	sizePolicy4.setHorizontalStretch(1);

@@ -1,3 +1,6 @@
+/**
+ * @author Jakub Ramašeuski (xramas01); 2024
+*/
 #ifndef TPOINT_HPP
 #define TPOINT_HPP
 

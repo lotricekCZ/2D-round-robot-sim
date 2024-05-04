@@ -1,3 +1,6 @@
+/**
+ * @author Jakub Ramašeuski (xramas01); 2024
+*/
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
 #include "../renderable/renderable.hpp"

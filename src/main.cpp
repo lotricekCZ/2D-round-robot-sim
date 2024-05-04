@@ -1,3 +1,6 @@
+/**
+ * @author Jakub Ramašeuski (xramas01); 2024
+*/
 #include <iostream>
 #include "shapes/TPoint.hpp"
 #include "shapes/TVector.hpp"

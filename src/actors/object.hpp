@@ -1,3 +1,6 @@
+/**
+ * @author Jakub Ramašeuski (xramas01); 2024
+*/
 /* all the plane-rendered objects will this have as the base */
 #ifndef OBJECT_HPP
 #define OBJECT_HPP

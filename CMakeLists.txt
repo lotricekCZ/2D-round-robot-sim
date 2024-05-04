@@ -37,7 +37,7 @@ find_package(Qt5 COMPONENTS
 				Xml						Gui             
 				QuickTest               XmlPatterns
 				REQUIRED)
-
+include_directories(${Qt5UiTools_INCLUDE_DIRS})
 
 # Qt5::Variant
 # Qt5::Action
@@ -85,7 +85,7 @@ target_link_libraries(vector point)
 target_link_libraries(line point vector)
 target_link_libraries(circle point line)
 target_link_libraries(segment point line)
-target_link_libraries(interface Qt5::Widgets)
+target_link_libraries(interface Qt5::Widgets Qt5::UiTools)
 
 
 

@@ -24,59 +24,91 @@
 #include <QtWidgets/QToolButton>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
+#include <QKeyEvent>
+#include <QUiLoader>
 
-class interface
+class interface : public QMainWindow
 {
 private:
     QAction *actionload_configuration;
     QAction *actionSave_simulation;
     QAction *actionOpen_simulation;
     QWidget *centralwidget;
-    QWidget *horizontalLayoutWidget;
-    QHBoxLayout *horizontalLayout;
-    QVBoxLayout *verticalLayout_2;
-    QGroupBox *groupBox;
+    QWidget *horizontal_layout_widget;
+    QHBoxLayout *horizontal_layout;
+    QVBoxLayout *vertical_layout_2;
+    QGroupBox *group_box;
     QTableWidget *items;
-    QWidget *horizontalLayoutWidget_2;
-    QHBoxLayout *horizontalLayout_2;
+    QWidget *horizontal_layout_widget_2;
+    QHBoxLayout *horizontal_layout_2;
     QCommandLinkButton *b_remove;
     QCommandLinkButton *b_reset;
     QCommandLinkButton *b_launch;
-    QTabWidget *tabWidget;
     QWidget *tab_properties;
-    QWidget *formLayoutWidget;
-    QFormLayout *formLayout;
-    QLabel *label;
+    QWidget *form_layout_widget;
+    QFormLayout *form_layout;
+    QTabWidget *tab_widget;
+    
+    // inputs
+    QLabel *l_x;
     QLineEdit *in_x;
+    QLabel *l_y;
     QLineEdit *in_y;
-    QLabel *label_3;
+    QLabel *l_r;
     QLineEdit *in_rotation;
-    QLabel *label_4;
+    QLabel *l_a;
     QComboBox *in_animator;
-    QLabel *label_2;
+
     QWidget *tab_4;
-    QWidget *gridLayoutWidget;
-    QGridLayout *gridLayout_4;
+    QWidget *grid_layout_widget;
+    QGridLayout *grid_layout_4;
     QToolButton *b_obstacle;
     QToolButton *b_vehicle;
-    QOpenGLWidget *openGLWidget;
+    QOpenGLWidget *openGL_widget;
     QMenuBar *menubar;
     QMenu *menuopen;
     QStatusBar *statusbar;
+    
 public:
-    std::filesystem::path source;
-    interface(/* args */);
+    
+    interface();
     void open();
     void mainloop();
+    using QMainWindow::show;
     void setupUi(QMainWindow *MainWindow);
     void retranslateUi(QMainWindow *MainWindow);
     ~interface();
+
+protected:
+    void keyPressEvent(QKeyEvent *event) override
+    {
+        if (event->type() == QEvent::KeyPress)
+        {
+            // Přetypujeme událost na klávesovou událost
+            QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+
+            // Získáme kód stisknuté klávesy
+            int key = keyEvent->key();
+
+            // Zkontrolujeme, zda byla stisknuta klávesa Enter
+            if (key == Qt::Key_Enter || key == Qt::Key_Return)
+            {
+                printf("Stisknuta klávesa Enter\n");
+            }
+            else
+            {
+                // Pokud ne, zobrazíme text odpovídající klávesu
+                printf("Stisknuta klávesa: %d\n", keyEvent->key());
+            }
+        }
+    }
 };
 
-namespace ui {
-    class MainWindow: public interface {};
+namespace ui
+{
+    class MainWindow : public interface
+    {
+    };
 }
 
 #endif
-
-

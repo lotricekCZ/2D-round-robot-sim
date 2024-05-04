@@ -5,7 +5,7 @@ set(SRC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(TEST ${CMAKE_CURRENT_SOURCE_DIR}/test)
 set(SHAPES ${SRC}/shapes)
 set(ACTORS ${SRC}/actors)
-set(ACTORS ${SRC}/actors)
+set(INTERFACE ${SRC}/user_interface)
 set(PROJECT_NAME simulator)
 # set the project name and version
 project(${PROJECT_NAME} VERSION 0.1.2)
@@ -17,8 +17,50 @@ file(GLOB SOURCE_FILES
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
-find_package(Qt5 COMPONENTS Widgets REQUIRED)
+find_package(Qt5 COMPONENTS 
+				LinguistTools           RemoteObjects
+				Help                    QuickWidgets
+				Location                RepParser
+				Multimedia              Scxml
+				MultimediaWidgets       Network                 
+				OpenGL                  Svg
+				OpenGLExtensions        Test
+				Positioning             TextToSpeech
+				PositioningQuick        UiPlugin
+				PrintSupport            UiTools
+				Qml                     WebChannel
+				Quick                   WebSockets
+				Concurrent              QuickCompiler           
+				WebView 				Core
+				QuickControls2          Widgets
+				Gamepad                 QuickTemplates2
+				Xml						Gui             
+				QuickTest               XmlPatterns
+				REQUIRED)
 
+
+# Qt5::Variant
+# Qt5::Action
+# Qt5::Application
+# Qt5::ComboBox
+# Qt5::CommandLinkButton
+# Qt5::FormLayout
+# Qt5::GridLayout
+# Qt5::GroupBox
+# Qt5::HBoxLayout
+# Qt5::HeaderView
+# Qt5::Label
+# Qt5::LineEdit
+# Qt5::MainWindow
+# Qt5::Menu
+# Qt5::MenuBar
+# Qt5::OpenGLWidget
+# Qt5::StatusBar
+# Qt5::TabWidget
+# Qt5::TableWidget
+# Qt5::ToolButton
+# Qt5::VBoxLayout
+# Qt5::Widget
 link_directories(${CMAKE_CURRENT_SOURCE_DIR}/build)
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
@@ -34,14 +76,16 @@ add_library(segment 		SHARED ${SHAPES}/Segment.cpp)
 add_library(ai 		        SHARED ${ACTORS}/ai.cpp)
 add_library(object 			SHARED ${ACTORS}/object.cpp)
 add_library(obstacle		SHARED ${ACTORS}/obstacle.cpp)
-add_library(player 			SHARED ${ACTORS}/player.cpp)
+# add_library(player 			SHARED ${ACTORS}/player.cpp)
 add_library(vehicle 		SHARED ${ACTORS}/vehicle.cpp)
 
+add_library(interface 		SHARED ${INTERFACE}/interface.cpp)
 
 target_link_libraries(vector point)
 target_link_libraries(line point vector)
 target_link_libraries(circle point line)
 target_link_libraries(segment point line)
+target_link_libraries(interface Qt5::Widgets)
 
 
 
@@ -60,7 +104,8 @@ add_executable(line_to_circle 		${TEST}/shapes/line_circle.cpp)
 add_executable(segment_to_line 		${TEST}/shapes/segment_line.cpp)
 add_executable(segment_to_segment 	${TEST}/shapes/segment_segment.cpp)
 add_executable(segment_to_point 	${TEST}/shapes/segment_point.cpp)
-add_executable(interface_test 		${TEST}/general/ui.cpp)	
+add_executable(interface_test 		${TEST}/general/ui.cpp)
+add_executable(interface_test_final	${TEST}/general/final_ui.cpp)
 
 target_link_libraries(line_to_line point line)
 target_link_libraries(line_to_line point line circle)
@@ -68,6 +113,7 @@ target_link_libraries(segment_to_line point line circle segment)
 target_link_libraries(segment_to_segment point line circle segment)
 target_link_libraries(segment_to_point point line circle segment)
 target_link_libraries(interface_test Qt5::Widgets Qt5::Core)
+target_link_libraries(interface_test_final interface)
 
 # LINE TO LINE TESTS
 add_test(NAME "l2l1" COMMAND line_to_line 0 4 4 3 0 0 8 4)

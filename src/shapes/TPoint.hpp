@@ -27,6 +27,7 @@ public:
 	static std::string print(const std::vector<TPoint> &);
 	std::string print();
 	static std::array<T, dims> point(const TPoint &);
+	std::array<T, dims> point(const std::array<T, dims> &);
 	static T distance(const TPoint<T, dims> &a, const TPoint<T, dims> &b);
 	static T dot(TPoint, TPoint);
 	T dot(TPoint);

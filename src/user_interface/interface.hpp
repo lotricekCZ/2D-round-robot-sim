@@ -29,6 +29,7 @@
 
 class interface : public QMainWindow
 {
+    Q_OBJECT
 private:
     QAction *actionload_configuration;
     QAction *actionSave_simulation;
@@ -78,30 +79,10 @@ public:
     void setupUi(QMainWindow *MainWindow);
     void retranslateUi(QMainWindow *MainWindow);
     ~interface();
-
+public slots:
+    void foo(int i) const {std::cout << "try" << std::endl;}
 protected:
-    void keyPressEvent(QKeyEvent *event) override
-    {
-        if (event->type() == QEvent::KeyPress)
-        {
-            // Přetypujeme událost na klávesovou událost
-            QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-
-            // Získáme kód stisknuté klávesy
-            int key = keyEvent->key();
-
-            // Zkontrolujeme, zda byla stisknuta klávesa Enter
-            if (key == Qt::Key_Enter || key == Qt::Key_Return)
-            {
-                printf("Stisknuta klávesa Enter\n");
-            }
-            else
-            {
-                // Pokud ne, zobrazíme text odpovídající klávesu
-                printf("Stisknuta klávesa: %d\n", keyEvent->key());
-            }
-        }
-    }
+    
 };
 
 namespace ui

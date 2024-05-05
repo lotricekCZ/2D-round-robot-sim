@@ -4,14 +4,13 @@
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
 #include "../renderable/renderable.hpp"
-#include "../shapes/TCircle.hpp"
+#include "vehicle.hpp"
 
-class player: public renderable, public Circle2D
+class player: public vehicle
 {
 private:
     /* data */
 public:
-    void render(plane &);
     player(/* args */);
     ~player();
 };

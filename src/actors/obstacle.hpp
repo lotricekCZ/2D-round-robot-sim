@@ -1,17 +1,27 @@
 /**
  * @author Jakub Ramašeuski (xramas01); 2024
-*/
+ */
+#include "../renderable/renderable.hpp"
+#include "../shapes/Segment.hpp"
+#include "../shapes/TPoint.hpp"
+#include <array>
 #ifndef OBSTACLE_HPP
 #define OBSTACLE_HPP
 
-class obstacle
+class obstacle : public renderable
 {
 private:
-    /* data */
+    float edge_size = 0.2;
+    Point2D center;
+
 public:
+    std::array<Point2D, 4> bounds;
     obstacle(/* args */);
     ~obstacle();
+    void render() override;
+    void place(float x = 0, float y = 0) override;
+    void rotate(float a = 0) override;
+    void move(float dx = 0, float dy = 0) override;
 };
-
 
 #endif

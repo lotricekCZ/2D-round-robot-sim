@@ -7,7 +7,7 @@ interface::interface() : QMainWindow()
 {
 	this->installEventFilter(this);
 	setupUi(this);
-	setFocusPolicy(Qt::StrongFocus);
+	// setFocusPolicy(Qt::StrongFocus);
 }
 void interface::open()
 {
@@ -227,7 +227,7 @@ void interface::setupUi(QMainWindow *MainWindow)
 	retranslateUi(MainWindow);
 
 	tab_widget->setCurrentIndex(0);
-
+	QObject::connect(in_animator, SIGNAL(currentIndexChanged(int)), this, SLOT(foo(int)));
 	QMetaObject::connectSlotsByName(MainWindow);
 } // setupUi
 

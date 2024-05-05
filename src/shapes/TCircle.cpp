@@ -474,4 +474,17 @@ TPoint<T, dims> TCircle<T, dims>::center()
 	return TCircle<T, dims>::center(*this);
 }
 
+template <typename T, uint32_t dims>
+template <typename... Args>
+void TCircle<T, dims>::reposition(Args... args){
+	circle_center = circle_center + TPoint<T, dims>(args...);
+}
+
+template <typename T, uint32_t dims>
+template <typename... Args>
+void TCircle<T, dims>::place(Args... args){
+	circle_center = TPoint<T, dims>(args...);
+}
+
 #endif
+

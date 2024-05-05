@@ -26,29 +26,31 @@
 #include <QUiLoader>
 #include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>
+#include "../actors/vehicle.hpp"
+#include "../actors/obstacle.hpp"
 
 #ifndef GL_VIEWPORT_HPP
 #define GL_VIEWPORT_HPP
-class Helper;
 
 class Viewport : public QOpenGLWidget, public QOpenGLFunctions
 {
     // Q_OBJECT
 public:
+    vehicle v, b;
+    obstacle ob;
     Viewport(QWidget *parent = nullptr);
     QTimer *timer;
     Viewport() = delete;
     ~Viewport();
 public slots:
     void animate();
+    void keyPressEvent(QKeyEvent *event);
+
 protected:
-    void timerEvent(QTimerEvent *event) override;
     void initializeGL() override;
     void paintGL() override;
+
 private:
-    float move = 1;
-    Helper *helper;
-    int elapsed;
 };
 
 #endif

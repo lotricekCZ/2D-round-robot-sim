@@ -53,6 +53,10 @@ public:
 	std::vector<TLine<T, dims>> tangents(TCircle c);
 	std::string print();
 	static std::string print(TCircle &);
+	template <typename... Args>
+	void reposition(Args...);
+	template <typename... Args>
+	void place(Args...);
 	
 
 	static T distance(TCircle, TPoint<T, dims>);

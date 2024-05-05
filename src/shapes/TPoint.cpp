@@ -318,4 +318,19 @@ bool TPoint<T, dims>::operator==(const TPoint<T, dims> &rhs)
 	return this->distance(rhs) <= std::numeric_limits<T>::epsilon();
 }
 
+/**
+ * @brief Checks if this point is equal to another point.
+ * 
+ * This method checks if this point is equal to the specified point.
+ * 
+ * @param rhs The other point.
+ * @return true if the points are equal, false otherwise.
+ */
+template <typename T, uint32_t dims>
+std::array<T, dims> TPoint<T, dims>::point(const std::array<T, dims> &point){
+	this->coords = point;
+	return this->coords;
+}
+
 #endif /* TPOINT_TPP */
+

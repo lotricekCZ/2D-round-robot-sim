@@ -6,6 +6,7 @@ set(TEST ${CMAKE_CURRENT_SOURCE_DIR}/test)
 set(SHAPES ${SRC}/shapes)
 set(ACTORS ${SRC}/actors)
 set(INTERFACE ${SRC}/user_interface)
+set(RENDERABLE ${SRC}/renderable)
 set(PROJECT_NAME simulator)
 # set the project name and version
 project(${PROJECT_NAME} VERSION 0.1.2)
@@ -76,20 +77,25 @@ add_library(polygon 		SHARED ${SHAPES}/TPolygon.cpp)
 add_library(segment 		SHARED ${SHAPES}/Segment.cpp)
 
 add_library(ai 		        SHARED ${ACTORS}/ai.cpp)
-add_library(object 			SHARED ${ACTORS}/object.cpp)
 add_library(obstacle		SHARED ${ACTORS}/obstacle.cpp)
-# add_library(player 			SHARED ${ACTORS}/player.cpp)
+add_library(player 			SHARED ${ACTORS}/player.cpp)
 add_library(vehicle 		SHARED ${ACTORS}/vehicle.cpp)
 
 add_library(interface 		SHARED ${INTERFACE}/interface.cpp)
 add_library(viewport		SHARED ${INTERFACE}/gl_viewport.cpp)
 
+add_library(renderable		SHARED ${RENDERABLE}/renderable.cpp)
+
 target_link_libraries(vector point)
 target_link_libraries(line point vector)
 target_link_libraries(circle point line)
 target_link_libraries(segment point line)
-target_link_libraries(viewport Qt5::Widgets Qt5::Gui Qt5::OpenGL)
-target_link_libraries(interface Qt5::Widgets Qt5::UiTools viewport)
+target_link_libraries(vehicle Qt5::OpenGL renderable circle point line)
+target_link_libraries(obstacle Qt5::OpenGL renderable circle point segment line)
+target_link_libraries(viewport Qt5::Widgets Qt5::Gui Qt5::OpenGL vehicle obstacle renderable)
+set_target_properties(interface PROPERTIES AUTOMOC TRUE)
+target_link_libraries(interface Qt5::Widgets Qt5::Core Qt5::UiTools viewport)
+
 
 
 

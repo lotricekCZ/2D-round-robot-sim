@@ -9,17 +9,17 @@
 #include <vector>
 #include "renderable.hpp"
 
-using plane = std::vector<std::vector<uint8_t>>;
 
 class renderer
 {
-private:
+protected:
     static uint16_t width;
     static uint16_t height;
-    plane viewport;
+    friend class renderable;
 public:
     renderer(/* args */);
     ~renderer();
+    void render();
 };
 
 #endif

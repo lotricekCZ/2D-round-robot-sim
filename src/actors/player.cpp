@@ -12,3 +12,7 @@ player::player(): vehicle()
 player::~player()
 {
 }
+
+std::string player::info(){
+    return "player";
+}

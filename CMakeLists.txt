@@ -83,8 +83,10 @@ add_library(vehicle 		SHARED ${ACTORS}/vehicle.cpp)
 
 add_library(interface 		SHARED ${INTERFACE}/interface.cpp)
 add_library(viewport		SHARED ${INTERFACE}/gl_viewport.cpp)
+add_library(serializer		SHARED ${INTERFACE}/serializer.cpp)
 
 add_library(renderable		SHARED ${RENDERABLE}/renderable.cpp)
+add_library(renderer		SHARED ${RENDERABLE}/renderer.cpp)
 
 target_link_libraries(vector point)
 target_link_libraries(line point vector)
@@ -93,8 +95,11 @@ target_link_libraries(segment point line)
 target_link_libraries(vehicle Qt5::OpenGL renderable circle point line)
 target_link_libraries(obstacle Qt5::OpenGL renderable circle point segment line)
 target_link_libraries(viewport Qt5::Widgets Qt5::Gui Qt5::OpenGL vehicle obstacle renderable)
+target_link_libraries(renderer vehicle obstacle renderable)
+target_link_libraries(serializer Qt5::Widgets Qt5::Core)
+
 set_target_properties(interface PROPERTIES AUTOMOC TRUE)
-target_link_libraries(interface Qt5::Widgets Qt5::Core Qt5::UiTools viewport)
+target_link_libraries(interface Qt5::Widgets Qt5::Core Qt5::UiTools renderer viewport)
 
 
 
@@ -116,6 +121,7 @@ add_executable(segment_to_segment 	${TEST}/shapes/segment_segment.cpp)
 add_executable(segment_to_point 	${TEST}/shapes/segment_point.cpp)
 add_executable(interface_test 		${TEST}/general/ui.cpp)
 add_executable(interface_test_final	${TEST}/general/final_ui.cpp)
+add_executable(jsontest				${TEST}/general/jsontest.cpp)
 
 target_link_libraries(line_to_line point line)
 target_link_libraries(line_to_line point line circle)
@@ -124,6 +130,7 @@ target_link_libraries(segment_to_segment point line circle segment)
 target_link_libraries(segment_to_point point line circle segment)
 target_link_libraries(interface_test Qt5::Widgets Qt5::Core)
 target_link_libraries(interface_test_final interface viewport)
+target_link_libraries(jsontest serializer)
 
 # LINE TO LINE TESTS
 add_test(NAME "l2l1" COMMAND line_to_line 0 4 4 3 0 0 8 4)

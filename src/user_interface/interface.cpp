@@ -1,6 +1,6 @@
 /**
  * @author Jakub Ramašeuski (xramas01); 2024
-*/
+ */
 #include "interface.hpp"
 
 interface::interface() : QMainWindow()
@@ -9,16 +9,19 @@ interface::interface() : QMainWindow()
 	setupUi(this);
 	// setFocusPolicy(Qt::StrongFocus);
 }
-void interface::open()
-{
-}
-void interface::mainloop()
-{
-}
+
 interface::~interface()
 {
 }
 
+/**
+ * @brief Initializes the user interface for the main window.
+ *
+ * This function sets up various UI components such as actions, widgets, layouts, etc.,
+ * and connects signals to slots for event handling.
+ * @note it is as hideous as it gets, it came straight out of QT designer and I had no time to split it into smaller function blocks.
+ * @param MainWindow Pointer to the QMainWindow instance representing the main window.
+ */
 void interface::setupUi(QMainWindow *MainWindow)
 {
 	if (MainWindow->objectName().isEmpty())
@@ -53,6 +56,8 @@ void interface::setupUi(QMainWindow *MainWindow)
 	items = new QTableWidget(group_box);
 	items->setObjectName(QString::fromUtf8("items"));
 	items->setGeometry(QRect(0, 20, 400, 220));
+	items->setColumnCount(4);
+	items->setHorizontalHeaderLabels({"Type", "Center", "Rotation", "ID"});
 	horizontal_layout_widget_2 = new QWidget(group_box);
 	horizontal_layout_widget_2->setObjectName(QString::fromUtf8("horizontal_layout_widget_2"));
 	horizontal_layout_widget_2->setGeometry(QRect(0, 239, 401, 61));
@@ -224,10 +229,17 @@ void interface::setupUi(QMainWindow *MainWindow)
 	menuopen->addAction(actionSave_simulation);
 	menuopen->addAction(actionOpen_simulation);
 
+	tab_widget->setCurrentIndex(0);
 	retranslateUi(MainWindow);
 
-	tab_widget->setCurrentIndex(0);
-	QObject::connect(in_animator, SIGNAL(currentIndexChanged(int)), this, SLOT(foo(int)));
+	in_rotation->setValidator(new QDoubleValidator(0, 360, 1, in_rotation));
+	in_x->setValidator(new QDoubleValidator(-1, 1, 3, in_x));
+	in_y->setValidator(new QDoubleValidator(-1, 1, 3, in_y));
+	QObject::connect(in_animator, SIGNAL(currentTextChanged(const QString &)), this, SLOT(assign_animator(QString)));
+	connect(in_x, &QLineEdit::editingFinished, this, [&]()
+			{
+        auto f1 = this->in_x->text().toFloat();
+		printf("contains: %f\n", f1); });
 	QMetaObject::connectSlotsByName(MainWindow);
 } // setupUi
 

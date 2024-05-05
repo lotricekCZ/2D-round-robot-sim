@@ -1,11 +1,15 @@
 /**
  * @author Jakub Ramašeuski (xramas01); 2024
 */
-#ifndef RENDERER_HPP
-#define RENDERER_HPP
+#ifndef RENDERABLE_HPP
+#define RENDERABLE_HPP
+
+#include <typeinfo>
 #include <vector>
 #include <cinttypes>
+
 #include <QOpenGLFunctions>
+
 
 class renderable
 {
@@ -21,6 +25,8 @@ protected:
 public:
     renderable(/* args */);
     ~renderable();
+    uint32_t id(){return ID;};
+    virtual std::string info() = 0;
     virtual void render() = 0;
     virtual void move(float dx, float dy) = 0;
     virtual void place(float x = 0, float y = 0) = 0;

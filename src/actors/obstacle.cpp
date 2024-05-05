@@ -47,3 +47,7 @@ void obstacle::rotate(float a)
     rotation += a;
     move(0,0);
 }
+
+std::string obstacle::info(){
+    return "obstacle";
+}

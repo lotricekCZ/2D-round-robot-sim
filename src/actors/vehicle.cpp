@@ -42,3 +42,7 @@ void vehicle::place(float x, float y) {
 void vehicle::rotate(float a) {
     rotation += a;
 }
+
+std::string vehicle::info(){
+    return "vehicle";
+}

@@ -8,6 +8,7 @@
 #include <QSurfaceFormat>
 #include <QTimer>
 #include <iostream>
+#include <memory>
 #include "gl_viewport.hpp"
 #include "../actors/vehicle.hpp"
 
@@ -34,20 +35,29 @@ void Viewport::initializeGL()
 	glMatrixMode(GL_PROJECTION);
 	float aspect = (float)QWidget::width() / (float)QWidget::height();
 	glOrtho(-aspect, aspect, -1, 1, -1, 1);
-	ob.place(0.9, -.5);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+		obstacle o;
+		o.place(0.4, 0.3);
+		objects.add(std::make_shared<obstacle>(o));
+		o.place(-0.4, 0.3);
+		o.rotate(-0.25);
+		objects.add(std::make_shared<obstacle>(o));
+		o.place(-0.4, -0.3);
+		objects.add(std::make_shared<obstacle>(o));
+		o.place(0.4, -0.3);
+		o.rotate(0.25);
+		objects.add(std::make_shared<obstacle>(o));
 }
 
 void Viewport::paintGL()
 {
-	ob.rotate(0.01);
 	glClearColor(0.5f, 0.5f, 0.8f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
+	objects.render();
 	v.render();
-	b.render();
-	ob.render();
+
 	glFlush();
 }
 

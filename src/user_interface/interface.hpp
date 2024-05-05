@@ -1,7 +1,6 @@
 #ifndef INTERFACE_HPP
 #define INTERFACE_HPP
 
-#include <filesystem>
 #include <QtCore/QVariant>
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
@@ -24,13 +23,17 @@
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 #include <QKeyEvent>
-#include <QUiLoader>
+#include <QDoubleValidator>
 #include "gl_viewport.hpp"
 
 class interface : public QMainWindow
 {
     Q_OBJECT
 private:
+    // input validators
+    QDoubleValidator * coords_validator; // (double bottom, double top, int decimals, QObject *parent = nullptr)
+    QDoubleValidator * rotation_validator; 
+    // misc
     QAction *actionload_configuration;
     QAction *actionSave_simulation;
     QAction *actionOpen_simulation;
@@ -80,7 +83,10 @@ public:
     void retranslateUi(QMainWindow *MainWindow);
     ~interface();
 public slots:
-    void foo(int i) const {std::cout << "try" << std::endl;}
+    void assign_animator(QString s) const {printf("selected: %s\n", s.toStdString().c_str());}
+    void change_x(QString s) const {printf("x: %s\n", s.toStdString().c_str());}
+    void change_y(QString s) const {printf("y: %s\n", s.toStdString().c_str());}
+    void change_rotation(QString s) const {printf("y: %s\n", s.toStdString().c_str());}
 protected:
     
 };

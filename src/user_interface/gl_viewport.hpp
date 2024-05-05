@@ -28,6 +28,7 @@
 #include <QOpenGLShaderProgram>
 #include "../actors/vehicle.hpp"
 #include "../actors/obstacle.hpp"
+#include "../renderable/renderer.hpp"
 
 #ifndef GL_VIEWPORT_HPP
 #define GL_VIEWPORT_HPP
@@ -37,7 +38,7 @@ class Viewport : public QOpenGLWidget, public QOpenGLFunctions
     // Q_OBJECT
 public:
     vehicle v, b;
-    obstacle ob;
+    renderer objects;
     Viewport(QWidget *parent = nullptr);
     QTimer *timer;
     Viewport() = delete;

@@ -5,6 +5,7 @@
 #include "../shapes/Segment.hpp"
 #include "../shapes/TPoint.hpp"
 #include <array>
+#include <string>
 #ifndef OBSTACLE_HPP
 #define OBSTACLE_HPP
 
@@ -13,11 +14,11 @@ class obstacle : public renderable
 private:
     float edge_size = 0.2;
     Point2D center;
-
 public:
     std::array<Point2D, 4> bounds;
     obstacle(/* args */);
     ~obstacle();
+    std::string info() override;
     void render() override;
     void place(float x = 0, float y = 0) override;
     void rotate(float a = 0) override;

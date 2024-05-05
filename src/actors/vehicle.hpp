@@ -17,6 +17,8 @@ private:
 public:
     vehicle(/* args */);
     ~vehicle();
+    // typeid(pb).name()
+    std::string info() override;
     void render() override;
     void place(float x = 0, float y = 0) override;
     void rotate(float a = 0) override;

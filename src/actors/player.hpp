@@ -11,6 +11,7 @@ class player: public vehicle
 private:
     /* data */
 public:
+    std::string info() override;
     player(/* args */);
     ~player();
 };

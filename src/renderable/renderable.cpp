@@ -3,7 +3,7 @@
  */
 #include "renderable.hpp"
 
-uint32_t renderable::ID_incrementor = 0x020202;
+uint32_t renderable::ID_incrementor = 0;
 
 renderable::renderable(/* args */)
 {

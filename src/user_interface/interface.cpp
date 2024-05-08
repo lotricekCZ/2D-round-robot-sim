@@ -6,6 +6,8 @@
 interface::interface() : QMainWindow()
 {
 	this->installEventFilter(this);
+	rndr = std::shared_ptr<renderer>(new renderer());
+	serializer.renderer_ptr = rndr;
 	setupUi(this);
 	// setFocusPolicy(Qt::StrongFocus);
 }
@@ -58,6 +60,7 @@ void interface::setupUi(QMainWindow *MainWindow)
 	items->setGeometry(QRect(0, 20, 400, 220));
 	items->setColumnCount(4);
 	items->setHorizontalHeaderLabels({"Type", "Center", "Rotation", "ID"});
+
 	horizontal_layout_widget_2 = new QWidget(group_box);
 	horizontal_layout_widget_2->setObjectName(QString::fromUtf8("horizontal_layout_widget_2"));
 	horizontal_layout_widget_2->setGeometry(QRect(0, 239, 401, 61));
@@ -180,13 +183,13 @@ void interface::setupUi(QMainWindow *MainWindow)
 	grid_layout_4->setObjectName(QString::fromUtf8("grid_layout_4"));
 	grid_layout_4->setSizeConstraint(QLayout::SetMinimumSize);
 	grid_layout_4->setContentsMargins(0, 0, 0, 0);
-	b_obstacle = new QToolButton(grid_layout_widget);
+	b_obstacle = new QPushButton(grid_layout_widget);
 	b_obstacle->setObjectName(QString::fromUtf8("b_obstacle"));
 	b_obstacle->setMinimumSize(QSize(50, 50));
 
 	grid_layout_4->addWidget(b_obstacle, 0, 1, 1, 1);
 
-	b_vehicle = new QToolButton(grid_layout_widget);
+	b_vehicle = new QPushButton(grid_layout_widget);
 	b_vehicle->setObjectName(QString::fromUtf8("b_vehicle"));
 	b_vehicle->setMinimumSize(QSize(50, 50));
 
@@ -198,7 +201,7 @@ void interface::setupUi(QMainWindow *MainWindow)
 
 	horizontal_layout->addLayout(vertical_layout_2);
 
-	openGL_widget = new Viewport(horizontal_layout_widget);
+	openGL_widget = new Viewport(horizontal_layout_widget, rndr);
 	openGL_widget->setObjectName(QString::fromUtf8("openGL_widget"));
 	QSizePolicy sizePolicy4(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	sizePolicy4.setHorizontalStretch(1);
@@ -233,13 +236,69 @@ void interface::setupUi(QMainWindow *MainWindow)
 	retranslateUi(MainWindow);
 
 	in_rotation->setValidator(new QDoubleValidator(0, 360, 1, in_rotation));
-	in_x->setValidator(new QDoubleValidator(-1, 1, 3, in_x));
-	in_y->setValidator(new QDoubleValidator(-1, 1, 3, in_y));
+	in_x->setValidator(new QDoubleValidator(-1, 1, 6, in_x));
+	in_y->setValidator(new QDoubleValidator(-1, 1, 6, in_y));
+
+	// signals and slots
+	// change animator
 	QObject::connect(in_animator, SIGNAL(currentTextChanged(const QString &)), this, SLOT(assign_animator(QString)));
-	connect(in_x, &QLineEdit::editingFinished, this, [&]()
-			{
-        auto f1 = this->in_x->text().toFloat();
-		printf("contains: %f\n", f1); });
+	// add vehicle
+	QObject::connect(b_vehicle, &QPushButton::clicked, this, [&]()
+					 { 	rndr->add(std::make_shared<vehicle>()); 
+						items->insertRow(items->rowCount());
+						items->setItem(items->rowCount() - 1, 0, new QTableWidgetItem(QString::fromStdString(rndr->objects.back()->info())));
+						items->setItem(items->rowCount() - 1, 1, new QTableWidgetItem(QString::fromStdString(rndr->objects.back()->center().print())));
+						items->setItem(items->rowCount() - 1, 2, new QTableWidgetItem(QString::fromStdString(std::to_string(rndr->objects.back()->rotation()))));
+						items->setItem(items->rowCount() - 1, 3, new QTableWidgetItem(QString::fromStdString(std::to_string(rndr->objects.back()->id())))); });
+	// add obstacle
+	QObject::connect(b_obstacle, &QPushButton::clicked, this, [&]()
+					 {
+						 rndr->add(std::make_shared<obstacle>());
+						 items->insertRow(items->rowCount());
+						 items->setItem(items->rowCount() - 1, 0, new QTableWidgetItem(QString::fromStdString(rndr->objects.back()->info())));
+						 items->setItem(items->rowCount() - 1, 1, new QTableWidgetItem(QString::fromStdString(rndr->objects.back()->center().print())));
+						 items->setItem(items->rowCount() - 1, 2, new QTableWidgetItem(QString::fromStdString(std::to_string(rndr->objects.back()->rotation() * 360.0))));
+						 items->setItem(items->rowCount() - 1, 3, new QTableWidgetItem(QString::fromStdString(std::to_string(rndr->objects.back()->id())))); });
+	// delete button
+	QObject::connect(items, &QTableWidget::cellClicked, this, [&](int row, int y)
+					 {
+
+		selected = items->item(row, 3)->text().toInt();
+		auto edited = rndr->get_by_id(selected);
+		if(edited){
+			in_x->setText(QString::fromStdString(std::to_string(edited.value()->center().point().at(0))));
+			in_y->setText(QString::fromStdString(std::to_string(edited.value()->center().point().at(1))));
+			in_rotation->setText(QString::fromStdString(std::to_string(edited.value()->rotation() * 360.0)));
+			in_animator->setEnabled(edited.value()->info() != "obstacle"); 
+			} });
+	// run (unused for now)
+	// QObject::connect(in_animator, SIGNAL(currentTextChanged(const QString &)), this, SLOT(assign_animator(QString)));
+
+	connect(in_x, &QLineEdit::editingFinished, this, [&]() { // todo: alter coordinates of the selected
+		auto edited = rndr->get_by_id(selected);
+		if (edited)
+		{
+			auto x = this->in_x->text().toFloat();
+			float y = edited.value()->center().point().at(1);
+			edited.value()->place(x, y);
+		}
+	});
+	connect(in_y, &QLineEdit::editingFinished, this, [&]() { // todo: alter coordinates of the selected
+		auto edited = rndr->get_by_id(selected);
+		if (edited)
+		{
+			auto y = this->in_y->text().toFloat();
+			float x = edited.value()->center().point().at(0);
+			edited.value()->place(x, y);
+		}
+	});
+	connect(in_rotation, &QLineEdit::editingFinished, this, [&]() { // todo: alter coordinates of the selected
+		auto edited = rndr->get_by_id(selected);
+		if (edited)
+		{
+			edited.value()->set_rotation(this->in_rotation->text().toFloat() / 360.0f);
+		}
+	});
 	QMetaObject::connectSlotsByName(MainWindow);
 } // setupUi
 

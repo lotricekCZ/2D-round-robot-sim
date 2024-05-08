@@ -48,3 +48,11 @@ void renderer::render()
                   [&](auto &o)
                   { o->render(); });
 }
+
+
+std::optional<std::shared_ptr<renderable>> renderer::get_by_id(uint32_t id){
+    for(auto o: objects)
+        if(o->id() == id)
+            return o;
+    return {};
+}

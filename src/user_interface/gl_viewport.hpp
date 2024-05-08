@@ -38,8 +38,8 @@ class Viewport : public QOpenGLWidget, public QOpenGLFunctions
     // Q_OBJECT
 public:
     vehicle v, b;
-    renderer objects;
-    Viewport(QWidget *parent = nullptr);
+    std::shared_ptr<renderer> objects;
+    Viewport(QWidget *parent = nullptr, std::shared_ptr<renderer> objs = nullptr);
     QTimer *timer;
     Viewport() = delete;
     ~Viewport();

@@ -25,6 +25,7 @@
 #include <QKeyEvent>
 #include <QDoubleValidator>
 #include "gl_viewport.hpp"
+#include "serializer.hpp"
 
 class interface : public QMainWindow
 {
@@ -66,13 +67,16 @@ private:
     QWidget *tab_4;
     QWidget *grid_layout_widget;
     QGridLayout *grid_layout_4;
-    QToolButton *b_obstacle;
-    QToolButton *b_vehicle;
+    QPushButton *b_obstacle;
+    QPushButton *b_vehicle;
     Viewport *openGL_widget;
     QMenuBar *menubar;
     QMenu *menuopen;
     QStatusBar *statusbar;
-    
+
+    int selected;
+    Serializer serializer;
+    std::shared_ptr<renderer> rndr;
 public:
     
     interface();

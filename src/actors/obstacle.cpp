@@ -26,7 +26,7 @@ void obstacle::render()
 
 void obstacle::move(float dx, float dy)
 {
-    auto o = center.point();
+    auto o = obstacle_center.point();
     o[0] += dx;
     o[1] += dy;
     place(o[0], o[1]);
@@ -34,20 +34,24 @@ void obstacle::move(float dx, float dy)
 
 void obstacle::place(float x, float y)
 {
-    center.point(std::array<float, 2>{x, y});
+    obstacle_center.point(std::array<float, 2>{x, y});
     for (size_t i = 0; i < bounds.size(); i++)
     {
-        bounds.at(i) = Circle2D(edge_size * M_SQRT1_2f, center).at((i * 0.25) + 0.125 + rotation / (2 * M_PI));
+        bounds.at(i) = Circle2D(edge_size * M_SQRT1_2f, obstacle_center).at((i * 0.25) + 0.125 + _rotation);
     }
 }
 
 
 void obstacle::rotate(float a)
 {
-    rotation += a;
+    _rotation += a;
     move(0,0);
 }
 
 std::string obstacle::info(){
     return "obstacle";
+}
+
+Point2D obstacle::center(){
+    return obstacle_center;
 }

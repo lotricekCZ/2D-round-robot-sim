@@ -5,6 +5,6 @@
 #include "../../src/user_interface/serializer.hpp"
 
 int main(int argc, char *argv[]) {
-	serializer s;
+	Serializer s;
     s.read();
 }

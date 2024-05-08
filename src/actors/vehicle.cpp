@@ -32,17 +32,26 @@ void vehicle::render()
 
 void vehicle::move(float dx, float dy)
 {
-    this->reposition(dx, dy);
+    this->rotate(dx);
+    auto vec = Vect2D(this->center(), this->at(_rotation)) / 10 * dy;
+    this->reposition(vec.d(0), vec.d(1));
 }
 
-void vehicle::place(float x, float y) {
+void vehicle::place(float x, float y)
+{
     Circle2D::place(x, y);
 }
 
-void vehicle::rotate(float a) {
-    rotation += a;
+void vehicle::rotate(float a)
+{
+    _rotation += a;
 }
 
-std::string vehicle::info(){
+std::string vehicle::info()
+{
     return "vehicle";
+}
+
+Point2D vehicle::center() {
+    return Circle2D::center(*this);
 }

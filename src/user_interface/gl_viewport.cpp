@@ -14,9 +14,10 @@
 
 Viewport::~Viewport() {}
 
-Viewport::Viewport(QWidget *parent) : QOpenGLWidget(parent)
+Viewport::Viewport(QWidget *parent, std::shared_ptr<renderer> objs) : QOpenGLWidget(parent)
 {
 	QSurfaceFormat format;
+	this->objects = objs;
 	this->timer = new QTimer(this);
 	format.setDepthBufferSize(24);
 	format.setStencilBufferSize(8);
@@ -37,17 +38,6 @@ void Viewport::initializeGL()
 	glOrtho(-aspect, aspect, -1, 1, -1, 1);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-		obstacle o;
-		o.place(0.4, 0.3);
-		objects.add(std::make_shared<obstacle>(o));
-		o.place(-0.4, 0.3);
-		o.rotate(-0.25);
-		objects.add(std::make_shared<obstacle>(o));
-		o.place(-0.4, -0.3);
-		objects.add(std::make_shared<obstacle>(o));
-		o.place(0.4, -0.3);
-		o.rotate(0.25);
-		objects.add(std::make_shared<obstacle>(o));
 }
 
 void Viewport::paintGL()
@@ -55,7 +45,7 @@ void Viewport::paintGL()
 	glClearColor(0.5f, 0.5f, 0.8f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	objects.render();
+	objects->render();
 	v.render();
 
 	glFlush();
@@ -67,8 +57,8 @@ void Viewport::animate()
 	update();
 }
 
-void Viewport::keyPressEvent(QKeyEvent * event){
+void Viewport::keyPressEvent(QKeyEvent *event)
+{
 	int key = event->key();
-	printf("key pressed: %c\n", (char)key);
-	v.move(-0.02 * (key == Qt::Key_A) + 0.02 * (key == Qt::Key_D), 0.02 * (key == Qt::Key_W) - 0.02 * (key == Qt::Key_S));
+	v.move(0.01 * (key == Qt::Key_A) - 0.01 * (key == Qt::Key_D), 1 * (key == Qt::Key_W) - 1 * (key == Qt::Key_S));
 }

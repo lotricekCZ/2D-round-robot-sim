@@ -19,14 +19,14 @@
 #ifndef SERIALIZER_HPP
 #define SERIALIZER_HPP
 
-class serializer
+class Serializer
 {
 private:
     std::filesystem::path file;
 public:
     std::shared_ptr<renderer> renderer_ptr;
-    serializer(/* args */);
-    ~serializer();
+    Serializer(/* args */);
+    ~Serializer();
     void read();
     void save();
 };

@@ -18,8 +18,10 @@ file(GLOB SOURCE_FILES
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
-# find_package(OpenGL REQUIRED)
-# find_package(GLUT REQUIRED)
+find_package(Doxygen
+			 REQUIRED dot
+			 OPTIONAL_COMPONENTS mscgen dia)
+
 find_package(Qt5 COMPONENTS 
 				LinguistTools           RemoteObjects
 				Help                    QuickWidgets
@@ -41,6 +43,7 @@ find_package(Qt5 COMPONENTS
 				QuickTest               XmlPatterns
 				REQUIRED)
 include_directories(${Qt5UiTools_INCLUDE_DIRS})
+
 
 # Qt5::Variant
 # Qt5::Action
@@ -64,6 +67,16 @@ include_directories(${Qt5UiTools_INCLUDE_DIRS})
 # Qt5::ToolButton
 # Qt5::VBoxLayout
 # Qt5::Widget
+
+set(DOXYGEN_GENERATE_HTML NO)
+set(DOXYGEN_GENERATE_MAN YES)
+
+doxygen_add_docs(
+    doxygen
+    ${PROJECT_SOURCE_DIR}
+    COMMENT "Generate man pages"
+)
+
 link_directories(${CMAKE_CURRENT_SOURCE_DIR}/build)
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
@@ -96,10 +109,10 @@ target_link_libraries(vehicle Qt5::OpenGL renderable circle point line)
 target_link_libraries(obstacle Qt5::OpenGL renderable circle point segment line)
 target_link_libraries(viewport Qt5::Widgets Qt5::Gui Qt5::OpenGL vehicle obstacle renderable)
 target_link_libraries(renderer vehicle obstacle renderable)
-target_link_libraries(serializer Qt5::Widgets Qt5::Core)
+target_link_libraries(serializer Qt5::Widgets Qt5::Core vehicle renderer obstacle)
 
 set_target_properties(interface PROPERTIES AUTOMOC TRUE)
-target_link_libraries(interface Qt5::Widgets Qt5::Core Qt5::UiTools renderer viewport)
+target_link_libraries(interface serializer Qt5::Widgets Qt5::Core Qt5::UiTools renderer viewport)
 
 
 
@@ -110,7 +123,7 @@ set(CMAKE_CXX_FLAGS "-std=c++17 -g")
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 target_link_libraries(${PROJECT_NAME} Threads::Threads
                         point line circle vector polygon segment
-						Qt5::Widgets
+						Qt5::Widgets interface viewport
 					)
 
 enable_testing()

@@ -34,7 +34,7 @@ void Serializer::read()
         }
         else if (type == "player")
         {
-            // renderer_ptr->add(std::make_shared<player>());
+            renderer_ptr->add(std::make_shared<player>());
         }
         else
         {

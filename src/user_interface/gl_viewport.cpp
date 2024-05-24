@@ -54,6 +54,11 @@ void Viewport::paintGL()
 
 void Viewport::animate()
 {
+	std::for_each(std::execution::par, objects->objects.begin(), objects->objects.end(),
+				  [&](auto &o)
+				  { 
+					if(o->info() == "player")
+					o->move(0.01 * (keysPressed.find(Qt::Key_A) != keysPressed.end()) - 0.01 * (keysPressed.find(Qt::Key_D) != keysPressed.end()), 1 * (keysPressed.find(Qt::Key_W) != keysPressed.end()) - 1 * (keysPressed.find(Qt::Key_S) != keysPressed.end())); });
 	paintGL();
 	update();
 }
@@ -61,24 +66,9 @@ void Viewport::animate()
 void Viewport::keyPressEvent(QKeyEvent *event)
 {
 	keysPressed += event->key();
-	std::for_each(std::execution::par, objects->objects.begin(), objects->objects.end(),
-				  [&](auto &o)
-				  { 
-					if(o->info() == "player")
-					o->move(0.01 * (keysPressed.find(Qt::Key_A) != keysPressed.end()) - 0.01 * (keysPressed.find(Qt::Key_D) != keysPressed.end()), 1 * (keysPressed.find(Qt::Key_W) != keysPressed.end()) - 1 * (keysPressed.find(Qt::Key_S) != keysPressed.end())); });
 }
 
 void Viewport::keyReleaseEvent(QKeyEvent *event)
 {
 	keysPressed -= event->key();
-	for (auto k: keysPressed)
-	{
-		std::cout << k << std::endl;
-	}
-	std::cout << std::endl;
-	std::for_each(std::execution::par, objects->objects.begin(), objects->objects.end(),
-				  [&](auto &o)
-				  { 
-					if(o->info() == "player")
-					o->move(0.01 * (keysPressed.find(Qt::Key_A) != keysPressed.end()) - 0.01 * (keysPressed.find(Qt::Key_D) != keysPressed.end()), 1 * (keysPressed.find(Qt::Key_W) != keysPressed.end()) - 1 * (keysPressed.find(Qt::Key_S) != keysPressed.end())); });
 }

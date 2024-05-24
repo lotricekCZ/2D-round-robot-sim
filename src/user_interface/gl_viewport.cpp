@@ -58,17 +58,17 @@ void Viewport::animate()
 				  [&](auto &o)
 				  { 
 					if(o->info() == "player")
-					o->move(0.01 * (keysPressed.find(Qt::Key_A) != keysPressed.end()) - 0.01 * (keysPressed.find(Qt::Key_D) != keysPressed.end()), 1 * (keysPressed.find(Qt::Key_W) != keysPressed.end()) - 1 * (keysPressed.find(Qt::Key_S) != keysPressed.end())); });
+					o->move(0.01 * (keys.find(Qt::Key_A) != keys.end()) - 0.01 * (keys.find(Qt::Key_D) != keys.end()), 1 * (keys.find(Qt::Key_W) != keys.end()) - 1 * (keys.find(Qt::Key_S) != keys.end())); });
 	paintGL();
 	update();
 }
 
 void Viewport::keyPressEvent(QKeyEvent *event)
 {
-	keysPressed += event->key();
+	keys += event->key();
 }
 
 void Viewport::keyReleaseEvent(QKeyEvent *event)
 {
-	keysPressed -= event->key();
+	keys -= event->key();
 }

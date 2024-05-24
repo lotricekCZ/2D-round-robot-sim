@@ -15,6 +15,9 @@
 #include <filesystem>
 #include <memory>
 #include "../renderable/renderer.hpp"
+#include "../actors/vehicle.hpp"
+#include "../actors/player.hpp"
+#include "../actors/obstacle.hpp"
 
 #ifndef SERIALIZER_HPP
 #define SERIALIZER_HPP

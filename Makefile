@@ -10,7 +10,7 @@ all: $(BIN_DIR)
 	cmake .. && \
 	make -j`nproc`
 
-run:
+run: all
 	./$(BIN_DIR)/$(EXE)
 
 

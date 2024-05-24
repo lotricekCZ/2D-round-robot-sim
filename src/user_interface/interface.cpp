@@ -9,7 +9,11 @@ interface::interface() : QMainWindow()
 	rndr = std::shared_ptr<renderer>(new renderer());
 	serializer.renderer_ptr = rndr;
 	setupUi(this);
-	// setFocusPolicy(Qt::StrongFocus);
+	// timer initiation
+	this->timer_table = new QTimer(this);
+	connect(timer_table, &QTimer::timeout, this, &interface::update_table);
+	setFocusPolicy(Qt::StrongFocus);
+	timer_table->start(250);
 }
 
 interface::~interface()
@@ -244,21 +248,14 @@ void interface::setupUi(QMainWindow *MainWindow)
 	// QObject::connect(in_animator, SIGNAL(currentTextChanged(const QString &)), this, SLOT(assign_animator(QString)));
 	// add vehicle
 	QObject::connect(b_vehicle, &QPushButton::clicked, this, [&]()
-					 { 	rndr->add(std::make_shared<vehicle>()); 
-						items->insertRow(items->rowCount());
-						items->setItem(items->rowCount() - 1, 0, new QTableWidgetItem(QString::fromStdString(rndr->objects.back()->info())));
-						items->setItem(items->rowCount() - 1, 1, new QTableWidgetItem(QString::fromStdString(rndr->objects.back()->center().print())));
-						items->setItem(items->rowCount() - 1, 2, new QTableWidgetItem(QString::fromStdString(std::to_string(rndr->objects.back()->rotation()))));
-						items->setItem(items->rowCount() - 1, 3, new QTableWidgetItem(QString::fromStdString(std::to_string(rndr->objects.back()->id())))); });
+					 { 
+						rndr->add(std::make_shared<vehicle>()); 
+					 	update_table(); });
 	// add obstacle
 	QObject::connect(b_obstacle, &QPushButton::clicked, this, [&]()
 					 {
 						 rndr->add(std::make_shared<obstacle>());
-						 items->insertRow(items->rowCount());
-						 items->setItem(items->rowCount() - 1, 0, new QTableWidgetItem(QString::fromStdString(rndr->objects.back()->info())));
-						 items->setItem(items->rowCount() - 1, 1, new QTableWidgetItem(QString::fromStdString(rndr->objects.back()->center().print())));
-						 items->setItem(items->rowCount() - 1, 2, new QTableWidgetItem(QString::fromStdString(std::to_string(rndr->objects.back()->rotation() * 360.0))));
-						 items->setItem(items->rowCount() - 1, 3, new QTableWidgetItem(QString::fromStdString(std::to_string(rndr->objects.back()->id())))); });
+						 update_table(); });
 	// delete button
 	QObject::connect(items, &QTableWidget::cellClicked, this, [&](int row, int y)
 					 {
@@ -280,28 +277,21 @@ void interface::setupUi(QMainWindow *MainWindow)
 			auto rotation = edited.value()->rotation();
 			if (text.toStdString() == "AI" && edited.value()->info() == "player")
 			{
-				rndr->erase_by_id(selected);
 				rndr->add(std::make_shared<vehicle>());
 				rndr->objects.back()->place(center.at(0), center.at(1));
 				rndr->objects.back()->rotate(rotation);
 				selected = rndr->objects.back()->id();
 				items->insertRow(items->rowCount());
-				items->setItem(items->rowCount() - 1, 0, new QTableWidgetItem(QString::fromStdString(rndr->objects.back()->info())));
-				items->setItem(items->rowCount() - 1, 1, new QTableWidgetItem(QString::fromStdString(rndr->objects.back()->center().print())));
-				items->setItem(items->rowCount() - 1, 2, new QTableWidgetItem(QString::fromStdString(std::to_string(rndr->objects.back()->rotation()))));
-				items->setItem(items->rowCount() - 1, 3, new QTableWidgetItem(QString::fromStdString(std::to_string(rndr->objects.back()->id()))));
 			}
 			else if (text.toStdString() == "User" && edited.value()->info() == "vehicle")
+			{
 				rndr->erase_by_id(selected);
 				rndr->add(std::make_shared<player>());
 				rndr->objects.back()->place(center.at(0), center.at(1));
 				rndr->objects.back()->rotate(rotation);
 				selected = rndr->objects.back()->id();
-				items->insertRow(items->rowCount());
-				items->setItem(items->rowCount() - 1, 0, new QTableWidgetItem(QString::fromStdString(rndr->objects.back()->info())));
-				items->setItem(items->rowCount() - 1, 1, new QTableWidgetItem(QString::fromStdString(rndr->objects.back()->center().print())));
-				items->setItem(items->rowCount() - 1, 2, new QTableWidgetItem(QString::fromStdString(std::to_string(rndr->objects.back()->rotation()))));
-				items->setItem(items->rowCount() - 1, 3, new QTableWidgetItem(QString::fromStdString(std::to_string(rndr->objects.back()->id()))));
+			}
+			update_table();
 		}
 	});
 
@@ -371,3 +361,16 @@ void interface::retranslateUi(QMainWindow *MainWindow)
 	tab_widget->setTabText(tab_widget->indexOf(tab_4), QCoreApplication::translate("MainWindow", "Add element", nullptr));
 	menuopen->setTitle(QCoreApplication::translate("MainWindow", "Simulation", nullptr));
 } // retranslateUi
+
+void interface::update_table()
+{
+	size_t i = 0;
+	items->setRowCount(rndr->objects.size());
+	std::for_each(rndr->objects.begin(), rndr->objects.end(),
+				  [&](auto o)
+				  {
+		items->setItem(i, 0, new QTableWidgetItem(QString::fromStdString(o->info())));
+		items->setItem(i, 1, new QTableWidgetItem(QString::fromStdString(o->center().print())));
+		items->setItem(i, 2, new QTableWidgetItem(QString::fromStdString(std::to_string(o->rotation()))));
+		items->setItem(i++, 3, new QTableWidgetItem(QString::fromStdString(std::to_string(o->id())))); });
+}

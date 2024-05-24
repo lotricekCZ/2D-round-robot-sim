@@ -109,7 +109,7 @@ target_link_libraries(vehicle Qt5::OpenGL renderable circle point line)
 target_link_libraries(obstacle Qt5::OpenGL renderable circle point segment line)
 target_link_libraries(viewport Qt5::Widgets Qt5::Gui Qt5::OpenGL vehicle obstacle renderable)
 target_link_libraries(renderer vehicle obstacle renderable)
-target_link_libraries(serializer Qt5::Widgets Qt5::Core vehicle renderer obstacle)
+target_link_libraries(serializer Qt5::Widgets Qt5::Core vehicle player renderer obstacle)
 
 set_target_properties(interface PROPERTIES AUTOMOC TRUE)
 target_link_libraries(interface serializer Qt5::Widgets Qt5::Core Qt5::UiTools renderer viewport player vehicle)

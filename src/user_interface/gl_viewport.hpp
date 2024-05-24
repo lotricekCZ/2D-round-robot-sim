@@ -38,7 +38,7 @@ class Viewport : public QOpenGLWidget, public QOpenGLFunctions
     // Q_OBJECT
 public:
     std::shared_ptr<renderer> objects;
-    QSet<int> keysPressed;
+    QSet<int> keys;
     Viewport(QWidget *parent = nullptr, std::shared_ptr<renderer> objs = nullptr);
     QTimer *timer;
     Viewport() = delete;

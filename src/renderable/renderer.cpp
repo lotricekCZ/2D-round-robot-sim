@@ -56,3 +56,13 @@ std::optional<std::shared_ptr<renderable>> renderer::get_by_id(uint32_t id){
             return o;
     return {};
 }
+
+
+bool renderer::erase_by_id(uint32_t id){
+    for (std::vector<std::shared_ptr<renderable>>::iterator it = objects.begin(); it != objects.end(); it++)
+        if((*it)->id() == id){
+            objects.erase(it);
+            return true;
+        }
+    return false;
+}

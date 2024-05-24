@@ -37,8 +37,8 @@ class Viewport : public QOpenGLWidget, public QOpenGLFunctions
 {
     // Q_OBJECT
 public:
-    vehicle v, b;
     std::shared_ptr<renderer> objects;
+    QSet<int> keysPressed;
     Viewport(QWidget *parent = nullptr, std::shared_ptr<renderer> objs = nullptr);
     QTimer *timer;
     Viewport() = delete;
@@ -46,6 +46,7 @@ public:
 public slots:
     void animate();
     void keyPressEvent(QKeyEvent *event);
+    void keyReleaseEvent(QKeyEvent *event);
 
 protected:
     void initializeGL() override;

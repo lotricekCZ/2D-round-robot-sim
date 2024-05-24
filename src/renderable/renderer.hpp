@@ -25,6 +25,7 @@ public:
     void render();
     void add(std::shared_ptr<renderable> object);
     std::optional<std::shared_ptr<renderable>> get_by_id(uint32_t);
+    bool erase_by_id(uint32_t);
 };
 
 #endif

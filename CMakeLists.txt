@@ -112,7 +112,7 @@ target_link_libraries(renderer vehicle obstacle renderable)
 target_link_libraries(serializer Qt5::Widgets Qt5::Core vehicle renderer obstacle)
 
 set_target_properties(interface PROPERTIES AUTOMOC TRUE)
-target_link_libraries(interface serializer Qt5::Widgets Qt5::Core Qt5::UiTools renderer viewport)
+target_link_libraries(interface serializer Qt5::Widgets Qt5::Core Qt5::UiTools renderer viewport player vehicle)
 
 
 

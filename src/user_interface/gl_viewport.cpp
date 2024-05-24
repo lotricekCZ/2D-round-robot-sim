@@ -9,6 +9,8 @@
 #include <QTimer>
 #include <iostream>
 #include <memory>
+#include <execution>
+#include <algorithm>
 #include "gl_viewport.hpp"
 #include "../actors/vehicle.hpp"
 
@@ -46,7 +48,6 @@ void Viewport::paintGL()
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	objects->render();
-	v.render();
 
 	glFlush();
 }
@@ -59,6 +60,25 @@ void Viewport::animate()
 
 void Viewport::keyPressEvent(QKeyEvent *event)
 {
-	int key = event->key();
-	v.move(0.01 * (key == Qt::Key_A) - 0.01 * (key == Qt::Key_D), 1 * (key == Qt::Key_W) - 1 * (key == Qt::Key_S));
+	keysPressed += event->key();
+	std::for_each(std::execution::par, objects->objects.begin(), objects->objects.end(),
+				  [&](auto &o)
+				  { 
+					if(o->info() == "player")
+					o->move(0.01 * (keysPressed.find(Qt::Key_A) != keysPressed.end()) - 0.01 * (keysPressed.find(Qt::Key_D) != keysPressed.end()), 1 * (keysPressed.find(Qt::Key_W) != keysPressed.end()) - 1 * (keysPressed.find(Qt::Key_S) != keysPressed.end())); });
+}
+
+void Viewport::keyReleaseEvent(QKeyEvent *event)
+{
+	keysPressed -= event->key();
+	for (auto k: keysPressed)
+	{
+		std::cout << k << std::endl;
+	}
+	std::cout << std::endl;
+	std::for_each(std::execution::par, objects->objects.begin(), objects->objects.end(),
+				  [&](auto &o)
+				  { 
+					if(o->info() == "player")
+					o->move(0.01 * (keysPressed.find(Qt::Key_A) != keysPressed.end()) - 0.01 * (keysPressed.find(Qt::Key_D) != keysPressed.end()), 1 * (keysPressed.find(Qt::Key_W) != keysPressed.end()) - 1 * (keysPressed.find(Qt::Key_S) != keysPressed.end())); });
 }

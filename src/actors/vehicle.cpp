@@ -9,6 +9,15 @@ vehicle::vehicle(/* args */) : Circle2D(0.1)
 {
 }
 
+// vehicle::vehicle(renderable rend) : Circle2D(0.1), renderable(rend)
+// {
+// }
+
+// vehicle::vehicle(renderable &rend) : Circle2D(0.1)
+// {
+//     this ->x= rend.x
+// }
+
 vehicle::~vehicle()
 {
 }

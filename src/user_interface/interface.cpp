@@ -241,7 +241,7 @@ void interface::setupUi(QMainWindow *MainWindow)
 
 	// signals and slots
 	// change animator
-	QObject::connect(in_animator, SIGNAL(currentTextChanged(const QString &)), this, SLOT(assign_animator(QString)));
+	// QObject::connect(in_animator, SIGNAL(currentTextChanged(const QString &)), this, SLOT(assign_animator(QString)));
 	// add vehicle
 	QObject::connect(b_vehicle, &QPushButton::clicked, this, [&]()
 					 { 	rndr->add(std::make_shared<vehicle>()); 
@@ -272,7 +272,38 @@ void interface::setupUi(QMainWindow *MainWindow)
 			in_animator->setEnabled(edited.value()->info() != "obstacle"); 
 			} });
 	// run (unused for now)
-	// QObject::connect(in_animator, SIGNAL(currentTextChanged(const QString &)), this, SLOT(assign_animator(QString)));
+	QObject::connect(in_animator, &QComboBox::currentTextChanged, this, [&](auto text) { // todo: alter coordinates of the selected
+		auto edited = rndr->get_by_id(selected);
+		if (edited)
+		{
+			auto center = edited.value()->center().point();
+			auto rotation = edited.value()->rotation();
+			if (text.toStdString() == "AI" && edited.value()->info() == "player")
+			{
+				rndr->erase_by_id(selected);
+				rndr->add(std::make_shared<vehicle>());
+				rndr->objects.back()->place(center.at(0), center.at(1));
+				rndr->objects.back()->rotate(rotation);
+				selected = rndr->objects.back()->id();
+				items->insertRow(items->rowCount());
+				items->setItem(items->rowCount() - 1, 0, new QTableWidgetItem(QString::fromStdString(rndr->objects.back()->info())));
+				items->setItem(items->rowCount() - 1, 1, new QTableWidgetItem(QString::fromStdString(rndr->objects.back()->center().print())));
+				items->setItem(items->rowCount() - 1, 2, new QTableWidgetItem(QString::fromStdString(std::to_string(rndr->objects.back()->rotation()))));
+				items->setItem(items->rowCount() - 1, 3, new QTableWidgetItem(QString::fromStdString(std::to_string(rndr->objects.back()->id()))));
+			}
+			else if (text.toStdString() == "User" && edited.value()->info() == "vehicle")
+				rndr->erase_by_id(selected);
+				rndr->add(std::make_shared<player>());
+				rndr->objects.back()->place(center.at(0), center.at(1));
+				rndr->objects.back()->rotate(rotation);
+				selected = rndr->objects.back()->id();
+				items->insertRow(items->rowCount());
+				items->setItem(items->rowCount() - 1, 0, new QTableWidgetItem(QString::fromStdString(rndr->objects.back()->info())));
+				items->setItem(items->rowCount() - 1, 1, new QTableWidgetItem(QString::fromStdString(rndr->objects.back()->center().print())));
+				items->setItem(items->rowCount() - 1, 2, new QTableWidgetItem(QString::fromStdString(std::to_string(rndr->objects.back()->rotation()))));
+				items->setItem(items->rowCount() - 1, 3, new QTableWidgetItem(QString::fromStdString(std::to_string(rndr->objects.back()->id()))));
+		}
+	});
 
 	connect(in_x, &QLineEdit::editingFinished, this, [&]() { // todo: alter coordinates of the selected
 		auto edited = rndr->get_by_id(selected);

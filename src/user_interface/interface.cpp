@@ -11,7 +11,8 @@ interface::interface() : QMainWindow()
 	setupUi(this);
 	// timer initiation
 	this->timer_table = new QTimer(this);
-	connect(timer_table, &QTimer::timeout, this, &interface::update_table);
+	connect(timer_table, &QTimer::timeout, this, [&]()
+			{update_table(); update_entries(); });
 	setFocusPolicy(Qt::StrongFocus);
 	timer_table->start(250);
 }
@@ -244,8 +245,9 @@ void interface::setupUi(QMainWindow *MainWindow)
 	in_y->setValidator(new QDoubleValidator(-1, 1, 6, in_y));
 
 	// signals and slots
-	// change animator
-	// QObject::connect(in_animator, SIGNAL(currentTextChanged(const QString &)), this, SLOT(assign_animator(QString)));
+	// delete button
+	QObject::connect(b_remove, &QCommandLinkButton::clicked, this, [&]()
+					 {rndr->erase_by_id(selected); update_table(); });
 	// add vehicle
 	QObject::connect(b_vehicle, &QPushButton::clicked, this, [&]()
 					 { 
@@ -256,18 +258,11 @@ void interface::setupUi(QMainWindow *MainWindow)
 					 {
 						 rndr->add(std::make_shared<obstacle>());
 						 update_table(); });
-	// delete button
+	// select
 	QObject::connect(items, &QTableWidget::cellClicked, this, [&](int row, int y)
 					 {
-
-		selected = items->item(row, 3)->text().toInt();
-		auto edited = rndr->get_by_id(selected);
-		if(edited){
-			in_x->setText(QString::fromStdString(std::to_string(edited.value()->center().point().at(0))));
-			in_y->setText(QString::fromStdString(std::to_string(edited.value()->center().point().at(1))));
-			in_rotation->setText(QString::fromStdString(std::to_string(edited.value()->rotation() * 360.0)));
-			in_animator->setEnabled(edited.value()->info() != "obstacle"); 
-			} });
+						selected = items->item(row, 3)->text().toInt();
+						update_entries(true); });
 	// run (unused for now)
 	QObject::connect(in_animator, &QComboBox::currentTextChanged, this, [&](auto text) { // todo: alter coordinates of the selected
 		auto edited = rndr->get_by_id(selected);
@@ -277,6 +272,7 @@ void interface::setupUi(QMainWindow *MainWindow)
 			auto rotation = edited.value()->rotation();
 			if (text.toStdString() == "AI" && edited.value()->info() == "player")
 			{
+				rndr->erase_by_id(selected);
 				rndr->add(std::make_shared<vehicle>());
 				rndr->objects.back()->place(center.at(0), center.at(1));
 				rndr->objects.back()->rotate(rotation);
@@ -373,4 +369,23 @@ void interface::update_table()
 		items->setItem(i, 1, new QTableWidgetItem(QString::fromStdString(o->center().print())));
 		items->setItem(i, 2, new QTableWidgetItem(QString::fromStdString(std::to_string(o->rotation()))));
 		items->setItem(i++, 3, new QTableWidgetItem(QString::fromStdString(std::to_string(o->id())))); });
+}
+
+void interface::update_entries(bool force)
+{
+	auto edited = rndr->get_by_id(selected);
+	if (edited)
+	{
+		if (force || !in_x->hasFocus())
+			in_x->setText(QString::fromStdString(std::to_string(edited.value()->center().point().at(0))));
+		if (force || !in_y->hasFocus())
+			in_y->setText(QString::fromStdString(std::to_string(edited.value()->center().point().at(1))));
+		if (force || !in_rotation->hasFocus())
+			in_rotation->setText(QString::fromStdString(std::to_string(edited.value()->rotation() * 360.0)));
+		if (force || !in_animator->hasFocus())
+		{
+			in_animator->setEnabled(edited.value()->info() != "obstacle");
+			in_animator->setCurrentIndex(edited.value()->info() == "vehicle");
+		}
+	}
 }

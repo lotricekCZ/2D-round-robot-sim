@@ -96,6 +96,7 @@ public:
     ~interface();
 public slots:
     void update_table();
+    void update_entries(bool force = 0);
     void assign_animator(QString s) const { printf("selected: %s\n", s.toStdString().c_str()); }
     void change_x(QString s) const { printf("x: %s\n", s.toStdString().c_str()); }
     void change_y(QString s) const { printf("y: %s\n", s.toStdString().c_str()); }
@@ -103,12 +104,5 @@ public slots:
 
 protected:
 };
-
-namespace ui
-{
-    class MainWindow : public interface
-    {
-    };
-}
 
 #endif

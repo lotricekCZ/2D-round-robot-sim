@@ -54,22 +54,35 @@ void Viewport::paintGL()
 
 void Viewport::animate()
 {
-	std::for_each(std::execution::par, objects->objects.begin(), objects->objects.end(),
-				  [&](auto &o)
-				  { 
-					if(o->info() == "player"){
-						bool collision = false;
-						for(auto p: objects->objects)
-							if (o != p)
-							{
-								o->move(0.01 * (keys.find(Qt::Key_A) != keys.end()) - 0.01 * (keys.find(Qt::Key_D) != keys.end()), 1 * (keys.find(Qt::Key_W) != keys.end()) - 1 * (keys.find(Qt::Key_S) != keys.end()));
-								collision |= p->intersection(*o).size() > 0;
-								o->move(-0.01 * (keys.find(Qt::Key_A) != keys.end()) + 0.01 * (keys.find(Qt::Key_D) != keys.end()), -1 * (keys.find(Qt::Key_W) != keys.end()) + 1 * (keys.find(Qt::Key_S) != keys.end()));
-							}
-						if (collision) return;
-						o->move(0.01 * (keys.find(Qt::Key_A) != keys.end()) - 0.01 * (keys.find(Qt::Key_D) != keys.end()), 1 * (keys.find(Qt::Key_W) != keys.end()) - 1 * (keys.find(Qt::Key_S) != keys.end()));
-						
-					} });
+	if (keys.size())
+	{
+		float dy = 1 * (keys.find(Qt::Key_W) != keys.end()) - 1 * (keys.find(Qt::Key_S) != keys.end());
+		float dx = 0.01 * (keys.find(Qt::Key_A) != keys.end()) - 0.01 * (keys.find(Qt::Key_D) != keys.end());
+		std::for_each(std::execution::par, objects->objects.begin(), objects->objects.end(),
+					  [&](auto &o)
+					  { 
+			if(o->info() == "player"){
+				bool collision = false;
+				Vect2D move = Vect2D(o->center(), std::get<0>(o->formula()).at(o->rotation() + dx)) / 10 * dy;
+				Point2D prediction = o->predict(dx, dy);
+				if(std::abs(dy) >= std::numeric_limits<float>::epsilon())
+					for(auto p: objects->objects)
+						if (o != p)
+						{
+							Vect2D distance = p->distance(prediction);
+							float product = Vect2D::dot(move, distance);
+							if ((distance.length() < std::get<0>(o->formula()).radius() /* that'll be circle*/ && product > 0 )) {
+								collision = true;
+								break;
+								};
+							
+							
+						}
+				if (collision) return;
+				o->move(dx, dy);
+				
+			} });
+	}
 	paintGL();
 	update();
 }

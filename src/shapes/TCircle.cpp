@@ -20,7 +20,7 @@ template <typename... Args>
 TCircle<T, dims>::TCircle(T r, Args... args)
 {
 	this->circle_center = TPoint<T, dims>(args...);
-	this->radius = r;
+	this->_radius = r;
 }
 
 /**
@@ -35,7 +35,7 @@ template <typename T, uint32_t dims>
 TCircle<T, dims>::TCircle(T r, TPoint<T, dims> c)
 {
 	this->circle_center = c;
-	this->radius = r;
+	this->_radius = r;
 }
 
 /**
@@ -50,7 +50,7 @@ TCircle<T, dims>::TCircle(T r, TPoint<T, dims> c)
 template <typename T, uint32_t dims>
 bool TCircle<T, dims>::inside(TPoint<T, dims> a)
 {
-	return TPoint<T, dims>::distance(circle_center, a) < radius;
+	return TPoint<T, dims>::distance(circle_center, a) < _radius;
 }
 
 /**
@@ -98,9 +98,9 @@ std::vector<TPoint<T, dims>> TCircle<T, dims>::intersection(TCircle<T, dims> c, 
 	std::vector<TPoint<T, dims>> ret = {};
 	// Implement intersection calculation here
 	auto d = l.distance(c.center());
-	if (d > c.radius)
+	if (d > c._radius)
 		return ret;
-	T alpha = std::acos(d / c.radius);
+	T alpha = std::acos(d / c._radius);
 	T beta = std::atan2(l.d(1), l.d(0)) + M_PI_2;
 
 	ret.push_back(c.at((beta + alpha) / (2 * M_PI)));
@@ -138,9 +138,9 @@ std::vector<TPoint<T, dims>> TCircle<T, dims>::intersection(TCircle k, TCircle c
 {
 	std::vector<TPoint<T, dims>> ret;
 	auto dist = TVector<T, dims>(k.circle_center, c.circle_center);
-	if (dist.length() > (k.radius + c.radius))
+	if (dist.length() > (k._radius + c._radius))
 		return ret;
-	T alpha = std::acos((std::pow(k.radius, 2) + std::pow(dist.length(), 2) - std::pow(c.radius, 2)) / (2 * k.radius * dist.length()));
+	T alpha = std::acos((std::pow(k._radius, 2) + std::pow(dist.length(), 2) - std::pow(c._radius, 2)) / (2 * k._radius * dist.length()));
 	T theta = std::atan2((dist.d(1)), (dist.d(0)));
 	ret.push_back(k.at((theta + alpha) / (2 * M_PI)));
 	if (std::abs(alpha) > std::numeric_limits<T>::epsilon())
@@ -174,7 +174,7 @@ std::vector<TPoint<T, dims>> TCircle<T, dims>::intersection(TCircle c)
 template <typename T, uint32_t dims>
 TPoint<T, dims> TCircle<T, dims>::at(TCircle<T, dims> &circ, T par)
 {
-	return circ.circle_center + TPoint<T, dims>(std::cos(2 * M_PI * par), std::sin(2 * M_PI * par)) * circ.radius;
+	return circ.circle_center + TPoint<T, dims>(std::cos(2 * M_PI * par), std::sin(2 * M_PI * par)) * circ._radius;
 }
 
 /**
@@ -209,16 +209,16 @@ std::vector<TLine<T, dims>> TCircle<T, dims>::tangents(TCircle<T, dims> a, TCirc
 
 	// Calculate angles for tangents
 	T theta = std::atan2((c2c.d(1)), (c2c.d(0)));
-	T alpha = std::acos((a.radius - b.radius) / (c2c.length()));
+	T alpha = std::acos((a._radius - b._radius) / (c2c.length()));
 
 	// Add the first pair of tangents
 	ans.emplace_back(a.at((theta + alpha) / (2 * M_PI)), b.at((theta + alpha) / (2 * M_PI)));
 	ans.emplace_back(a.at((theta - alpha) / (2 * M_PI)), b.at((theta - alpha) / (2 * M_PI)));
 
 	// If the distance between circle centers is greater than the sum of their radii, add another pair of tangents
-	if (c2c.length() > (a.radius + b.radius))
+	if (c2c.length() > (a._radius + b._radius))
 	{
-		alpha = std::acos((a.radius + b.radius) / (c2c.length()));
+		alpha = std::acos((a._radius + b._radius) / (c2c.length()));
 		ans.emplace_back(a.at((theta + alpha) / (2 * M_PI)), b.at((theta + alpha + M_PI) / (2 * M_PI)));
 		ans.emplace_back(a.at((theta - alpha) / (2 * M_PI)), b.at((theta - alpha + M_PI) / (2 * M_PI)));
 	}
@@ -306,7 +306,7 @@ template <typename T, uint32_t dims>
 std::string TCircle<T, dims>::print(TCircle<T, dims> &a)
 {
 	std::stringstream ss;
-	ss << TPoint<T, dims>::print(a.circle_center) << " + " << a.radius << "(cos(2 π t), sin(2 π t))";
+	ss << TPoint<T, dims>::print(a.circle_center) << " + " << a._radius << "(cos(2 π t), sin(2 π t))";
 	return ss.str();
 }
 
@@ -368,7 +368,7 @@ std::string TCircle<T, dims>::print(TCircle<T, dims> &a)
 template <typename T, uint32_t dims>
 T TCircle<T, dims>::distance(TCircle<T, dims> circ, TPoint<T, dims> point)
 {
-	return std::abs(point.distance(circ.circle_center) - circ.radius);
+	return std::abs(point.distance(circ.circle_center) - circ._radius);
 }
 
 /**
@@ -398,8 +398,8 @@ template <typename T, uint32_t dims>
 T TCircle<T, dims>::distance(TCircle<T, dims> ci, TLine<T, dims> l)
 {
 	auto p = l.distance(ci.circle_center);
-	std::cout << std::abs(ci.radius - p) << std::endl;
-	return ((ci.radius >= p)) ? 0 : p;
+	std::cout << std::abs(ci._radius - p) << std::endl;
+	return ((ci._radius >= p)) ? 0 : p;
 }
 
 /**
@@ -459,6 +459,17 @@ template <typename T, uint32_t dims>
 TPoint<T, dims> TCircle<T, dims>::center(TCircle<T, dims> circle)
 {
 	return circle.circle_center;
+}
+
+/**
+ * @brief Returns radius of the circle.
+ *
+ * @return T radius of the circle.
+ */
+template <typename T, uint32_t dims>
+T TCircle<T, dims>::radius()
+{
+	return _radius;
 }
 
 /**

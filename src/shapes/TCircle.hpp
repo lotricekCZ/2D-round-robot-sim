@@ -20,7 +20,7 @@
 template <typename T, uint32_t dims>
 class TCircle
 {
-	T radius = 1;
+	T _radius = 1;
 	TPoint<T, dims> circle_center;
 
 public:
@@ -63,6 +63,7 @@ public:
 	static T distance(TCircle, TLine<T, dims>);
 	static T distance(TCircle, TPoint<T, dims>, TPoint<T, dims>);
 
+	T radius();
 	T distance(TPoint<T, dims>);
 	T distance(TLine<T, dims>);
 	T distance(TPoint<T, dims>, TPoint<T, dims>);

@@ -41,17 +41,28 @@ void obstacle::place(float x, float y)
     }
 }
 
-
 void obstacle::rotate(float a)
 {
     _rotation += a;
-    move(0,0);
+    move(0, 0);
 }
 
-std::string obstacle::info(){
+std::string obstacle::info()
+{
     return "obstacle";
 }
 
-Point2D obstacle::center(){
+Point2D obstacle::center()
+{
     return obstacle_center;
 }
+
+std::variant<Circle2D, std::vector<Segment>> obstacle::formula()
+{
+    std::vector<Segment> ret;
+    for (size_t i = 0; i < bounds.size(); i++)
+    {
+        ret.emplace_back(bounds.at(i), bounds.at((i + 1) % bounds.size()));
+    }
+    return ret;
+};

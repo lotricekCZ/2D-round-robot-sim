@@ -12,10 +12,6 @@ player::player(vehicle &v): vehicle(v)
 {
 }
 
-player::player(vehicle v): vehicle(v)
-{
-}
-
 player::~player()
 {
 }

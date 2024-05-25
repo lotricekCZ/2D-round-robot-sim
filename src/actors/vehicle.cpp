@@ -9,15 +9,6 @@ vehicle::vehicle(/* args */) : Circle2D(0.1)
 {
 }
 
-// vehicle::vehicle(renderable rend) : Circle2D(0.1), renderable(rend)
-// {
-// }
-
-// vehicle::vehicle(renderable &rend) : Circle2D(0.1)
-// {
-//     this ->x= rend.x
-// }
-
 vehicle::~vehicle()
 {
 }
@@ -64,3 +55,7 @@ std::string vehicle::info()
 Point2D vehicle::center() {
     return Circle2D::center(*this);
 }
+
+std::variant<Circle2D, std::vector<Segment>> vehicle::formula(){
+    return (Circle2D)*this;
+};

@@ -14,7 +14,7 @@ public:
     std::string info() override;
     player(/* args */);
     player(vehicle &);
-    player(vehicle);
+    // player(vehicle);
     ~player();
     using vehicle::render;
 };

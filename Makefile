@@ -2,7 +2,7 @@ BIN_DIR := build
 DOC_DIR := docs
 EXE := simulator
 
-.PHONY: all clean run documentation
+.PHONY: all clean run documentation test
 
 
 all: $(BIN_DIR)
@@ -20,6 +20,9 @@ $(BIN_DIR):
 $(DOC_DIR):
 	mkdir -p $(DOC_DIR)
 
+test:
+	cd $(BIN_DIR) && \
+	make test
 
 clean:
 	@$(RM) -rv $(BIN_DIR) $(DOC_DIR)

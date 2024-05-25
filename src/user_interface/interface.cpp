@@ -367,7 +367,7 @@ void interface::update_table()
 				  {
 		items->setItem(i, 0, new QTableWidgetItem(QString::fromStdString(o->info())));
 		items->setItem(i, 1, new QTableWidgetItem(QString::fromStdString(o->center().print())));
-		items->setItem(i, 2, new QTableWidgetItem(QString::fromStdString(std::to_string(o->rotation()))));
+		items->setItem(i, 2, new QTableWidgetItem(QString::fromStdString(std::to_string(o->rotation())) + "˚"));
 		items->setItem(i++, 3, new QTableWidgetItem(QString::fromStdString(std::to_string(o->id())))); });
 }
 

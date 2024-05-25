@@ -57,8 +57,19 @@ void Viewport::animate()
 	std::for_each(std::execution::par, objects->objects.begin(), objects->objects.end(),
 				  [&](auto &o)
 				  { 
-					if(o->info() == "player")
-					o->move(0.01 * (keys.find(Qt::Key_A) != keys.end()) - 0.01 * (keys.find(Qt::Key_D) != keys.end()), 1 * (keys.find(Qt::Key_W) != keys.end()) - 1 * (keys.find(Qt::Key_S) != keys.end())); });
+					if(o->info() == "player"){
+						bool collision = false;
+						for(auto p: objects->objects)
+							if (o != p)
+							{
+								o->move(0.01 * (keys.find(Qt::Key_A) != keys.end()) - 0.01 * (keys.find(Qt::Key_D) != keys.end()), 1 * (keys.find(Qt::Key_W) != keys.end()) - 1 * (keys.find(Qt::Key_S) != keys.end()));
+								collision |= p->intersection(*o).size() > 0;
+								o->move(-0.01 * (keys.find(Qt::Key_A) != keys.end()) + 0.01 * (keys.find(Qt::Key_D) != keys.end()), -1 * (keys.find(Qt::Key_W) != keys.end()) + 1 * (keys.find(Qt::Key_S) != keys.end()));
+							}
+						if (collision) return;
+						o->move(0.01 * (keys.find(Qt::Key_A) != keys.end()) - 0.01 * (keys.find(Qt::Key_D) != keys.end()), 1 * (keys.find(Qt::Key_W) != keys.end()) - 1 * (keys.find(Qt::Key_S) != keys.end()));
+						
+					} });
 	paintGL();
 	update();
 }

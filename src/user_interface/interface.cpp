@@ -240,7 +240,7 @@ void interface::setupUi(QMainWindow *MainWindow)
 	tab_widget->setCurrentIndex(0);
 	retranslateUi(MainWindow);
 
-	in_rotation->setValidator(new QDoubleValidator(0, 360, 1, in_rotation));
+	in_rotation->setValidator(new QDoubleValidator(0, 360, 6, in_rotation));
 	in_x->setValidator(new QDoubleValidator(-1, 1, 6, in_x));
 	in_y->setValidator(new QDoubleValidator(-1, 1, 6, in_y));
 
@@ -263,6 +263,28 @@ void interface::setupUi(QMainWindow *MainWindow)
 					 {
 						selected = items->item(row, 3)->text().toInt();
 						update_entries(true); });
+	// new sim
+	QObject::connect(actionload_configuration, &QAction::triggered, this, [&]()
+					 {
+						rndr->erase_all();
+					 });
+	// open sim
+	QObject::connect(actionOpen_simulation, &QAction::triggered, this, [&]()
+					 {
+						QString config = QFileDialog::getOpenFileName(this,
+							tr("Load your configuration"), ".", tr("JSON Files (*.json)"));
+						serializer.select(config.toStdString());
+						rndr->erase_all();
+						serializer.read();
+					 });
+	// save sim
+	QObject::connect(actionSave_simulation, &QAction::triggered, this, [&]()
+					 {
+						QString config = QFileDialog::getSaveFileName(this,
+							tr("Save your configuration"), ".", tr("JSON Files (*.json)"));
+						serializer.select(config.toStdString());
+						serializer.save();
+					 });
 	// run (unused for now)
 	QObject::connect(in_animator, &QComboBox::currentTextChanged, this, [&](auto text) { // todo: alter coordinates of the selected
 		auto edited = rndr->get_by_id(selected);
@@ -367,7 +389,7 @@ void interface::update_table()
 				  {
 		items->setItem(i, 0, new QTableWidgetItem(QString::fromStdString(o->info())));
 		items->setItem(i, 1, new QTableWidgetItem(QString::fromStdString(o->center().print())));
-		items->setItem(i, 2, new QTableWidgetItem(QString::fromStdString(std::to_string(o->rotation())) + "˚"));
+		items->setItem(i, 2, new QTableWidgetItem(QString::fromStdString(std::to_string(o->rotation() * 360)) + "˚"));
 		items->setItem(i++, 3, new QTableWidgetItem(QString::fromStdString(std::to_string(o->id())))); });
 }
 

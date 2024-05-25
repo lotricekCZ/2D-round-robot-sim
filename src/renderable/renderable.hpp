@@ -33,6 +33,7 @@ protected:
 	float _rotation = 0;
 
 public:
+	static void reset();
 	renderable(/* args */);
 	~renderable();
 	uint32_t id() { return ID; };

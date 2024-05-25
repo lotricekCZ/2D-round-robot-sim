@@ -30,6 +30,7 @@ public:
 	std::shared_ptr<renderer> renderer_ptr;
 	Serializer(/* args */);
 	~Serializer();
+	void select(std::string);
 	void read();
 	void save();
 };

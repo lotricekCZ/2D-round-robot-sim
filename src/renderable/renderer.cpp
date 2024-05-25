@@ -66,3 +66,9 @@ bool renderer::erase_by_id(uint32_t id){
 		}
 	return false;
 }
+
+
+void renderer::erase_all(){
+	objects.clear();
+	renderable::reset();
+}

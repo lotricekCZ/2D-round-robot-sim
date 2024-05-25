@@ -28,6 +28,7 @@
 #include <QtWidgets/QWidget>
 #include <QTimer>
 #include <QKeyEvent>
+#include <QFileDialog>
 #include <QDoubleValidator>
 #include "gl_viewport.hpp"
 #include "serializer.hpp"

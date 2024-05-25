@@ -66,3 +66,7 @@ void Serializer::save()
 	handler << output;
 	handler.close();
 }
+
+void Serializer::select(std::string path){
+	file = path;
+}

@@ -44,6 +44,7 @@ void obstacle::place(float x, float y)
 void obstacle::rotate(float a)
 {
 	_rotation += a;
+    _rotation -= floor(_rotation);
 	move(0, 0);
 }
 

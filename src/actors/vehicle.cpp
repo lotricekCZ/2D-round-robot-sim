@@ -51,6 +51,7 @@ void vehicle::place(float x, float y)
 void vehicle::rotate(float a)
 {
 	_rotation += a;
+	_rotation -= floor(_rotation);
 }
 
 std::string vehicle::info()

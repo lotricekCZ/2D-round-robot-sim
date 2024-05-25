@@ -137,3 +137,7 @@ Points2D renderable::intersection(renderable &r)
 	}
 	return {};
 }
+
+void renderable::reset(){
+	ID_incrementor = 0;
+}

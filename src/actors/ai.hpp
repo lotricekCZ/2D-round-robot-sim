@@ -7,10 +7,10 @@
 class ai
 {
 private:
-    /* data */
+	/* data */
 public:
-    ai(/* args */);
-    ~ai();
+	ai(/* args */);
+	~ai();
 };
 
 

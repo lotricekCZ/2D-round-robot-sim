@@ -17,36 +17,38 @@
 class renderable
 {
 private:
-    static uint32_t ID_incrementor;
+	static uint32_t ID_incrementor;
 
 protected:
-    enum
-    {
-        vehicle,
-        obstacle
-    };
-    union
-    {
-        uint32_t ID : 24; // unique identifier
-        uint8_t colors[3];
-    };
-    float _rotation = 0;
+	enum
+	{
+		vehicle,
+		obstacle
+	};
+	union
+	{
+		uint32_t ID : 24; // unique identifier
+		uint8_t colors[3];
+	};
+	float _rotation = 0;
 
 public:
-    renderable(/* args */);
-    ~renderable();
-    uint32_t id() { return ID; };
-    float rotation() { return _rotation; };
-    void set_rotation(float rot) { _rotation = rot; };
-    virtual std::string info() = 0;
-    virtual void render() = 0;
-    Vect2D distance(renderable &r);
-    Points2D intersection(renderable &r);
-    virtual std::variant<Circle2D, std::vector<Segment>> formula() = 0;
-    virtual void move(float dx, float dy) = 0;
-    virtual void place(float x = 0, float y = 0) = 0;
-    virtual void rotate(float a = 0) = 0;
-    virtual Point2D center() = 0;
+	renderable(/* args */);
+	~renderable();
+	uint32_t id() { return ID; };
+	float rotation() { return _rotation; };
+	void set_rotation(float rot) { _rotation = rot; };
+	virtual std::string info() = 0;
+	virtual void render() = 0;
+	Vect2D distance(renderable &r);
+	Vect2D distance(Point2D p);
+	Points2D intersection(renderable &r);
+	virtual Point2D predict(float dx, float dy) = 0;
+	virtual std::variant<Circle2D, std::vector<Segment>> formula() = 0;
+	virtual void move(float dx, float dy) = 0;
+	virtual void place(float x = 0, float y = 0) = 0;
+	virtual void rotate(float a = 0) = 0;
+	virtual Point2D center() = 0;
 };
 
 #endif

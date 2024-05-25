@@ -9,14 +9,14 @@
 class player : public vehicle
 {
 private:
-    /* data */
+	/* data */
 public:
-    std::string info() override;
-    player(/* args */);
-    player(vehicle &);
-    // player(vehicle);
-    ~player();
-    using vehicle::render;
+	std::string info() override;
+	player(/* args */);
+	player(vehicle &);
+	// player(vehicle);
+	~player();
+	using vehicle::render;
 };
 
 #endif

@@ -45,7 +45,7 @@ TLine<T, dims>::TLine(TVector<T, dims> dir, TPoint<T, dims> src) : TVector<T, di
 template <typename T, uint32_t dims>
 std::string TLine<T, dims>::print(const TLine<T, dims> &line)
 {
-    return TPoint<T, dims>::print(line.origin) + " + t" + TVector<T, dims>::print(line);
+	return TPoint<T, dims>::print(line.origin) + " + t" + TVector<T, dims>::print(line);
 }
 
 /**
@@ -58,7 +58,7 @@ std::string TLine<T, dims>::print(const TLine<T, dims> &line)
 template <typename T, uint32_t dims>
 std::string TLine<T, dims>::print()
 {
-    return TLine<T, dims>::print(*this);
+	return TLine<T, dims>::print(*this);
 }
 
 /**
@@ -72,7 +72,7 @@ std::string TLine<T, dims>::print()
 template <typename T, uint32_t dims>
 T TLine<T, dims>::distance(TPoint<T, dims> point) const
 {
-    return TLine<T, dims>::distance(*this, point);
+	return TLine<T, dims>::distance(*this, point);
 }
 
 /**
@@ -112,7 +112,7 @@ T TLine<T, dims>::distance(TLine<T, dims> line, const TPoint<T, dims> &point)
 template <typename T, uint32_t dims>
 T TLine<T, dims>::distance(TLine<T, dims> line)
 {
-    return TLine<T, dims>::distance(*this, line);
+	return TLine<T, dims>::distance(*this, line);
 }
 
 /**
@@ -248,7 +248,7 @@ std::optional<TPoint<T, dims>> TLine<T, dims>::intersection(const TLine<T, dims>
 template <typename T, uint32_t dims>
 std::optional<TPoint<T, dims>> TLine<T, dims>::intersection(const TLine<T, dims> &line)
 {
-    return TLine<T, dims>::intersection(*this, line);
+	return TLine<T, dims>::intersection(*this, line);
 }
 
 /*

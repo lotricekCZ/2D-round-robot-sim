@@ -14,20 +14,21 @@
 class obstacle : public renderable
 {
 private:
-    float edge_size = 0.2;
-    Point2D obstacle_center;
+	float edge_size = 0.2;
+	Point2D obstacle_center;
 
 public:
-    std::array<Point2D, 4> bounds;
-    obstacle(/* args */);
-    ~obstacle();
-    std::string info() override;
-    void render() override;
-    void place(float x = 0, float y = 0) override;
-    void rotate(float a = 0) override;
-    void move(float dx = 0, float dy = 0) override;
-    std::variant<Circle2D, std::vector<Segment>> formula() override;
-    Point2D center() override;
+	std::array<Point2D, 4> bounds;
+	obstacle(/* args */);
+	~obstacle();
+	std::string info() override;
+	void render() override;
+	void place(float x = 0, float y = 0) override;
+	void rotate(float a = 0) override;
+	void move(float dx = 0, float dy = 0) override;
+	Point2D predict(float dx, float dy) override;
+	std::variant<Circle2D, std::vector<Segment>> formula() override;
+	Point2D center() override;
 };
 
 #endif

@@ -10,7 +10,7 @@ int main(int argc, char ** argv) {
 	QApplication app(argc, argv);
 
 	interface window;
-    window.show();
+	window.show();
 
 	return app.exec();
 }

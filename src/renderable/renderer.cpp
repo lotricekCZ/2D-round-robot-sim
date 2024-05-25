@@ -33,7 +33,7 @@ renderer::~renderer()
  */
 void renderer::add(std::shared_ptr<renderable> object)
 {
-    objects.push_back(std::move(object));
+	objects.push_back(std::move(object));
 }
 
 /**
@@ -44,25 +44,25 @@ void renderer::add(std::shared_ptr<renderable> object)
  */
 void renderer::render()
 {
-    std::for_each(std::execution::par, objects.begin(), objects.end(),
-                  [&](auto &o)
-                  { o->render(); });
+	std::for_each(std::execution::par, objects.begin(), objects.end(),
+				  [&](auto &o)
+				  { o->render(); });
 }
 
 
 std::optional<std::shared_ptr<renderable>> renderer::get_by_id(uint32_t id){
-    for(auto o: objects)
-        if(o->id() == id)
-            return o;
-    return {};
+	for(auto o: objects)
+		if(o->id() == id)
+			return o;
+	return {};
 }
 
 
 bool renderer::erase_by_id(uint32_t id){
-    for (std::vector<std::shared_ptr<renderable>>::iterator it = objects.begin(); it != objects.end(); it++)
-        if((*it)->id() == id){
-            objects.erase(it);
-            return true;
-        }
-    return false;
+	for (std::vector<std::shared_ptr<renderable>>::iterator it = objects.begin(); it != objects.end(); it++)
+		if((*it)->id() == id){
+			objects.erase(it);
+			return true;
+		}
+	return false;
 }

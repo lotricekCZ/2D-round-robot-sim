@@ -35,22 +35,22 @@
 
 class Viewport : public QOpenGLWidget, public QOpenGLFunctions
 {
-    // Q_OBJECT
+	// Q_OBJECT
 public:
-    std::shared_ptr<renderer> objects;
-    QSet<int> keys;
-    Viewport(QWidget *parent = nullptr, std::shared_ptr<renderer> objs = nullptr);
-    QTimer *timer;
-    Viewport() = delete;
-    ~Viewport();
+	std::shared_ptr<renderer> objects;
+	QSet<int> keys;
+	Viewport(QWidget *parent = nullptr, std::shared_ptr<renderer> objs = nullptr);
+	QTimer *timer;
+	Viewport() = delete;
+	~Viewport();
 public slots:
-    void animate();
-    void keyPressEvent(QKeyEvent *event);
-    void keyReleaseEvent(QKeyEvent *event);
+	void animate();
+	void keyPressEvent(QKeyEvent *event);
+	void keyReleaseEvent(QKeyEvent *event);
 
 protected:
-    void initializeGL() override;
-    void paintGL() override;
+	void initializeGL() override;
+	void paintGL() override;
 
 private:
 };

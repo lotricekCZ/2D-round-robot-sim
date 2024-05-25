@@ -25,13 +25,13 @@
 class Serializer
 {
 private:
-    std::filesystem::path file;
+	std::filesystem::path file;
 public:
-    std::shared_ptr<renderer> renderer_ptr;
-    Serializer(/* args */);
-    ~Serializer();
-    void read();
-    void save();
+	std::shared_ptr<renderer> renderer_ptr;
+	Serializer(/* args */);
+	~Serializer();
+	void read();
+	void save();
 };
 
 #endif

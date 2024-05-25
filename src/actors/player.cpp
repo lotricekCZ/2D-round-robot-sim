@@ -18,5 +18,5 @@ player::~player()
 
 std::string player::info()
 {
-    return "player";
+	return "player";
 }

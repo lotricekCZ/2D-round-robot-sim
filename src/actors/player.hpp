@@ -9,14 +9,16 @@
 class player : public vehicle
 {
 private:
-	/* data */
+	static GLuint texture;
 public:
 	std::string info() override;
 	player(/* args */);
 	player(vehicle &);
 	// player(vehicle);
-	~player();
+	~player(); // glBindTexture(GL_TEXTURE_2D, texture_id_bot);
 	using vehicle::render;
+	void set_texture(GLuint id) override;
+	GLuint get_texture() override;
 };
 
 #endif

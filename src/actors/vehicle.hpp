@@ -18,21 +18,21 @@ private:
 	// overall number of polygons circle will have
 	const uint16_t poly_count = 32;
 	const float radius = 0.1;
-    static bool texture_loaded;
+	static GLuint texture;
 public:
 	vehicle(/* args */);
 	~vehicle();
-	// typeid(pb).name()
+	
 	std::string info() override;
 	void render() override;
 	void place(float x = 0, float y = 0) override;
 	void rotate(float a = 0) override;
 	void move(float dx = 0, float dy = 0) override;
-    Point2D predict(float dx, float dy) override;
-    GLuint program;
-	GLuint texture_id;
+	Point2D predict(float dx, float dy) override;
 	std::variant<Circle2D, std::vector<Segment>> formula() override;
 	Point2D center() override;
+	void set_texture(GLuint id) override;
+	GLuint get_texture() override;
 };
 
 #endif

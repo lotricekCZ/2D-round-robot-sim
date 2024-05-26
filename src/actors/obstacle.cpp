@@ -44,7 +44,7 @@ void obstacle::place(float x, float y)
 void obstacle::rotate(float a)
 {
 	_rotation += a;
-    _rotation -= floor(_rotation);
+	_rotation -= floor(_rotation);
 	move(0, 0);
 }
 
@@ -72,3 +72,11 @@ Point2D obstacle::predict(float dx, float dy)
 {
 	return obstacle_center + Point2D(dx, dy);
 };
+
+void obstacle::set_texture(GLuint id){
+
+}
+
+GLuint obstacle::get_texture(){
+	return -1;
+}

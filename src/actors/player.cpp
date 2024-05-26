@@ -4,6 +4,8 @@
 #include "vehicle.hpp"
 #include "player.hpp"
 
+GLuint player::texture = -1;
+
 player::player() : vehicle()
 {
 }
@@ -19,4 +21,12 @@ player::~player()
 std::string player::info()
 {
 	return "player";
+}
+
+void player::set_texture(GLuint id){
+	player::texture = id;
+}
+
+GLuint player::get_texture(){
+	return player::texture;
 }

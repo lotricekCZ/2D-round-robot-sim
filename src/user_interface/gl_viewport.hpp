@@ -27,6 +27,7 @@
 #include <QOpenGLFunctions>
 #include <QOpenGLShader>
 #include <QOpenGLShaderProgram>
+#include "../actors/player.hpp"
 #include "../actors/vehicle.hpp"
 #include "../actors/obstacle.hpp"
 #include "../renderable/renderer.hpp"
@@ -45,11 +46,11 @@ public:
 	QTimer *timer;
 	Viewport() = delete;
 	~Viewport();
-	unsigned char *load_vehicle(int &size);
 	GLint m_proj;
 	GLint f_time;
 	GLuint program;
 	GLuint texture_id;
+	GLuint texture_id_bot;
 public slots:
 	void animate();
 	void keyPressEvent(QKeyEvent *event);

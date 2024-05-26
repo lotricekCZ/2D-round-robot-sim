@@ -29,6 +29,8 @@ public:
 	Point2D predict(float dx, float dy) override;
 	std::variant<Circle2D, std::vector<Segment>> formula() override;
 	Point2D center() override;
+	void set_texture(GLuint id) override;
+	GLuint get_texture() override;
 };
 
 #endif

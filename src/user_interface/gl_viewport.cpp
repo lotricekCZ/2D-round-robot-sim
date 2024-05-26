@@ -117,10 +117,8 @@ void Viewport::initializeGL()
 	// glLoadIdentity();
 	QImage img("src/user_interface/vehicle.png");
 	QImage tex = QGLWidget::convertToGLFormat(img);
-	unsigned char *texture_img = img.bits();
-	int width = tex.width();
-	int height = tex.height();
-	
+	QImage tex2 = QGLWidget::convertToGLFormat(QImage("src/user_interface/bot.png"));
+
 	glEnable(GL_TEXTURE_2D);
 	glGenTextures(1, &texture_id);
 	glBindTexture(GL_TEXTURE_2D, texture_id);
@@ -134,7 +132,25 @@ void Viewport::initializeGL()
 
 	glUniform1i(glGetUniformLocation(program, "vehicle_texture"), 0);
 	glDisable(GL_TEXTURE_2D);
+
+	glEnable(GL_TEXTURE_2D);
+	glGenTextures(1, &texture_id_bot);
+	glBindTexture(GL_TEXTURE_2D, texture_id_bot);
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex2.width(), tex2.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, tex2.bits());
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+	glUniform1i(glGetUniformLocation(program, "bot_texture"), 0);
+	glDisable(GL_TEXTURE_2D);
 	glUseProgram(program);
+
+	vehicle().set_texture(texture_id_bot);
+	player().set_texture(texture_id);
+	renderable::reset();
 }
 
 void Viewport::paintGL()
@@ -142,8 +158,7 @@ void Viewport::paintGL()
 	glClearColor(0.5f, 0.5f, 0.8f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, texture_id);
+	
 	objects->render();
 	glDisable(GL_TEXTURE_2D);
 
@@ -195,19 +210,4 @@ void Viewport::keyPressEvent(QKeyEvent *event)
 void Viewport::keyReleaseEvent(QKeyEvent *event)
 {
 	keys -= event->key();
-}
-
-unsigned char *Viewport::load_vehicle(int &size)
-{
-	QImage image("src/user_interface/vehicle.bmp");
-	QByteArray bytes;
-	QBuffer buffer(&bytes);
-	buffer.open(QIODevice::WriteOnly);
-	image.save(&buffer, "BMP");
-	buffer.close();
-
-	unsigned char *data = (unsigned char *)malloc(bytes.size());
-	memcpy(data, reinterpret_cast<unsigned char *>(bytes.data()), bytes.size());
-	size = bytes.size();
-	return data;
 }

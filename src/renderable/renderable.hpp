@@ -50,6 +50,8 @@ public:
 	virtual void place(float x = 0, float y = 0) = 0;
 	virtual void rotate(float a = 0) = 0;
 	virtual Point2D center() = 0;
+	virtual void set_texture(GLuint id) = 0;
+	virtual GLuint get_texture() = 0;
 };
 
 #endif

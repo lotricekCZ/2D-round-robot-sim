@@ -4,7 +4,8 @@
 #include "vehicle.hpp"
 #include <cassert>
 #include <QOpenGLFunctions>
-bool vehicle::texture_loaded = false;
+
+GLuint vehicle::texture = -1;
 
 vehicle::vehicle(/* args */) : Circle2D(0.1)
 {
@@ -23,6 +24,8 @@ void vehicle::render()
 
 	glColor3f(colors[0] / 255.0f, colors[1] / 255.0f, colors[2] / 255.0f);
 	// glBegin(GL_LINE_LOOP);
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, this->get_texture());
 	glBegin(GL_POLYGON);
 	// glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void *)(2 * sizeof(float)));
 	// glEnableVertexAttribArray(2);
@@ -32,11 +35,11 @@ void vehicle::render()
 		auto n = (this->at((float)(i) / ((float)vehicle::poly_count) + rotation())).point();
 		// printf("%f %f\n", 0.5 + o[0] / (this->radius * 2.f), 0.5f + o[1] / (this->radius * 2.f));
 		glVertex4f(n[0], n[1], 0.5 + o[0] / (this->radius * 2.f), 0.5f + o[1] / (this->radius * 2.f)); // not the most optimal approach, I could've done that with just an 1/8 of a points
-		// glTexCoord2f(0.5 + o[0] / (this->radius * 2.f), 0.5f + o[1] / (this->radius * 2.f));
-		
+																									   // glTexCoord2f(0.5 + o[0] / (this->radius * 2.f), 0.5f + o[1] / (this->radius * 2.f));
 	}
 	// glDisableVertexAttribArray(2);
 	glEnd();
+	glDisable(GL_TEXTURE_2D);
 }
 
 void vehicle::move(float dx, float dy)
@@ -77,3 +80,12 @@ std::variant<Circle2D, std::vector<Segment>> vehicle::formula()
 {
 	return (Circle2D) * this;
 };
+
+void vehicle::set_texture(GLuint id)
+{
+	vehicle::texture = id;
+}
+GLuint vehicle::get_texture()
+{
+	return vehicle::texture;
+}

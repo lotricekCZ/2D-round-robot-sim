@@ -3,7 +3,6 @@
 out vec4 frag_color;
 in vec2 tex_coord;
 
-uniform float u_time;
 uniform sampler2D vehicle_texture;
 
 void main()

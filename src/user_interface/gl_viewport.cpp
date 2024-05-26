@@ -38,8 +38,8 @@ Viewport::Viewport(QWidget *parent, std::shared_ptr<renderer> objs) : QOpenGLWid
 void Viewport::initializeGL()
 {
 	initializeOpenGLFunctions();
-	QFile vertex_file("src/user_interface/vertex_shader.glsl");
-	QFile fragment_file("src/user_interface/fragment_shader.glsl");
+	QFile vertex_file("src/user_interface/shaders/vertex_shader.glsl");
+	QFile fragment_file("src/user_interface/shaders/fragment_shader.glsl");
 	char *source;
 	QByteArray ba;
 	if (vertex_file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -95,7 +95,6 @@ void Viewport::initializeGL()
 	glViewport(0, 0, QWidget::width(), QWidget::height());
 	glUseProgram(program);
 	m_proj = glGetUniformLocation(program, "u_proj");
-	f_time = glGetUniformLocation(program, "u_time");
 	GLfloat proj_m[4][4] = {0};
 	{
 		float left = -(float)QWidget::width() / (float)QWidget::height();
@@ -121,7 +120,7 @@ void Viewport::initializeGL()
 	unsigned char *texture_img = img.bits();
 	int width = tex.width();
 	int height = tex.height();
-	printf("%d\t%d\n", width, height);
+	
 	glEnable(GL_TEXTURE_2D);
 	glGenTextures(1, &texture_id);
 	glBindTexture(GL_TEXTURE_2D, texture_id);
@@ -136,24 +135,13 @@ void Viewport::initializeGL()
 	glUniform1i(glGetUniformLocation(program, "vehicle_texture"), 0);
 	glDisable(GL_TEXTURE_2D);
 	glUseProgram(program);
-	// This step is unnecessary if you use the location specifier in your shader
-	// e.g. layout (location = 0) in vec3 position;
-	// glBindAttribLocation(program, 0, "vPos");
-	// glBindAttribLocation(program, 1, "vColor");
-	// glBindAttribLocation(program, 2, "vTexCoord");
 }
 
 void Viewport::paintGL()
 {
 	glClearColor(0.5f, 0.5f, 0.8f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
-	// glActiveTexture(GL_TEXTURE0); // activate the texture unit first before binding texture
-	// glBindTexture(GL_TEXTURE_2D, texture_id);
-	struct timespec spec;
-	clock_gettime(CLOCK_REALTIME, &spec);
-	// s  = spec.tv_sec;
-	// ms = round(spec.tv_nsec / 1.0e6);
-	glUniform1f(f_time, spec.tv_nsec / 5e8);
+
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, texture_id);
 	objects->render();
@@ -172,16 +160,18 @@ void Viewport::animate()
 					  [&](auto &o)
 					  { 
 			if(o->info() == "player"){
-				bool collision = false;
 				Vect2D move = Vect2D(o->center(), std::get<0>(o->formula()).at(o->rotation() + dx)) / 10 * dy;
 				Point2D prediction = o->predict(dx, dy);
-				if(std::abs(dy) >= std::numeric_limits<float>::epsilon())
+				auto point = prediction.point();
+				bool collision = std::abs(point[0]) >= 1.05 || std::abs(point[1]) >= 0.9;
+				
+				if(!collision && std::abs(dy) >= std::numeric_limits<float>::epsilon())
 					for(auto p: objects->objects)
 						if (o != p)
 						{
 							Vect2D distance = p->distance(prediction);
 							float product = Vect2D::dot(move, distance);
-							if ((distance.length() < std::get<0>(o->formula()).radius() /* that'll be circle*/ && product > 0 )) {
+							if ((distance.length() < std::get<0>(o->formula()).radius() /* that'll be circle*/ && product > 0)) {
 								collision = true;
 								break;
 								};

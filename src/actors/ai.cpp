@@ -4,10 +4,19 @@
 
 #include "ai.hpp"
 
-ai::ai(/* args */)
+ai::ai() : vehicle()
+{
+}
+
+ai::ai(vehicle &v): vehicle(v)
 {
 }
 
 ai::~ai()
 {
+}
+
+std::string ai::info()
+{
+	return "ai";
 }

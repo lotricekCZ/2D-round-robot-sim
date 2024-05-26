@@ -156,6 +156,8 @@ void interface::setupUi(QMainWindow *MainWindow)
 	in_animator->addItem(QString());
 	in_animator->addItem(QString());
 	in_animator->setObjectName(QString::fromUtf8("in_animator"));
+	in_animator->setDuplicatesEnabled(false);
+	in_animator->setMaxCount(3);
 	QSizePolicy sizePolicy2(QSizePolicy::Minimum, QSizePolicy::Fixed);
 	sizePolicy2.setHorizontalStretch(0);
 	sizePolicy2.setVerticalStretch(0);
@@ -237,7 +239,7 @@ void interface::setupUi(QMainWindow *MainWindow)
 	menuopen->addAction(actionSave_simulation);
 	menuopen->addAction(actionOpen_simulation);
 
-	tab_widget->setCurrentIndex(0);
+	tab_widget->setCurrentIndex(1);
 	retranslateUi(MainWindow);
 
 	in_rotation->setValidator(new QDoubleValidator(0, 360, 6, in_rotation));
@@ -245,6 +247,11 @@ void interface::setupUi(QMainWindow *MainWindow)
 	in_y->setValidator(new QDoubleValidator(-1, 1, 6, in_y));
 
 	// signals and slots
+	// reset simulation button
+	QObject::connect(b_reset, &QCommandLinkButton::clicked, this, [&]()
+					 {
+						rndr->erase_all();
+						serializer.read(); });
 	// delete button
 	QObject::connect(b_remove, &QCommandLinkButton::clicked, this, [&]()
 					 {rndr->erase_by_id(selected); update_table(); });
@@ -258,6 +265,7 @@ void interface::setupUi(QMainWindow *MainWindow)
 					 {
 						 rndr->add(std::make_shared<obstacle>());
 						 update_table(); });
+
 	// select
 	QObject::connect(items, &QTableWidget::cellClicked, this, [&](int row, int y)
 					 {
@@ -265,26 +273,28 @@ void interface::setupUi(QMainWindow *MainWindow)
 						update_entries(true); });
 	// new sim
 	QObject::connect(actionload_configuration, &QAction::triggered, this, [&]()
-					 {
-						rndr->erase_all();
-					 });
+					 { rndr->erase_all(); });
 	// open sim
 	QObject::connect(actionOpen_simulation, &QAction::triggered, this, [&]()
 					 {
 						QString config = QFileDialog::getOpenFileName(this,
 							tr("Load your configuration"), ".", tr("JSON Files (*.json)"));
-						serializer.select(config.toStdString());
-						rndr->erase_all();
-						serializer.read();
-					 });
+						if(config.length())
+						{
+							serializer.select(config.toStdString());
+							rndr->erase_all();
+							serializer.read();
+						} });
 	// save sim
 	QObject::connect(actionSave_simulation, &QAction::triggered, this, [&]()
 					 {
 						QString config = QFileDialog::getSaveFileName(this,
 							tr("Save your configuration"), ".", tr("JSON Files (*.json)"));
-						serializer.select(config.toStdString());
-						serializer.save();
-					 });
+						if(config.length())
+						{
+							serializer.select(config.toStdString());
+							serializer.save();
+						} });
 	// run (unused for now)
 	QObject::connect(in_animator, &QComboBox::currentTextChanged, this, [&](auto text) { // todo: alter coordinates of the selected
 		auto edited = rndr->get_by_id(selected);
@@ -295,11 +305,19 @@ void interface::setupUi(QMainWindow *MainWindow)
 			if (text.toStdString() == "AI" && edited.value()->info() == "player")
 			{
 				rndr->erase_by_id(selected);
-				rndr->add(std::make_shared<vehicle>());
+				rndr->add(std::make_shared<ai>());
 				rndr->objects.back()->place(center.at(0), center.at(1));
 				rndr->objects.back()->rotate(rotation);
 				selected = rndr->objects.back()->id();
 				items->insertRow(items->rowCount());
+			}
+			else if (text.toStdString() == "User" && edited.value()->info() == "ai")
+			{
+				rndr->erase_by_id(selected);
+				rndr->add(std::make_shared<player>());
+				rndr->objects.back()->place(center.at(0), center.at(1));
+				rndr->objects.back()->rotate(rotation);
+				selected = rndr->objects.back()->id();
 			}
 			else if (text.toStdString() == "User" && edited.value()->info() == "vehicle")
 			{
@@ -308,6 +326,16 @@ void interface::setupUi(QMainWindow *MainWindow)
 				rndr->objects.back()->place(center.at(0), center.at(1));
 				rndr->objects.back()->rotate(rotation);
 				selected = rndr->objects.back()->id();
+				in_animator->removeItem(2);
+			}
+			else if (text.toStdString() == "AI" && edited.value()->info() == "vehicle")
+			{
+				rndr->erase_by_id(selected);
+				rndr->add(std::make_shared<ai>());
+				rndr->objects.back()->place(center.at(0), center.at(1));
+				rndr->objects.back()->rotate(rotation);
+				selected = rndr->objects.back()->id();
+				in_animator->removeItem(2);
 			}
 			update_table();
 		}
@@ -407,7 +435,9 @@ void interface::update_entries(bool force)
 		if (force || !in_animator->hasFocus())
 		{
 			in_animator->setEnabled(edited.value()->info() != "obstacle");
-			in_animator->setCurrentIndex(edited.value()->info() == "vehicle");
+			if (edited.value()->info() == "vehicle")
+				in_animator->insertItem(2, "Vehicle");
+			in_animator->setCurrentIndex((edited.value()->info() == "ai") + (edited.value()->info() == "vehicle") * 2);
 		}
 	}
 }

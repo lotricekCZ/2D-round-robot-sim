@@ -33,6 +33,7 @@
 #include "gl_viewport.hpp"
 #include "serializer.hpp"
 #include "../actors/player.hpp"
+#include "../actors/ai.hpp"
 
 class interface : public QMainWindow
 {

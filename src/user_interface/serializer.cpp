@@ -32,6 +32,10 @@ void Serializer::read()
 		{
 			renderer_ptr->add(std::make_shared<vehicle>());
 		}
+		else if (type == "ai")
+		{
+			renderer_ptr->add(std::make_shared<vehicle>());
+		}
 		else if (type == "player")
 		{
 			renderer_ptr->add(std::make_shared<player>());

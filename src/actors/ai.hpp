@@ -10,14 +10,14 @@
 class ai: public vehicle
 {
 private:
-	/* data */
+	int patience; // number of retries before changing mind
 public:
 	ai(/* args */);
 	ai(vehicle &);
 	std::string info() override;
 	~ai();
 	using vehicle::render;
-	
+
 };
 
 

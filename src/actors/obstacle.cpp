@@ -15,7 +15,7 @@ obstacle::~obstacle()
 void obstacle::render()
 {
 	glColor3f(colors[0] / 255.0f, colors[1] / 255.0f, colors[2] / 255.0f);
-	glBegin(GL_POLYGON);
+	glBegin(GL_QUADS);
 	for (auto i : bounds)
 	{
 		auto o = i.point();

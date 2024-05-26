@@ -29,10 +29,11 @@ void vehicle::render()
 	for (size_t i = 0; i < vehicle::poly_count; i++)
 	{
 		auto o = (this->at((float)(i) / ((float)vehicle::poly_count)) - point_center).point();
+		auto n = (this->at((float)(i) / ((float)vehicle::poly_count) + rotation())).point();
+		// printf("%f %f\n", 0.5 + o[0] / (this->radius * 2.f), 0.5f + o[1] / (this->radius * 2.f));
+		glVertex4f(n[0], n[1], 0.5 + o[0] / (this->radius * 2.f), 0.5f + o[1] / (this->radius * 2.f)); // not the most optimal approach, I could've done that with just an 1/8 of a points
+		// glTexCoord2f(0.5 + o[0] / (this->radius * 2.f), 0.5f + o[1] / (this->radius * 2.f));
 		
-		glVertex2f(center[0] + o[0], center[1] + o[1]); // not the most optimal approach, I could've done that with just an 1/8 of a points
-		
-		glTexCoord2f(0.5 + o[0] / (this->radius * 2.f), 0.5f + o[1] / (this->radius * 2.f)); // not the most optimal approach, I could've done that with just an 1/8 of a points
 	}
 	// glDisableVertexAttribArray(2);
 	glEnd();

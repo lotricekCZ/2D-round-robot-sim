@@ -16,7 +16,7 @@ class vehicle : public renderable, public Circle2D
 {
 private:
 	// overall number of polygons circle will have
-	const uint16_t poly_count = 16;
+	const uint16_t poly_count = 32;
 	const float radius = 0.1;
     static bool texture_loaded;
 public:

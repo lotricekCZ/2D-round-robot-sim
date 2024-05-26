@@ -5,6 +5,7 @@
 #include <QPainter>
 #include <QBuffer>
 #include <QOpenGLWidget>
+#include <QGLWidget>
 #include <QOpenGLFunctions>
 #include <QSurfaceFormat>
 #include <QTimer>
@@ -116,46 +117,47 @@ void Viewport::initializeGL()
 	glUniformMatrix4fv(m_proj, 1, GL_FALSE, &proj_m[0][0]);
 	// glLoadIdentity();
 	QImage img("src/user_interface/vehicle.png");
+	QImage tex = QGLWidget::convertToGLFormat(img);
 	unsigned char *texture_img = img.bits();
-	int width = img.width();
-	int height = img.height();
+	int width = tex.width();
+	int height = tex.height();
 	printf("%d\t%d\n", width, height);
-	if (!texture_img)
-	{
-		std::cerr << "error" << std::endl;
-		return;
-	}
-
+	glEnable(GL_TEXTURE_2D);
 	glGenTextures(1, &texture_id);
 	glBindTexture(GL_TEXTURE_2D, texture_id);
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex.width(), tex.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, tex.bits());
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture_img);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
-	glGenerateMipmap(GL_TEXTURE_2D);
-	glUseProgram(program);
 	glUniform1i(glGetUniformLocation(program, "vehicle_texture"), 0);
-	glMatrixMode(GL_PROJECTION);
-	float aspect = (float)QWidget::width() / (float)QWidget::height();
-	glOrtho(-aspect, aspect, -1, 1, -1, 1);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
+	glDisable(GL_TEXTURE_2D);
+	glUseProgram(program);
+	// This step is unnecessary if you use the location specifier in your shader
+	// e.g. layout (location = 0) in vec3 position;
+	// glBindAttribLocation(program, 0, "vPos");
+	// glBindAttribLocation(program, 1, "vColor");
+	// glBindAttribLocation(program, 2, "vTexCoord");
 }
 
 void Viewport::paintGL()
 {
 	glClearColor(0.5f, 0.5f, 0.8f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
+	// glActiveTexture(GL_TEXTURE0); // activate the texture unit first before binding texture
+	// glBindTexture(GL_TEXTURE_2D, texture_id);
 	struct timespec spec;
 	clock_gettime(CLOCK_REALTIME, &spec);
-
+	// s  = spec.tv_sec;
+	// ms = round(spec.tv_nsec / 1.0e6);
 	glUniform1f(f_time, spec.tv_nsec / 5e8);
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, texture_id);
 	objects->render();
+	glDisable(GL_TEXTURE_2D);
 
 	glFlush();
 }

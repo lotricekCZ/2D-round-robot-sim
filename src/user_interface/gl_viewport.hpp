@@ -25,6 +25,7 @@
 #include <QKeyEvent>
 #include <QUiLoader>
 #include <QOpenGLFunctions>
+#include <QOpenGLShader>
 #include <QOpenGLShaderProgram>
 #include "../actors/vehicle.hpp"
 #include "../actors/obstacle.hpp"
@@ -37,12 +38,18 @@ class Viewport : public QOpenGLWidget, public QOpenGLFunctions
 {
 	// Q_OBJECT
 public:
+	unsigned int texture;
 	std::shared_ptr<renderer> objects;
 	QSet<int> keys;
 	Viewport(QWidget *parent = nullptr, std::shared_ptr<renderer> objs = nullptr);
 	QTimer *timer;
 	Viewport() = delete;
 	~Viewport();
+	unsigned char *load_vehicle(int &size);
+	GLint m_proj;
+	GLint f_time;
+	GLuint program;
+	GLuint texture_id;
 public slots:
 	void animate();
 	void keyPressEvent(QKeyEvent *event);

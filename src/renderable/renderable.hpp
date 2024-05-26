@@ -14,7 +14,7 @@
 
 #include <QOpenGLFunctions>
 
-class renderable
+class renderable: public QOpenGLFunctions
 {
 private:
 	static uint32_t ID_incrementor;

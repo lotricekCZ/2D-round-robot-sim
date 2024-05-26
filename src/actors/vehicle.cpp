@@ -4,6 +4,7 @@
 #include "vehicle.hpp"
 #include <cassert>
 #include <QOpenGLFunctions>
+bool vehicle::texture_loaded = false;
 
 vehicle::vehicle(/* args */) : Circle2D(0.1)
 {
@@ -21,12 +22,19 @@ void vehicle::render()
 	std::vector<std::array<float, 2>> vtx(vehicle::poly_count);
 
 	glColor3f(colors[0] / 255.0f, colors[1] / 255.0f, colors[2] / 255.0f);
+	// glBegin(GL_LINE_LOOP);
 	glBegin(GL_POLYGON);
+	// glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void *)(2 * sizeof(float)));
+	// glEnableVertexAttribArray(2);
 	for (size_t i = 0; i < vehicle::poly_count; i++)
 	{
 		auto o = (this->at((float)(i) / ((float)vehicle::poly_count)) - point_center).point();
+		
 		glVertex2f(center[0] + o[0], center[1] + o[1]); // not the most optimal approach, I could've done that with just an 1/8 of a points
+		
+		glTexCoord2f(0.5 + o[0] / (this->radius * 2.f), 0.5f + o[1] / (this->radius * 2.f)); // not the most optimal approach, I could've done that with just an 1/8 of a points
 	}
+	// glDisableVertexAttribArray(2);
 	glEnd();
 }
 
@@ -59,10 +67,12 @@ std::string vehicle::info()
 	return "vehicle";
 }
 
-Point2D vehicle::center() {
+Point2D vehicle::center()
+{
 	return Circle2D::center(*this);
 }
 
-std::variant<Circle2D, std::vector<Segment>> vehicle::formula(){
-	return (Circle2D)*this;
+std::variant<Circle2D, std::vector<Segment>> vehicle::formula()
+{
+	return (Circle2D) * this;
 };

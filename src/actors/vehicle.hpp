@@ -4,6 +4,7 @@
 #ifndef VEHICLE_HPP
 #define VEHICLE_HPP
 
+#include <QOpenGLFunctions>
 #include <cinttypes>
 #include <variant>
 #include <vector>
@@ -17,7 +18,7 @@ private:
 	// overall number of polygons circle will have
 	const uint16_t poly_count = 16;
 	const float radius = 0.1;
-
+    static bool texture_loaded;
 public:
 	vehicle(/* args */);
 	~vehicle();
@@ -28,6 +29,8 @@ public:
 	void rotate(float a = 0) override;
 	void move(float dx = 0, float dy = 0) override;
     Point2D predict(float dx, float dy) override;
+    GLuint program;
+	GLuint texture_id;
 	std::variant<Circle2D, std::vector<Segment>> formula() override;
 	Point2D center() override;
 };

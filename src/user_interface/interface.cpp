@@ -349,7 +349,7 @@ void interface::setupUi(QMainWindow *MainWindow)
 		auto edited = rndr->get_by_id(selected);
 		if (edited)
 		{
-			auto x = this->in_x->text().toFloat();
+			auto x = this->in_x->text().replace(",", ".").toFloat();
 			float y = edited.value()->center().point().at(1);
 			edited.value()->place(x, y);
 		}
@@ -358,7 +358,7 @@ void interface::setupUi(QMainWindow *MainWindow)
 		auto edited = rndr->get_by_id(selected);
 		if (edited)
 		{
-			auto y = this->in_y->text().toFloat();
+			auto y = this->in_y->text().replace(",", ".").toFloat();
 			float x = edited.value()->center().point().at(0);
 			edited.value()->place(x, y);
 		}
@@ -367,7 +367,7 @@ void interface::setupUi(QMainWindow *MainWindow)
 		auto edited = rndr->get_by_id(selected);
 		if (edited)
 		{
-			edited.value()->set_rotation(this->in_rotation->text().toFloat() / 360.0f);
+			edited.value()->set_rotation(this->in_rotation->text().replace(",", ".").toFloat() / 360.0f);
 		}
 	});
 	QMetaObject::connectSlotsByName(MainWindow);

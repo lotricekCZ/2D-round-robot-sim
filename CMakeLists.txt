@@ -23,24 +23,18 @@ find_package(Doxygen
 			 OPTIONAL_COMPONENTS mscgen dia)
 
 find_package(Qt5 COMPONENTS 
-				LinguistTools           RemoteObjects
-				Help                    QuickWidgets
-				Location                RepParser
-				Multimedia              Scxml
-				MultimediaWidgets       Network                 
-				OpenGL                  Svg
-				OpenGLExtensions        Test
-				Positioning             TextToSpeech
-				PositioningQuick        UiPlugin
-				PrintSupport            UiTools
-				Qml                     WebChannel
-				Quick                   WebSockets
-				Concurrent              QuickCompiler           
-				WebView 				Core
-				QuickControls2          Widgets
-				Gamepad                 QuickTemplates2
-				Xml						Gui             
-				QuickTest               XmlPatterns
+				Help				QuickWidgets
+				Network				UiPlugin
+				OpenGL				Svg
+				OpenGLExtensions	Test
+				TextToSpeech		Widgets
+				PrintSupport		UiTools
+				Qml					WebChannel
+				Quick				WebSockets
+				WebView				Core
+				Xml					Gui
+				QuickTest			XmlPatterns
+				Concurrent				
 				REQUIRED)
 include_directories(${Qt5UiTools_INCLUDE_DIRS})
 

@@ -1,0 +1,139 @@
+
+@startuml
+skinparam Style strictuml
+' left to right direction
+scale 1200 height
+class QOpenGLWidget
+class QOpenGLFunctions
+
+package shapes {
+
+    class TPoint<**T** value type,\n**dims** number of dimensions> {
+        coords: array<T, dims>
+        TPoint(T arg, Args...)
+    }
+
+    class Point2D<T=float, dims=2>  <<typedef>> extends TPoint{}
+
+    class TVector<**T** value type,\n**dims** number of dimensions> extends TPoint, .std::pair{
+
+    }
+
+    class Vect2D<T=float, dims=2>  <<typedef>> extends TVector{}
+
+    class TCircle<**T** value type,\n**dims** number of dimensions> {
+        radius: T
+        circle_center: TPoint
+    }
+
+    class Circle2D<T=float, dims=2>  <<typedef>> extends TCircle{}
+
+    class TLine<**T** value type,\n**dims** number of dimensions> extends TVector {
+        origin: TPoint
+    }
+
+    class Line2D<T=float, dims=2>  <<typedef>> extends TLine{}
+
+    class Segment {
+        formula: Circle2D | Line2D
+        range: array<float, 2>
+    }
+}
+
+package renderable {
+    class renderer {
+        objects: vector<shared_ptr<renderable>>
+        minds: vector<shared_ptr<ai>>
+    }
+    abstract class renderable extends .QOpenGLFunctions {
+        formula: Circle2D | Line2D
+        range: array<float, 2>
+
+        {abstract} void move(float, float)
+        {abstract} void place(float, float)
+        {abstract} void rotate(float)
+        {abstract} Point2D center()
+
+        {abstract} void set_texture(GLuint)
+        {abstract} GLuint get_texture()
+        {abstract} void render()
+
+        Vect2D distance(renderable &)
+        Vect2D distance(Point2D)
+        Points2D intersection(renderable &)
+        {abstract} Point2D predict(float, float)
+        {abstract} Circle2D | vector<Segment> formula()
+        {abstract} string info()
+    }
+}
+
+package actors {
+    class ai {
+        dx: float
+        dy: float
+        next_change: chrono::time_point
+        attached: shared_ptr<renderable>
+    }
+
+    class vehicle extends renderable.renderable, shapes.Circle2D {
+        poly_count: uint16
+        radius: float
+        texture: GLuint
+        next_change: chrono::time_point
+        attached: shared_ptr<renderable>
+    }
+
+    class obstacle extends renderable.renderable {
+        bounds: array<Point2D, 4>
+        obstacle_center: Point2D
+
+        string info() override;
+        void render() override;
+        void place(float x = 0, float y = 0) override;
+        void rotate(float a = 0) override;
+        void move(float dx = 0, float dy = 0) override;
+        Point2D predict(float dx, float dy) override;
+        Circle2D | vector<Segment> formula() override;
+        Point2D center() override;
+        void set_texture(GLuint id) override;
+        GLuint get_texture() override;
+    }
+
+    class player extends vehicle {
+    }
+
+    class bot extends vehicle {
+    }
+}
+
+package user_interface {
+    class Viewport extends .QOpenGLWidget, .QOpenGLFunctions {
+        objects: shared_ptr<renderer>
+        keys: QSet<int>
+        timer: QTimer *;
+
+        void animate()
+        void keyPressEvent(QKeyEvent *)
+        void keyReleaseEvent(QKeyEvent *)
+        void initializeGL() override
+        void paintGL() override
+    }
+    class interface extends .QMainWindow{
+        openGL_widget: Viewport
+        timer_table: QTimer *
+        selected: int
+        serializer: Serializer
+        rndr: shared_ptr<renderer>
+    }
+
+    class Serializer {
+        file: filesystem::path
+        renderer_ptr: shared_ptr<renderer>
+    }
+
+    interface::openGL_widget -> Viewport
+    interface::serializer -> Serializer
+    Viewport::objects -> renderable.renderer
+}
+
+@enduml

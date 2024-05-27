@@ -26,7 +26,7 @@
 class Serializer
 {
 private:
-	std::filesystem::path file;
+	QFile file;
 public:
 	std::shared_ptr<renderer> renderer_ptr;
 	Serializer(/* args */);

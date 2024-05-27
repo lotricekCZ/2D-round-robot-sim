@@ -90,6 +90,7 @@ add_library(polygon 		SHARED ${SHAPES}/TPolygon.cpp)
 add_library(segment 		SHARED ${SHAPES}/Segment.cpp)
 
 add_library(ai 		        SHARED ${ACTORS}/ai.cpp)
+add_library(bot 		    SHARED ${ACTORS}/bot.cpp)
 add_library(obstacle		SHARED ${ACTORS}/obstacle.cpp)
 add_library(player 			SHARED ${ACTORS}/player.cpp)
 add_library(vehicle 		SHARED ${ACTORS}/vehicle.cpp)
@@ -110,10 +111,11 @@ target_link_libraries(vehicle Qt5::OpenGL renderable circle point line)
 target_link_libraries(obstacle Qt5::OpenGL renderable circle point segment line)
 target_link_libraries(viewport Qt5::Widgets Qt5::Gui Qt5::OpenGL vehicle obstacle renderable)
 target_link_libraries(renderer vehicle obstacle renderable)
-target_link_libraries(serializer Qt5::Widgets Qt5::Core vehicle player renderer obstacle)
+target_link_libraries(ai bot)
+target_link_libraries(serializer Qt5::Widgets Qt5::Core vehicle player renderer obstacle bot ai)
 
 set_target_properties(interface PROPERTIES AUTOMOC TRUE)
-target_link_libraries(interface serializer Qt5::Widgets Qt5::Core Qt5::UiTools renderer viewport player vehicle ai)
+target_link_libraries(interface serializer Qt5::Widgets Qt5::Core Qt5::UiTools renderer viewport player vehicle bot ai)
 
 
 

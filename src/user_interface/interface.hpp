@@ -34,6 +34,7 @@
 #include "serializer.hpp"
 #include "../actors/player.hpp"
 #include "../actors/ai.hpp"
+#include "../actors/bot.hpp"
 
 class interface : public QMainWindow
 {

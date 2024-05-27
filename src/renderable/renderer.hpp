@@ -11,6 +11,8 @@
 #include "renderable.hpp"
 #include "../actors/vehicle.hpp"
 #include "../actors/obstacle.hpp"
+#include "../actors/ai.hpp"
+#include "../actors/bot.hpp"
 
 class renderer
 {
@@ -19,6 +21,7 @@ protected:
 	friend class Viewport;
 	friend class interface;
 	std::vector<std::shared_ptr<renderable>> objects;
+	std::vector<std::shared_ptr<ai>> minds;
 public:
 	renderer(/* args */);
 	~renderer();

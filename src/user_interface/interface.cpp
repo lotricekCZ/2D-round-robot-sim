@@ -305,13 +305,15 @@ void interface::setupUi(QMainWindow *MainWindow)
 			if (text.toStdString() == "AI" && edited.value()->info() == "player")
 			{
 				rndr->erase_by_id(selected);
-				rndr->add(std::make_shared<ai>());
+				rndr->add(std::make_shared<bot>());
+				rndr->minds.emplace_back();
+				rndr->minds.back()->attach(rndr->objects.back());
 				rndr->objects.back()->place(center.at(0), center.at(1));
 				rndr->objects.back()->rotate(rotation);
 				selected = rndr->objects.back()->id();
 				items->insertRow(items->rowCount());
 			}
-			else if (text.toStdString() == "User" && edited.value()->info() == "ai")
+			else if (text.toStdString() == "User" && edited.value()->info() == "bot")
 			{
 				rndr->erase_by_id(selected);
 				rndr->add(std::make_shared<player>());
@@ -331,9 +333,11 @@ void interface::setupUi(QMainWindow *MainWindow)
 			else if (text.toStdString() == "AI" && edited.value()->info() == "vehicle")
 			{
 				rndr->erase_by_id(selected);
-				rndr->add(std::make_shared<ai>());
+				rndr->add(std::make_shared<bot>());
+				rndr->minds.push_back(std::make_shared<ai>());
 				rndr->objects.back()->place(center.at(0), center.at(1));
 				rndr->objects.back()->rotate(rotation);
+				rndr->minds.back()->attach(rndr->objects.back());
 				selected = rndr->objects.back()->id();
 				in_animator->removeItem(2);
 			}
@@ -437,7 +441,7 @@ void interface::update_entries(bool force)
 			in_animator->setEnabled(edited.value()->info() != "obstacle");
 			if (edited.value()->info() == "vehicle")
 				in_animator->insertItem(2, "Vehicle");
-			in_animator->setCurrentIndex((edited.value()->info() == "ai") + (edited.value()->info() == "vehicle") * 2);
+			in_animator->setCurrentIndex((edited.value()->info() == "bot") + (edited.value()->info() == "vehicle") * 2);
 		}
 	}
 }

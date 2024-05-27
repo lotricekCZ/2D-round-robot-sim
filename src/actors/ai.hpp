@@ -2,22 +2,30 @@
  * @author Jakub Ramašeuski (xramas01); 2024
 */
 
-#include "vehicle.hpp"
+#include "bot.hpp"
+#include "../renderable/renderable.hpp"
+
+#include <chrono>
+#include <memory>
 
 #ifndef AI_HPP
 #define AI_HPP
 
-class ai: public vehicle
+class ai
 {
 private:
 	int patience; // number of retries before changing mind
 public:
+	struct {
+		float dx = 0;
+		float dy = 0;
+		std::chrono::time_point<std::chrono::steady_clock> next_change;
+	} controls;
+	std::shared_ptr<renderable> attached;
 	ai(/* args */);
-	ai(vehicle &);
-	std::string info() override;
+	void attach(std::shared_ptr<renderable> &);
+	void steer();
 	~ai();
-	using vehicle::render;
-
 };
 
 

@@ -49,26 +49,35 @@ void renderer::render()
 				  { o->render(); });
 }
 
-
-std::optional<std::shared_ptr<renderable>> renderer::get_by_id(uint32_t id){
-	for(auto o: objects)
-		if(o->id() == id)
+std::optional<std::shared_ptr<renderable>> renderer::get_by_id(uint32_t id)
+{
+	for (auto o : objects)
+		if (o->id() == id)
 			return o;
 	return {};
 }
 
-
-bool renderer::erase_by_id(uint32_t id){
+bool renderer::erase_by_id(uint32_t id)
+{
 	for (std::vector<std::shared_ptr<renderable>>::iterator it = objects.begin(); it != objects.end(); it++)
-		if((*it)->id() == id){
+		if ((*it)->id() == id)
+		{
+			auto type = (*it)->info();
 			objects.erase(it);
+			if (type == "bot")
+				for (std::vector<std::shared_ptr<ai>>::iterator ait = minds.begin(); ait != minds.end(); ait++)
+					if (!(*ait))
+					{
+						minds.erase(ait);
+						return true;
+					}
 			return true;
 		}
 	return false;
 }
 
-
-void renderer::erase_all(){
+void renderer::erase_all()
+{
 	objects.clear();
 	renderable::reset();
 }

@@ -158,7 +158,6 @@ void Viewport::paintGL()
 	glClearColor(0.5f, 0.5f, 0.8f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	
 	objects->render();
 	glDisable(GL_TEXTURE_2D);
 
@@ -198,6 +197,34 @@ void Viewport::animate()
 				
 			} });
 	}
+	auto now = std::chrono::steady_clock::now();
+	for_each(std::execution::par, objects->minds.begin(), objects->minds.end(), [&](std::shared_ptr<ai> &m)
+			 {
+				 auto o = m->attached;
+				 float dy = m->controls.dy;
+				 float dx = m->controls.dx;
+				 Vect2D move = Vect2D(o->center(), std::get<0>(o->formula()).at(o->rotation() + dx)) / 10 * dy;
+				 Point2D prediction = o->predict(dx, dy);
+				 auto point = prediction.point();
+				 bool collision = std::abs(point[0]) >= 1.05 || std::abs(point[1]) >= 0.9;
+
+				 if (!collision && std::abs(dy) >= std::numeric_limits<float>::epsilon())
+					 for (auto p : objects->objects)
+						 if (o != p)
+						 {
+							 Vect2D distance = p->distance(prediction);
+							 float product = Vect2D::dot(move, distance);
+							 if ((distance.length() < std::get<0>(o->formula()).radius() /* that'll be circle*/ && product > 0))
+							 {
+								 collision = true;
+								 break;
+							 };
+						 }
+				 if (collision || m->controls.next_change <= now){
+					 m->steer();
+					 return;}
+				 o->move(dx, dy);
+			 });
 	paintGL();
 	update();
 }

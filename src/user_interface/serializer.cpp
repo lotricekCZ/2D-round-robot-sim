@@ -32,9 +32,11 @@ void Serializer::read()
 		{
 			renderer_ptr->add(std::make_shared<vehicle>());
 		}
-		else if (type == "ai")
+		else if (type == "bot")
 		{
 			renderer_ptr->add(std::make_shared<vehicle>());
+			renderer_ptr->minds.push_back(std::make_shared<ai>());
+			renderer_ptr->minds.back()->attach(renderer_ptr->objects.back());
 		}
 		else if (type == "player")
 		{

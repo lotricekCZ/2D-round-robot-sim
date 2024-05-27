@@ -18,6 +18,7 @@
 #include "../actors/vehicle.hpp"
 #include "../actors/player.hpp"
 #include "../actors/obstacle.hpp"
+#include "../actors/ai.hpp"
 
 #ifndef SERIALIZER_HPP
 #define SERIALIZER_HPP

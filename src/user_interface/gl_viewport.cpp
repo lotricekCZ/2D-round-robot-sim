@@ -207,7 +207,7 @@ void Viewport::animate()
 #ifndef noexec
 	for_each(std::execution::par, objects->minds.begin(), objects->minds.end(), [&](std::shared_ptr<ai> &m)
 #else
-	for_each(std::execution::par, objects->minds.begin(), objects->minds.end(), [&](std::shared_ptr<ai> &m)
+	for_each(objects->minds.begin(), objects->minds.end(), [&](std::shared_ptr<ai> &m)
 #endif
 			 {
 				 auto o = m->attached;

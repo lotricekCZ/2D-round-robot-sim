@@ -1,6 +1,11 @@
 /**
  * @author Jakub Ramašeuski (xramas01); 2024
  */
+
+#ifndef M_SQRT1_2f
+#define M_SQRT1_2f 0.70710678118654752440f
+#endif
+
 #include "obstacle.hpp"
 #include <cmath>
 obstacle::obstacle(/* args */) : renderable()
@@ -73,10 +78,11 @@ Point2D obstacle::predict(float dx, float dy)
 	return obstacle_center + Point2D(dx, dy);
 };
 
-void obstacle::set_texture(GLuint id){
-
+void obstacle::set_texture(GLuint id)
+{
 }
 
-GLuint obstacle::get_texture(){
+GLuint obstacle::get_texture()
+{
 	return -1;
 }

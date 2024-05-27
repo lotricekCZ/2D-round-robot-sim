@@ -14,11 +14,14 @@ Serializer::~Serializer()
 
 void Serializer::read()
 {
-	std::ifstream handler(file);
-	std::stringstream buffer;
-	buffer << handler.rdbuf();
-	handler.close();
-	QJsonDocument doc = QJsonDocument::fromJson(QByteArray::fromStdString(buffer.str()));
+	QByteArray ba;
+	QString data;
+	if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+	{
+		ba = file.readAll();
+		file.close();
+	}
+	QJsonDocument doc = QJsonDocument::fromJson(ba);
 	QJsonArray jsonArray = doc.array();
 	for (auto v : jsonArray)
 	{
@@ -34,7 +37,7 @@ void Serializer::read()
 		}
 		else if (type == "bot")
 		{
-			renderer_ptr->add(std::make_shared<vehicle>());
+			renderer_ptr->add(std::make_shared<bot>());
 			renderer_ptr->minds.push_back(std::make_shared<ai>());
 			renderer_ptr->minds.back()->attach(renderer_ptr->objects.back());
 		}
@@ -67,12 +70,11 @@ void Serializer::save()
 	}
 	QJsonDocument document(save_array);
 	QByteArray bytes = document.toJson(QJsonDocument::Indented);
-	std::string output(bytes.constData(), bytes.length());
-	std::ofstream handler(file);
-	handler << output;
-	handler.close();
+	file.open(QIODevice::WriteOnly);
+	file.write(bytes);
+	file.close();
 }
 
 void Serializer::select(std::string path){
-	file = path;
+	file.setFileName(QString::fromStdString(path));
 }

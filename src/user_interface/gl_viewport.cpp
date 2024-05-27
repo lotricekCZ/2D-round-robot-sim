@@ -11,12 +11,14 @@
 #include <QTimer>
 #include <iostream>
 #include <memory>
-#include <execution>
 #include <algorithm>
 #include <ctime>
 #include "gl_viewport.hpp"
 
 #include "../actors/vehicle.hpp"
+#ifndef noexec
+#include <execution>
+#endif
 
 Viewport::~Viewport() {}
 
@@ -170,7 +172,11 @@ void Viewport::animate()
 	{
 		float dy = 1 * (keys.find(Qt::Key_W) != keys.end()) - 1 * (keys.find(Qt::Key_S) != keys.end());
 		float dx = 0.01 * (keys.find(Qt::Key_A) != keys.end()) - 0.01 * (keys.find(Qt::Key_D) != keys.end());
+#ifndef noexec
 		std::for_each(std::execution::par, objects->objects.begin(), objects->objects.end(),
+#else
+		std::for_each(objects->objects.begin(), objects->objects.end(),
+#endif
 					  [&](auto &o)
 					  { 
 			if(o->info() == "player"){
@@ -198,7 +204,11 @@ void Viewport::animate()
 			} });
 	}
 	auto now = std::chrono::steady_clock::now();
+#ifndef noexec
 	for_each(std::execution::par, objects->minds.begin(), objects->minds.end(), [&](std::shared_ptr<ai> &m)
+#else
+	for_each(std::execution::par, objects->minds.begin(), objects->minds.end(), [&](std::shared_ptr<ai> &m)
+#endif
 			 {
 				 auto o = m->attached;
 				 float dy = m->controls.dy;
@@ -223,8 +233,7 @@ void Viewport::animate()
 				 if (collision || m->controls.next_change <= now){
 					 m->steer();
 					 return;}
-				 o->move(dx, dy);
-			 });
+				 o->move(dx, dy); });
 	paintGL();
 	update();
 }

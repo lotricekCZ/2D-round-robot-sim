@@ -1,6 +1,6 @@
 /**
  * @author Jakub Ramašeuski (xramas01); 2024
-*/
+ */
 
 #include <QJsonObject>
 #include <QJsonDocument>
@@ -10,9 +10,6 @@
 #include <QDebug>
 #include <QTranslator>
 #include <iostream>
-#include <fstream> 
-#include <sstream> 
-#include <filesystem>
 #include <memory>
 #include "../renderable/renderer.hpp"
 #include "../actors/vehicle.hpp"
@@ -27,6 +24,7 @@ class Serializer
 {
 private:
 	QFile file;
+
 public:
 	std::shared_ptr<renderer> renderer_ptr;
 	Serializer(/* args */);

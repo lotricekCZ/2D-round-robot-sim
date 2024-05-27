@@ -4,8 +4,9 @@
 #include "renderer.hpp"
 #include "renderable.hpp"
 #include <algorithm>
+#ifndef noexec
 #include <execution>
-
+#endif
 /**
  * @brief Constructs a new renderer object.
  *
@@ -44,7 +45,11 @@ void renderer::add(std::shared_ptr<renderable> object)
  */
 void renderer::render()
 {
+	#ifndef noexec
 	std::for_each(std::execution::par, objects.begin(), objects.end(),
+	#else
+	std::for_each(objects.begin(), objects.end(),
+	#endif
 				  [&](auto &o)
 				  { o->render(); });
 }

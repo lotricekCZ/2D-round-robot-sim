@@ -8,8 +8,10 @@
 #include <algorithm>
 #include <type_traits>
 #include <cmath>
-#include <execution>
 #include <cinttypes>
+#ifndef noexec
+#include <execution>
+#endif
 
 /**
  * @brief Constructs a segment from a circle formula and range.

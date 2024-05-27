@@ -11,33 +11,38 @@ set(PROJECT_NAME simulator)
 # set the project name and version
 project(${PROJECT_NAME} VERSION 0.1.2)
 
-
 file(GLOB SOURCE_FILES
-	${SRC}/main.cpp
-	)
+${SRC}/main.cpp
+)
+
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
+include(CheckIncludeFileCXX)
 find_package(Threads REQUIRED)
 find_package(Doxygen
-			 REQUIRED dot
-			 OPTIONAL_COMPONENTS mscgen dia)
+REQUIRED dot
+OPTIONAL_COMPONENTS mscgen dia)
 
 find_package(Qt5 COMPONENTS 
-				Help				QuickWidgets
-				Network				UiPlugin
-				OpenGL				Svg
-				OpenGLExtensions	Test
-				TextToSpeech		Widgets
-				PrintSupport		UiTools
-				Qml					WebChannel
-				Quick				WebSockets
-				WebView				Core
-				Xml					Gui
-				QuickTest			XmlPatterns
-				Concurrent				
-				REQUIRED)
+Help				QuickWidgets
+Network				UiPlugin
+OpenGL				Svg
+OpenGLExtensions	Test
+TextToSpeech		Widgets
+PrintSupport		UiTools
+Qml					WebChannel
+Quick				WebSockets
+WebView				Core
+Xml					Gui
+QuickTest			XmlPatterns
+Concurrent				
+REQUIRED)
 include_directories(${Qt5UiTools_INCLUDE_DIRS})
 
+CHECK_INCLUDE_FILE_CXX(execution cxx_has_execution)
+if(NOT cxx_has_execution)
+	add_definitions(-Dnoexec)
+endif()
 
 # Qt5::Variant
 # Qt5::Action

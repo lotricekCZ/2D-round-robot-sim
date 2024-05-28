@@ -193,6 +193,7 @@ void Viewport::animate()
 							float product = Vect2D::dot(move, distance);
 							if ((distance.length() < std::get<0>(o->formula()).radius() /* that'll be circle*/ && product > 0)) {
 								collision = true;
+								o->move(dx, 0);
 								break;
 								};
 							

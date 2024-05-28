@@ -243,8 +243,8 @@ void interface::setupUi(QMainWindow *MainWindow)
 	retranslateUi(MainWindow);
 
 	in_rotation->setValidator(new QDoubleValidator(0, 360, 6, in_rotation));
-	in_x->setValidator(new QDoubleValidator(-1, 1, 6, in_x));
-	in_y->setValidator(new QDoubleValidator(-1, 1, 6, in_y));
+	in_x->setValidator(new QDoubleValidator(-1.04, 1.04, 6, in_x));
+	in_y->setValidator(new QDoubleValidator(-0.89, 0.89, 6, in_y));
 
 	// signals and slots
 	// reset simulation button
@@ -306,7 +306,7 @@ void interface::setupUi(QMainWindow *MainWindow)
 			{
 				rndr->erase_by_id(selected);
 				rndr->add(std::make_shared<bot>());
-				rndr->minds.emplace_back();
+				rndr->minds.push_back(std::make_shared<ai>());
 				rndr->minds.back()->attach(rndr->objects.back());
 				rndr->objects.back()->place(center.at(0), center.at(1));
 				rndr->objects.back()->rotate(rotation);

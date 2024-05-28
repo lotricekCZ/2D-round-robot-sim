@@ -216,7 +216,7 @@ void Viewport::animate()
 				 Vect2D move = Vect2D(o->center(), std::get<0>(o->formula()).at(o->rotation() + dx)) / 10 * dy;
 				 Point2D prediction = o->predict(dx, dy);
 				 auto point = prediction.point();
-				 bool collision = std::abs(point[0]) >= 1.05 || std::abs(point[1]) >= 0.9;
+				 bool collision = (std::abs(point[0]) >= 1.05 || std::abs(point[1]) >= 0.9);
 
 				 if (!collision && std::abs(dy) >= std::numeric_limits<float>::epsilon())
 					 for (auto p : objects->objects)
@@ -224,13 +224,14 @@ void Viewport::animate()
 						 {
 							 Vect2D distance = p->distance(prediction);
 							 float product = Vect2D::dot(move, distance);
-							 if ((distance.length() < std::get<0>(o->formula()).radius() /* that'll be circle*/ && product > 0))
+							 if ((distance.length() < std::get<0>(o->formula()).radius() /* that'll be circle */ && product > 0))
 							 {
 								 collision = true;
 								 break;
 							 };
 						 }
 				 if (collision || m->controls.next_change <= now){
+					 o->move(dx, 0);
 					 m->steer();
 					 return;}
 				 o->move(dx, dy); });

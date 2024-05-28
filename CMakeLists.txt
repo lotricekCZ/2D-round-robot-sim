@@ -24,18 +24,9 @@ REQUIRED dot
 OPTIONAL_COMPONENTS mscgen dia)
 
 find_package(Qt5 COMPONENTS 
-Help				QuickWidgets
-Network				UiPlugin
-OpenGL				Svg
-OpenGLExtensions	Test
-TextToSpeech		Widgets
-PrintSupport		UiTools
-Qml					WebChannel
-Quick				WebSockets
-WebView				Core
-Xml					Gui
-QuickTest			XmlPatterns
-Concurrent				
+	Gui Widgets 
+	OpenGL Core 
+	UiTools	
 REQUIRED)
 include_directories(${Qt5UiTools_INCLUDE_DIRS})
 
@@ -44,28 +35,11 @@ if(NOT cxx_has_execution)
 	add_definitions(-Dnoexec)
 endif()
 
-# Qt5::Variant
-# Qt5::Action
-# Qt5::Application
-# Qt5::ComboBox
-# Qt5::CommandLinkButton
-# Qt5::FormLayout
-# Qt5::GridLayout
-# Qt5::GroupBox
-# Qt5::HBoxLayout
-# Qt5::HeaderView
-# Qt5::Label
-# Qt5::LineEdit
-# Qt5::MainWindow
-# Qt5::Menu
-# Qt5::MenuBar
-# Qt5::OpenGLWidget
-# Qt5::StatusBar
-# Qt5::TabWidget
-# Qt5::TableWidget
-# Qt5::ToolButton
-# Qt5::VBoxLayout
+# Qt5::Gui
+# Qt5::OpenGL
+# Qt5::UiTools
 # Qt5::Widget
+# Qt5::Core
 
 set(DOXYGEN_GENERATE_HTML NO)
 set(DOXYGEN_GENERATE_MAN YES)
@@ -85,7 +59,6 @@ add_library(point 	        SHARED ${SHAPES}/TPoint.cpp)
 add_library(line 			SHARED ${SHAPES}/TLine.cpp)
 add_library(circle 			SHARED ${SHAPES}/TCircle.cpp)
 add_library(vector 			SHARED ${SHAPES}/TVector.cpp)
-add_library(polygon 		SHARED ${SHAPES}/TPolygon.cpp)
 add_library(segment 		SHARED ${SHAPES}/Segment.cpp)
 
 add_library(ai 		        SHARED ${ACTORS}/ai.cpp)
@@ -124,7 +97,7 @@ set(CMAKE_CXX_FLAGS "-std=c++17 -g")
 
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 target_link_libraries(${PROJECT_NAME} Threads::Threads
-                        point line circle vector polygon segment
+                        point line circle vector segment
 						Qt5::Widgets interface viewport
 					)
 

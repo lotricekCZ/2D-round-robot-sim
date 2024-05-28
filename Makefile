@@ -27,7 +27,7 @@ test:
 clean:
 	@$(RM) -rv $(BIN_DIR) $(DOC_DIR)
 
-documentation: $(DOC_DIR)
+doxygen: $(DOC_DIR)
 	doxygen Doxyfile
 
 -include $(OBJ:.o=.d)

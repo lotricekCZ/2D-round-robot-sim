@@ -242,9 +242,9 @@ void interface::setupUi(QMainWindow *MainWindow)
 	tab_widget->setCurrentIndex(1);
 	retranslateUi(MainWindow);
 
-	in_rotation->setValidator(new QDoubleValidator(0, 360, 6, in_rotation));
-	in_x->setValidator(new QDoubleValidator(-1.04, 1.04, 6, in_x));
-	in_y->setValidator(new QDoubleValidator(-0.89, 0.89, 6, in_y));
+	in_rotation->setValidator(new QDoubleValidator(0, 360, 12, in_rotation));
+	in_x->setValidator(new QDoubleValidator(-1.04, 1.04, 12, in_x));
+	in_y->setValidator(new QDoubleValidator(-0.89, 0.89, 12, in_y));
 
 	// signals and slots
 	// reset simulation button

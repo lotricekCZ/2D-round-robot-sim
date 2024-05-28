@@ -291,24 +291,11 @@ float Segment::distance(const Segment &segment, const Circle2D &circle)
 	{
 	case type::circle:
 	{
-		// if (segment.intersection(line).size() != 0)
-		// 	return 0;
-		// // return candidates
-		// std::vector<float> ret_c = {circle.distance(segment.start()), circle.distance(segment.end())};
-
-		// auto l = line.get_point().point();
-		// for (auto intersection : segment.intersection(Line2D(Vect2D(l.at(1), -l.at(0)), (std::get<type::circle>(segment.get_formula()).center()))))
-		// 	ret_c.push_back(line.distance(intersection));
-		// return *std::min_element(ret_c.begin(), ret_c.end());
-		// break;
+		
 	}
 	case type::line:
 	{
-		// auto inter = std::get<type::line>(formula).intersection(line);
-		// if (inter && segment.is_on(inter.value()))
-		// 	return 0;
-		// Points2D c = {Segment::at(segment, segment.range.at(0)).value(), Segment::at(segment, segment.range.at(1)).value()};
-		// return std::min(static_cast<Line2D>(line).distance(c.at(0)), static_cast<Line2D>(line).distance(c.at(1)));
+		
 	}
 	}
 

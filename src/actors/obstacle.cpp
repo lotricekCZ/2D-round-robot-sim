@@ -34,7 +34,7 @@ void obstacle::move(float dx, float dy)
 	auto o = obstacle_center.point();
 	o[0] += dx;
 	o[1] += dy;
-	place(o[0], o[1]);
+	this->place(o[0], o[1]);
 }
 
 void obstacle::place(float x, float y)
@@ -50,7 +50,7 @@ void obstacle::rotate(float a)
 {
 	_rotation += a;
 	_rotation -= floor(_rotation);
-	move(0, 0);
+	this->move(0,0);
 }
 
 std::string obstacle::info()

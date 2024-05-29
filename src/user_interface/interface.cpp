@@ -368,6 +368,7 @@ void interface::setupUi(QMainWindow *MainWindow)
 		if (edited)
 		{
 			edited.value()->set_rotation(this->in_rotation->text().replace(",", ".").toFloat() / 360.0f);
+			edited.value()->move(0, 0);
 		}
 	});
 	QMetaObject::connectSlotsByName(MainWindow);

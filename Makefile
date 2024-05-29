@@ -2,7 +2,7 @@ BIN_DIR := build
 DOC_DIR := docs
 EXE := simulator
 
-.PHONY: all clean run documentation test
+.PHONY: all clean run documentation test pack
 
 
 all: $(BIN_DIR)
@@ -25,9 +25,12 @@ test:
 	make test
 
 clean:
-	@$(RM) -rv $(BIN_DIR) $(DOC_DIR)
+	@$(RM) -rv $(BIN_DIR) $(DOC_DIR) xramas01.zip
 
 doxygen: $(DOC_DIR)
 	doxygen Doxyfile
+
+pack:
+	zip -r xramas01.zip assets CMakeLists.txt Doxyfile src dokumentace.pdf  Makefile  README.txt  test
 
 -include $(OBJ:.o=.d)

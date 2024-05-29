@@ -87,7 +87,7 @@ target_link_libraries(ai bot)
 target_link_libraries(serializer Qt5::Widgets Qt5::Core vehicle player renderer obstacle bot ai)
 
 set_target_properties(interface PROPERTIES AUTOMOC TRUE)
-target_link_libraries(interface serializer Qt5::Widgets Qt5::Core Qt5::UiTools renderer viewport player vehicle bot ai)
+target_link_libraries(interface serializer Qt5::Widgets Qt5::Core renderer viewport player vehicle bot ai)
 
 
 

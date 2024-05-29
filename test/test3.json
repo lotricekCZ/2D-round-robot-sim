@@ -1,0 +1,82 @@
+[
+    {
+        "coordinates": [
+            0.30000001192092896,
+            0.4000000059604645
+        ],
+        "rotation": 240,
+        "type": "obstacle"
+    },
+    {
+        "coordinates": [
+            -0.30000001192092896,
+            -0.4000000059604645
+        ],
+        "rotation": 20,
+        "type": "obstacle"
+    },
+    {
+        "coordinates": [
+            -0.30000001192092896,
+            0.4000000059604645
+        ],
+        "rotation": 160,
+        "type": "obstacle"
+    },
+    {
+        "coordinates": [
+            0.30000001192092896,
+            -0.4000000059604645
+        ],
+        "rotation": 45,
+        "type": "obstacle"
+    },
+    {
+        "coordinates": [
+            0.6000000238418579,
+            0
+        ],
+        "rotation": 270,
+        "type": "vehicle"
+    },
+    {
+        "coordinates": [
+            -0.7056877613067627,
+            0.41674673557281494
+        ],
+        "rotation": 291.5998229980469,
+        "type": "player"
+    },
+    {
+        "coordinates": [
+            0.4167468845844269,
+            0.8056879639625549
+        ],
+        "rotation": 201.59991455078125,
+        "type": "player"
+    },
+    {
+        "coordinates": [
+            -0.4167470335960388,
+            -0.8056879639625549
+        ],
+        "rotation": 21.599822998046875,
+        "type": "player"
+    },
+    {
+        "coordinates": [
+            0,
+            0
+        ],
+        "rotation": 0,
+        "type": "obstacle"
+    },
+    {
+        "coordinates": [
+            -1.0494102239608765,
+            0.20831291377544403
+        ],
+        "rotation": 106.49811553955078,
+        "type": "bot"
+    }
+]

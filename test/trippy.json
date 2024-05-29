@@ -1,0 +1,66 @@
+[
+    {
+        "coordinates": [
+            0.30000001192092896,
+            0.4000000059604645
+        ],
+        "rotation": 240,
+        "type": "obstacle"
+    },
+    {
+        "coordinates": [
+            -0.30000001192092896,
+            -0.4000000059604645
+        ],
+        "rotation": 20,
+        "type": "obstacle"
+    },
+    {
+        "coordinates": [
+            -0.30000001192092896,
+            0.4000000059604645
+        ],
+        "rotation": 160,
+        "type": "obstacle"
+    },
+    {
+        "coordinates": [
+            0.30000001192092896,
+            -0.4000000059604645
+        ],
+        "rotation": 45,
+        "type": "obstacle"
+    },
+    {
+        "coordinates": [
+            0.6000000238418579,
+            0
+        ],
+        "rotation": 270,
+        "type": "vehicle"
+    },
+    {
+        "coordinates": [
+            -0.6000000238418579,
+            0
+        ],
+        "rotation": 90,
+        "type": "player"
+    },
+    {
+        "coordinates": [
+            0,
+            0.699999988079071
+        ],
+        "rotation": 0,
+        "type": "player"
+    },
+    {
+        "coordinates": [
+            0,
+            -0.699999988079071
+        ],
+        "rotation": 180,
+        "type": "player"
+    }
+]
